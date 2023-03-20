@@ -1,1 +1,166 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "/node_modules/angular-notifier/styles.css";
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", "Tahoma", "Trebuchet MS", "Arial", "Helvetica", sans-serif;
+  font-size: 14px;
+}
+
+* {
+  box-sizing: inherit;
+}
+
+/* APP */
+
+.app {
+  display: block;
+  padding: 30px;
+}
+
+/* HEADINGS */
+
+h1 {
+  font-size: 30px;
+  padding-bottom: 10px;
+}
+
+h2 {
+  margin-top: 40px;
+  font-size: 18px;
+}
+
+/* BUTTONS */
+
+.button {
+  display: inline-block;
+  padding: 11px 16px 10px;
+  margin-right: 4px;
+  background: none;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  opacity: 1;
+  -webkit-transition: background-color .2s ease;
+  transition: background-color .2s ease;
+}
+
+.button--primary {
+  background-color: #2B90D9;
+  color: #FFF;
+}
+
+.button--primary:hover,
+.button--primary:focus,
+.button--primary:active {
+  background-color: #2273AD;
+}
+
+.button--secondary {
+  background-color: #DDD;
+  color: #333;
+}
+
+.button--secondary:hover,
+.button--secondary:focus,
+.button--secondary:active {
+  background-color: #CACACA;
+}
+
+/*=================================================================*/
+body{
+  background-color: #eff2f5 !important;
+
+}
+
+.background-grey{
+  background-color: #eff2f5 !important;
+}
+.bimage{
+
+  background-image: url("src/assets/Lock@ (Copy1).png");
+  background-repeat: no-repeat;
+  background-attachment: inherit;
+  justify-content: right;
+  background-size: 100% 100%;
+
+}
+.b2image{
+
+  background-image: url("src/assets/HAPDP_image.jpg");
+  background-repeat: no-repeat;
+  background-attachment: inherit;
+  justify-content: right;
+  background-size: 100% 100%;
+
+}
+
+.border-none{
+  border: none !important;
+}
+.min-height-80{
+  min-height: 80px;
+}
+
+.border-right{
+  border-right:4px solid #9ca1a6 ;
+}
+.custom-border{
+  border: solid #9ca1a6 ;
+  border-radius: 10px;
+}
+
+.blue-color{
+  color: #037bfe;
+}
+.red-color{
+  color: red;
+}
+.green-color{
+  color: green;
+}
+/*===============================*/
+td{
+  cursor: pointer;
+}
+
+.move-right{
+  position: absolute;
+  right: 0;
+}
+.move-left{
+  position: absolute;
+  left: 0;
+}
+
+.btn-file{
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file]{
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+

@@ -1,16 +1,16 @@
 import {NotifierModule, NotifierOptions} from "angular-notifier";
-import {AppComponent} from "../app.component";
 import {NgModule} from "@angular/core";
 
 
 const notifierUserOptions: NotifierOptions = {
+
   position: {
     horizontal: {
       position: 'left',
       distance: 12,
     },
     vertical: {
-      position: 'top',
+      position: 'bottom',
       distance: 12,
       gap: 10,
     },
@@ -47,5 +47,6 @@ const notifierUserOptions: NotifierOptions = {
 @NgModule({
   imports: [NotifierModule.withConfig(notifierUserOptions)],
   exports: [NotifierModule],
+
 })
 export class NotificationModule {}

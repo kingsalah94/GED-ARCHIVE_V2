@@ -14,13 +14,13 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService) {}
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
-    if (httpRequest.url.includes(`${this.authenticationService.host}/user/login`)){
+    if (httpRequest.url.includes(`${this.authenticationService.host}/api/archive/user/login`)){
       return  httpHandler.handle(httpRequest);
     }
-    if (httpRequest.url.includes(`${this.authenticationService.host}/user/register`)){
+    if (httpRequest.url.includes(`${this.authenticationService.host}/api/archive/user/register`)){
       return  httpHandler.handle(httpRequest);
     }
-    if (httpRequest.url.includes(`${this.authenticationService.host}/user/resetPassword`)){
+    if (httpRequest.url.includes(`${this.authenticationService.host}/api/archive/user/resetPassword`)){
       return  httpHandler.handle(httpRequest);
     }
 

@@ -1,51 +1,41 @@
 export class User {
-  id: number;
-  userId: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-  email: string;
-  profileImageUrl: string;
-  lastLoginDate: Date;
-  lastLoginDateDisplay: Date;
-  joinDate: Date;
-  role: string;
-  authorities: string[];
-  active: boolean;
-  notLocked: boolean;
+  public id: number;
+  public userId: string;
+  public firstName: string;
+  public lastName: string;
+  public username: string;
+  public password: string;
+  public email: string;
+  public profileImageUrl: string;
+  public lastLoginDate: Date;
+  public lastLoginDateDisplay: Date;
+  public joinDate: Date;
+  public role: string;
+  public authorities: string[];
+  public active: boolean;
+  public notLocked: boolean;
 
-  constructor(
-    id: number,
-    userId: string,
-    firstName: string,
-    lastName: string,
-    username: string,
-    password: string,
-    email: string,
-    profileImageUrl: string,
-    lastLoginDate: Date,
-    lastLoginDateDisplay: Date,
-    joinDate: Date,
-    role: string,
-    authorities: string[],
-    active: boolean,
-    notLocked: boolean
-  ) {
-    this.id = id;
-    this.userId = userId;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.profileImageUrl = profileImageUrl;
-    this.lastLoginDate = lastLoginDate;
-    this.lastLoginDateDisplay = lastLoginDateDisplay;
-    this.joinDate = joinDate;
-    this.role = role;
-    this.authorities = authorities;
-    this.active = active;
-    this.notLocked = notLocked;
+
+  constructor() {
+    this.id = 0;
+    this.userId = '';
+    this.firstName = '';
+    this.lastName = '';
+    this.username = '';
+    this.password = '';
+    this.email = '';
+    this.profileImageUrl = '';
+    // @ts-ignore
+    this.lastLoginDate = null;
+    // @ts-ignore
+    this.lastLoginDateDisplay = null;
+    // @ts-ignore
+    this.joinDate = null;
+    this.role = '';
+    this.authorities = [];
+    this.active = false;
+    this.notLocked = false;
   }
+
+
 }

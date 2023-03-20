@@ -5,6 +5,8 @@ import {Observable} from "rxjs";
 import {User} from "../models/user";
 import {JwtHelperService, JwtInterceptor} from "@auth0/angular-jwt";
 
+const AUTH_API = 'http://localhost:8086'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,13 +18,15 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) { }
 
-  public login(user: User): Observable<HttpResponse<any> | HttpErrorResponse>{
-    return this.http.post<User | HttpErrorResponse>
-    (`${this.host}/user/register`,user,{observe:'response'});
+  public login(user: User): Observable<HttpResponse<User>>{
+    return this.http.post<User>(`${this.host}/api/archive/user/login`,user,{ observe: 'response' });
   }
-  public register(user: User): Observable<HttpResponse<User | HttpErrorResponse>>{
-    return this.http.post<User | HttpErrorResponse>
-    (`${this.host}/user/register`,user,{observe:'response'});
+  public register(user: User): Observable<HttpResponse<User>>{
+    return this.http.post<User>
+    (`${this.host}/api/archive/user/register`,user,{observe:'response'});
+  }public add(user: User): Observable<HttpResponse<User>>{
+    return this.http.post<User>
+    (`${this.host}/api/archive/user/add`,user,{observe:'response'});
   }
   public logOut(): void{
     this.token = null;
@@ -32,12 +36,14 @@ export class AuthenticationService {
     localStorage.removeItem('users');
   }
 
-  public saveToken(token: string): void{
+  public saveToken(token: string | null): void{
     this.token = token;
-    localStorage.setItem('token',token);
+    if (typeof token === "string") {
+      localStorage.setItem('token', token);
+    }
   }
 
-  public addUserToLocalCache(user: User): void{
+  public addUserToLocalCache(user: User | null): void{
     localStorage.setItem('user',JSON.stringify(user));
   }
 
