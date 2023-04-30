@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Subscription} from "rxjs";
+import {BehaviorSubject, Subscription, takeUntil} from "rxjs";
 import {User} from "../../../models/user";
 import {UserService} from "../../../GlobaleServices/user.service";
 import {HttpErrorResponse} from "@angular/common/http";
@@ -173,6 +173,9 @@ export class UserComponent implements OnInit{
       }
     }))
   }
+
+
+
 
   public onDeleteUser(userId: number): void{
     let conf = confirm("Etes-Vous sur de continuer ???");
