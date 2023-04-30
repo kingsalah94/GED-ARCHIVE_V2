@@ -28,6 +28,9 @@ export class UserComponent implements OnInit{
   private currentUsername!: string;
   currentUser: any;
   editUser = new User();
+  selectedButton: string = '';
+
+
   constructor(private userService: UserService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
   }
 
@@ -38,6 +41,15 @@ export class UserComponent implements OnInit{
   public changeTitle(title: string): void{
     this.titleSubject.next(title);
   }
+
+  showContent(id: string) {
+    let content = document.getElementById(id + 'Content');
+    if (content) {
+      content.style.display = 'block';
+    }
+  }
+
+
   public getUsers(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
