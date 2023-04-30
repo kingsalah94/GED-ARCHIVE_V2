@@ -1,4 +1,4 @@
-import any = jasmine.any;
+
 
 export class Documents {
   id?: any;
