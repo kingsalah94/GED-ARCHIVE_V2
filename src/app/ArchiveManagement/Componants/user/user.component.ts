@@ -177,11 +177,11 @@ export class UserComponent implements OnInit{
 
 
 
-  public onDeleteUser(userId: number): void{
+  public onDeleteUser(username: string): void{
     let conf = confirm("Etes-Vous sur de continuer ???");
     if (!conf) return;
     // @ts-ignore
-    this.subscription.push(this.userService.deleteUser(userId).subscribe({
+    this.subscription.push(this.userService.deleteUser(username).subscribe({
         next: (response: CustomHttpResponse) => {
           this.sendNotification(NotificationType.SUCCESS, response.message);
           this.getUsers(true);

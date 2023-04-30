@@ -32,8 +32,8 @@ export class UserService {
       observe: 'events'
       });
   }
-  public deleteUser(userId: number): Observable<CustomHttpResponse | HttpErrorResponse>{
-    return  this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/user/delete/${userId}`);
+  public deleteUser(username: string): Observable<CustomHttpResponse | HttpErrorResponse>{
+    return  this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/user/delete/${username}`);
   }
   public addUsersToLocalCache(users: User[] | HttpErrorResponse): void{
     localStorage.setItem('users',JSON.stringify(users));

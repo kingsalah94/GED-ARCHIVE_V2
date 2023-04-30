@@ -7,6 +7,15 @@ import {DashboardComponent} from "./ArchiveManagement/Pages/dashboard/dashboard.
 import {AuthenticationGuard} from "./Guards/authentication.guard";
 import {AppComponent} from "./app.component";
 import {ProfileComponent} from "./ArchiveManagement/Componants/profile/profile.component";
+import {
+  AdministraticeComptableComponent
+} from "./ArchiveManagement/Pages/administratice-comptable/administratice-comptable.component";
+import {
+  ControleConformiterComponent
+} from "./ArchiveManagement/Pages/controle-conformiter/controle-conformiter.component";
+import {
+  ArchivesConfigurationComponent
+} from "./ArchiveManagement/Pages/archives-configuration/archives-configuration.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -23,6 +32,21 @@ const routes: Routes = [
       {
         path: 'user/profile',
         component: ProfileComponent,
+        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'archives/administrativeComptable',
+        component: AdministraticeComptableComponent,
+        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'archives/controleDeConformiter',
+        component: ControleConformiterComponent,
+        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'archives/configurations',
+        component: ArchivesConfigurationComponent,
         canActivate: [AuthenticationGuard]
       },
     ]

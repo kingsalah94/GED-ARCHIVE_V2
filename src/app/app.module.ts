@@ -18,6 +18,15 @@ import { DashboardComponent } from './ArchiveManagement/Pages/dashboard/dashboar
 import { HeaderComponent } from './ArchiveManagement/Componants/header/header.component';
 import {FormsModule} from "@angular/forms";
 import {ProfileComponent} from "./ArchiveManagement/Componants/profile/profile.component";
+import {
+  ArchivesConfigurationComponent
+} from "./ArchiveManagement/Pages/archives-configuration/archives-configuration.component";
+import {
+  AdministraticeComptableComponent
+} from "./ArchiveManagement/Pages/administratice-comptable/administratice-comptable.component";
+import {
+  ControleConformiterComponent
+} from "./ArchiveManagement/Pages/controle-conformiter/controle-conformiter.component";
 
 @NgModule({
   declarations: [
@@ -29,7 +38,11 @@ import {ProfileComponent} from "./ArchiveManagement/Componants/profile/profile.c
     FooterComponent,
     DashboardComponent,
     HeaderComponent,
-    ProfileComponent
+    ProfileComponent,
+    ArchivesConfigurationComponent,
+    AdministraticeComptableComponent,
+    ControleConformiterComponent
+
   ],
     imports: [
         BrowserModule,

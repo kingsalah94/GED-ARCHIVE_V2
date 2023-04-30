@@ -35,77 +35,45 @@ export class MenuComponent implements OnInit{
 
     {
       id:'3',
-      titre:'Creation',
-      icon: 'fas fa-plus',
+      titre:'Archives',
+      icon: 'fas fa-boxes',
       url: '',
       sousMenu:[
         {
           id:'31',
-          titre:'Boite',
-          icon: 'bis bi-boxes',
-          url: 'dashboard/nouvelBoite',
+          titre:'Administrative & Comptable',
+          icon: 'fas fa-box-open',
+          url: 'dashboard/archives/administrativeComptable',
         },
 
         {
           id:'32',
-          titre:'Dossier',
-          icon: 'fas fa-folder-plus',
-          url: 'dashboard/saveDossier',
+          titre:'Controle de Conformiter',
+          icon: 'fas fa-box-open',
+          url: 'dashboard/archives/controleDeConformiter',
         },
 
-        {
-          id:'33',
-          titre:'Document',
-          icon: 'bis bi-file-plus',
-          url: 'dashboard/nouveauDocument',
-        },
 
       ]
     },
-    {
-      id:'4',
-      titre:'Consultation',
-      icon: 'fas fa-eye',
-      url: '',
-      sousMenu:[
-        {
-          id:'31',
-          titre:'Boite',
-          icon: 'bis bi-boxes',
-          url: 'dashboard/Boite',
-        },
-        {
-          id:'31',
-          titre:'Dossier',
-          icon: 'fas fa-folder-open',
-          url: '/dashboard/listDossier',
-        },
 
-        {
-          id:'32',
-          titre:'Documents',
-          icon: 'fas fa-file',
-          url: '/dashboard/gestionDocument',
-        },
-      ]
-    },
     {
       id:'5',
       titre:'Parametrages',
-      icon: 'fas fa-cogs',
+      icon: 'fas fa-cog',
       url: '',
       sousMenu:[
         {
           id:'51',
-          titre:'Configuration',
-          icon: 'fas fa-cog',
+          titre:'Account Configuration',
+          icon: 'fas fa-user-cog',
           url: 'dashboard/user/management',
         },
         {
           id:'52',
-          titre:'Consultation',
-          icon: 'fas fa-eye',
-          url: 'dashboard/gest-batiment',
+          titre:'Archives Configuration',
+          icon: 'fas fa-cogs',
+          url: 'dashboard/archives/configurations',
         },
       ]
     },

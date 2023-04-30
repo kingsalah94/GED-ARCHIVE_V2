@@ -1,0 +1,42 @@
+<div class="row m-3" *ngIf="currentUser; else loggedOut">
+  <div class="card col-md-6 text-center me-3">
+    <div class="col">
+      <div class="mb-3 ">
+        <img src="/assets/user.png" width="40" class="rounded-circle p-2" width="200px" height="200px" alt="" />
+      </div>
+      <div>
+        <h2>{{currentUser.username}}</h2>
+        <small>{{currentUser.roles}}</small>
+      </div>
+      <div class="col d-flex  p-3">
+        <button type="button" class=" flex-fill btn btn-outline-primary me-3" ><i class="fas fa-pencil-alt"></i>&nbsp;Modifier Le Profile</button>
+        <button type="button" class=" flex-fill btn btn-outline-info me-3" (click)="modiferMotDePasse()"><i class="fas fa-user-lock"></i>&nbsp;Changer Le Mot de Passe</button>
+        <button type="button" class=" flex-fill btn btn-outline-danger"  (click)="handleLogout()">
+          <i class="bi bi-box-arrow-right text-danger"></i>
+          Deconnexion</button>
+      </div>
+    </div>
+  </div>
+  <div class="card col-md-5">
+    <table class="table">
+      <tbody>
+      <tr>
+        <th scope="row">Nom Complet</th>
+        <td>{{currentUser.username}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Email</th>
+        <td>{{currentUser.email}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Roles</th>
+        <td colspan="2">{{currentUser.roles}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+<ng-template #loggedOut>
+  Please login.
+</ng-template>

@@ -87,7 +87,7 @@
                 <button class="btn btn-outline-info" (click)="onEditUser(appUser)" >
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-outline-danger" (click)="onDeleteUser(appUser.id)">
+                <button class="btn btn-outline-danger" (click)="onDeleteUser(appUser.username)">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
@@ -127,6 +127,7 @@
         </form>
       </div>
     </div>
+
 <!--Modal User Infos-->
     <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
