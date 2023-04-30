@@ -51,7 +51,7 @@ export class UserComponent implements OnInit{
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
-        this.sendNotification(NotificationType.ERREUR, errorResponse.error.message);
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
         this.refreshing = false;
       })
     );
@@ -96,7 +96,7 @@ export class UserComponent implements OnInit{
       },
       error: (e)=> {
         console.error(e);
-          this.sendNotification(NotificationType.ERREUR, e.message);
+          this.sendNotification(NotificationType.ERROR, e.message);
       }
     }));
   }
@@ -116,7 +116,7 @@ export class UserComponent implements OnInit{
       },
       error: (e)=> {
         console.error(e);
-        this.sendNotification(NotificationType.ERREUR, e.message);
+        this.sendNotification(NotificationType.ERROR, e.message);
       }
     }));
   }
@@ -172,7 +172,7 @@ export class UserComponent implements OnInit{
           this.getUsers(true);
         },
       error: err => {
-          this.sendNotification(NotificationType.ERREUR, err.error.messages);
+          this.sendNotification(NotificationType.ERROR, err.error.messages);
       }
       })
     );

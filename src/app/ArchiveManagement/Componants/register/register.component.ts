@@ -37,7 +37,7 @@ public onRegister(user:User): void{
 
         },
       error: (errorResponse: HttpErrorResponse) =>{
-          this.sendNotification(NotificationType.ERREUR, errorResponse.error.message);
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           this.showLoading = false;
       }
       });

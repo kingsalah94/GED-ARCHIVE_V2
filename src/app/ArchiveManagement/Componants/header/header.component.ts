@@ -52,7 +52,7 @@ export class HeaderComponent {
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
-        this.sendNotification(NotificationType.ERREUR, errorResponse.error.message);
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
         this.refreshing = false;
       })
     );
