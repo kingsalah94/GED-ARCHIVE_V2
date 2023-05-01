@@ -1,13 +1,13 @@
 
 
 export class Documents {
-  id?: any;
-  intituleDocument?: string;
-  dateCreation?: Date;
-  numeroDordre?: any;
-  typeDocument?: string;
-  nombrPage?: any;
-  dossierId?: any;
+  public id: any;
+  public intituleDocument: string;
+  public dateCreation: Date;
+  public numeroDordre: any;
+  public typeDocument: string;
+  public nombrPage: any;
+  public dossierId: any;
 
 
   constructor() {

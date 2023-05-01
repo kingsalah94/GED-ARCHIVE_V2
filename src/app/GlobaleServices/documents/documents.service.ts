@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpEvent} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Dossier} from "../../models/dossier";
 import {Documents} from "../../models/documents";
+import {User} from "../../models/user";
+import {CustomHttpResponse} from "../../Http-Response/Custom-http-response";
 
 
 @Injectable({
@@ -11,46 +13,61 @@ import {Documents} from "../../models/documents";
 })
 export class DocumentsService {
 data:any;
+  private host = environment.backendHost;
   constructor(private http: HttpClient) {
 
   }
 
   public getDossier(): Observable<Dossier[]> {
-    return this.http.get<Dossier[]>(environment.backendHost + "/dossier")
-  }
-  public saveDocument(document: Documents): Observable<Documents > {
-    return this.http.post<Documents>(environment.backendHost + "/document",document)
+    return this.http.get<Dossier[]>(`${this.host}/api/archive/dossier`)
   }
 
 
 
-  public getDocument(): Observable<Array<Documents>> {
-    return this.http.get<Array<Documents>>(environment.backendHost + "/document")
+  public getDocuments(): Observable<Documents[] | HttpErrorResponse>{
+    return  this.http.get<Documents[]>(`${this.host}/api/archive/document/list`);
   }
-  public getAllDocument(): Observable<Documents[]> {
-    return this.http.get<Documents[]>(environment.backendHost + "/document")
+  public addDocument(formData: FormData): Observable<any>{
+    return  this.http.post<Documents>(`${this.host}/api/archive/document/add`,formData);
   }
-  public getOneDocument(id:any): Observable<Documents> {
-    return this.http.get<Documents>(environment.backendHost + "/document/"+id)
-  }
-
-  public create(data: any): Observable<any> {
-    return this.http.post(environment.backendHost + "/document",data)
+  public updateDocument(formData: FormData): Observable<any>{
+    return  this.http.put<Documents>(`${this.host}/api/archive/document/update`,formData);
   }
 
-  public delete(id: any):Observable<any> {
-    return this.http.delete(environment.backendHost + "/document/"+id)
+
+  public updateDocumentPdf(formData: FormData): Observable<HttpEvent<Documents> | HttpErrorResponse>{
+    return  this.http.post<Documents>(`${this.host}/api/archive/document/updateDocumentPdf`,formData,
+      {reportProgress: true,
+        observe: 'events'
+      });
+  }
+  public deletedocument(intituleDocument: string): Observable<CustomHttpResponse | HttpErrorResponse>{
+    return  this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/document/delete/${intituleDocument}`);
+  }
+  public addDocumentsToLocalCache(document: Documents[] | HttpErrorResponse): void{
+    localStorage.setItem('document',JSON.stringify(document));
+  }
+  public getDocumentsFromLocalCache(): Documents[] | null {
+    const documents = localStorage.getItem('documents');
+    if (documents) {
+      return JSON.parse(documents);
+    }
+    return null;
   }
 
-  public updatedocument(document: Documents): Observable<Documents> {
-    return this.http.put<Documents>(environment.backendHost+"/document/"+document.id,document);
-  }
-  public updateDocuments(id: any,data:any): Observable<any> {
-    return this.http.put(environment.backendHost+"/document/"+id,data);
+  public createDocumentFormData(loggedInUsername: string, document: Documents, documentPdf: File): FormData {
+    const formData = new FormData();
+    formData.append('currentUsername',loggedInUsername);
+    formData.append('intituleDocument',document.intituleDocument);
+    formData.append('numeroDordre',document.numeroDordre);
+    formData.append('typeDocument',document.typeDocument);
+    formData.append('nombrPage',document.nombrPage);
+    formData.append('dossierId',document.dossierId);
+    formData.append('documentpdf',documentPdf);
+
+    return formData;
   }
 
-  findByNom(keyword: string): Observable<Documents[]> {
-    return this.http.get<Documents[]>(environment.backendHost+"/document/search?keyword="+keyword);
-  }
+
 
 }

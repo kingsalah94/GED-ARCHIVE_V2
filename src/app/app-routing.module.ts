@@ -8,8 +8,8 @@ import {AuthenticationGuard} from "./Guards/authentication.guard";
 import {AppComponent} from "./app.component";
 import {ProfileComponent} from "./ArchiveManagement/Componants/profile/profile.component";
 import {
-  AdministraticeComptableComponent
-} from "./ArchiveManagement/Pages/administratice-comptable/administratice-comptable.component";
+  AdministrativeComptableComponent
+} from "./ArchiveManagement/Pages/administratice-comptable/administrative-comptable.component";
 import {
   ControleConformiterComponent
 } from "./ArchiveManagement/Pages/controle-conformiter/controle-conformiter.component";
@@ -36,7 +36,7 @@ const routes: Routes = [
       },
       {
         path: 'archives/administrativeComptable',
-        component: AdministraticeComptableComponent,
+        component: AdministrativeComptableComponent,
         canActivate: [AuthenticationGuard]
       },
       {

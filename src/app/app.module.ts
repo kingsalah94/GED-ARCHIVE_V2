@@ -22,8 +22,8 @@ import {
   ArchivesConfigurationComponent
 } from "./ArchiveManagement/Pages/archives-configuration/archives-configuration.component";
 import {
-  AdministraticeComptableComponent
-} from "./ArchiveManagement/Pages/administratice-comptable/administratice-comptable.component";
+  AdministrativeComptableComponent
+} from "./ArchiveManagement/Pages/administratice-comptable/administrative-comptable.component";
 import {
   ControleConformiterComponent
 } from "./ArchiveManagement/Pages/controle-conformiter/controle-conformiter.component";
@@ -40,7 +40,7 @@ import {
     HeaderComponent,
     ProfileComponent,
     ArchivesConfigurationComponent,
-    AdministraticeComptableComponent,
+    AdministrativeComptableComponent,
     ControleConformiterComponent
 
   ],

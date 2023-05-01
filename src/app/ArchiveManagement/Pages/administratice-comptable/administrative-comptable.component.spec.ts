@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdministraticeComptableComponent } from './administratice-comptable.component';
+import { AdministrativeComptableComponent } from './administrative-comptable.component';
 
 describe('AdministraticeComptableComponent', () => {
-  let component: AdministraticeComptableComponent;
-  let fixture: ComponentFixture<AdministraticeComptableComponent>;
+  let component: AdministrativeComptableComponent;
+  let fixture: ComponentFixture<AdministrativeComptableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdministraticeComptableComponent ]
+      declarations: [ AdministrativeComptableComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AdministraticeComptableComponent);
+    fixture = TestBed.createComponent(AdministrativeComptableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
