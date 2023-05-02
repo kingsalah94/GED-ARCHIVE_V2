@@ -29,6 +29,7 @@ export class UserComponent implements OnInit{
   currentUser: any;
   editUser = new User();
   selectedButton: string = '';
+  public showLoading: boolean | undefined;
 
 
   constructor(private userService: UserService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
@@ -93,12 +94,14 @@ export class UserComponent implements OnInit{
   }
 
   public onAddNewUser(userForm: NgForm):void{
+    this.showLoading = true;
    // @ts-ignore
     const formData = this.userService.createUserFormData(null, userForm.value, this.profileImage);
     this.subscription.push(this.userService.addUser(formData).subscribe({
       next: (response: User)=>{
-       this.clickButton('#new-user-close');
-       this.getUsers(false);
+        this.showLoading = false;
+        this.clickButton('#new-user-close');
+        this.getUsers(false);
        // @ts-ignore
         this.fileName = "";
        // @ts-ignore
@@ -109,6 +112,7 @@ export class UserComponent implements OnInit{
       error: (e)=> {
         console.error(e);
           this.sendNotification(NotificationType.ERROR, e.message);
+        this.showLoading = false;
       }
     }));
   }

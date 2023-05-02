@@ -17,7 +17,7 @@ export class BoiteService {
   }
 
   public getBoite(): Observable<Array<Boite>> {
-    return this.http.get<Array<Boite>>(environment.backendHost + "/boite")
+    return this.http.get<Array<Boite>>(environment.backendHost + "/api/archive/boite")
   }
 
 

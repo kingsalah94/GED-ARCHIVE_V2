@@ -9,7 +9,7 @@ import {AppComponent} from "./app.component";
 import {ProfileComponent} from "./ArchiveManagement/Componants/profile/profile.component";
 import {
   AdministrativeComptableComponent
-} from "./ArchiveManagement/Pages/administratice-comptable/administrative-comptable.component";
+} from "./ArchiveManagement/Pages/administrative-comptable/administrative-comptable.component";
 import {
   ControleConformiterComponent
 } from "./ArchiveManagement/Pages/controle-conformiter/controle-conformiter.component";

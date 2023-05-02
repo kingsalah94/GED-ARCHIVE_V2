@@ -10,9 +10,13 @@ import {NgForm} from "@angular/forms";
 import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
 import {Documents} from "../../../models/documents";
 import {DocumentsService} from "../../../GlobaleServices/documents/documents.service";
+import {Dossier} from "../../../models/dossier";
+import {BoiteService} from "../../../GlobaleServices/Boite/boite.service";
+import {Boite} from "../../../models/Boite";
+import {DossierService} from "../../../GlobaleServices/dossier/dossier.service";
 
 @Component({
-  selector: 'app-administratice-comptable',
+  selector: 'app-administrative-comptable',
   templateUrl: './administrative-comptable.component.html',
   styleUrls: ['./administrative-comptable.component.css']
 })
@@ -31,14 +35,24 @@ export class AdministrativeComptableComponent {
   currentDocument: any;
   editDocument = new Documents();
   selectedButton: string = '';
+  public dossier!: Dossier[];
+  dossiers: Dossier = new Dossier();
+  boite: Boite[] = [];
 
 
-  constructor(private documentService: DocumentsService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
+  constructor(private boiteService:BoiteService,
+              private documentService: DocumentsService,
+              private dossierService: DossierService,
+              private notificationService: NotificationService,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
-    this.getDocuments(true)
+    this.getDocuments(true);
+    this.getDossier(true)
+    this.boiteService.getBoite()
+      .subscribe(response =>this.boite=response)
   }
   public changeTitle(title: string): void{
     this.titleSubject.next(title);
@@ -69,6 +83,23 @@ export class AdministrativeComptableComponent {
         this.refreshing = false;
       })
     );
+  } public getDossier(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.documentService.getDossier().subscribe((response: Dossier[] ) => {
+
+        this.dossier = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} dossier(s) Charger avec succer.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
   }
 
   public onSelectDocument(selectedDocument: Documents): void {
@@ -77,7 +108,7 @@ export class AdministrativeComptableComponent {
 
   }
 
-  public ondocumentPdfChange(fileName: string, documentPdf: File): void{
+  public onDocumentPdfChange(fileName: string, documentPdf: File): void{
     this.fileName = fileName;
     this.documentPdf = documentPdf;
 
@@ -86,7 +117,7 @@ export class AdministrativeComptableComponent {
   handleDocumentPdfChange(event: any): void {
     const fileName: string = event.target.files[0].name;
     const documentPdf: File = event.target.files[0];
-    this.ondocumentPdfChange(fileName, documentPdf);
+    this.onDocumentPdfChange(fileName, documentPdf);
     console.log(fileName, documentPdf,)
   }
 
@@ -96,10 +127,10 @@ export class AdministrativeComptableComponent {
 
   public onAddNewDocument(documentForm: NgForm):void{
     // @ts-ignore
-    const formData = this.documentService.createDocumentFormData(null, userForm.value, this.profileImage);
+    const formData = this.documentService.createDocumentFormData(null, documentForm.value, this.documentPdf);
     this.subscription.push(this.documentService.addDocument(formData).subscribe({
       next: (response: Documents)=>{
-        this.clickButton('#new-user-close');
+        this.clickButton('#new-document-close');
         this.getDocuments(false);
         // @ts-ignore
         this.fileName = "";
@@ -189,6 +220,22 @@ export class AdministrativeComptableComponent {
   private clickButton(buttonId: string): void {
     const button = document.querySelector(buttonId) as HTMLButtonElement;
     button.click();
+  }
+
+
+  /*=====================Partie Gestions des Dossier*/
+
+
+  handleSaveDossier() {
+    this.dossierService.create(this.dossiers).subscribe({
+      next :data=>{
+        alert("Le Dossier est Creer Avec Succer");
+        //this.newDocumentFormGroup.reset();
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
   }
 
 }

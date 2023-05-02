@@ -15,7 +15,7 @@ export class DossierService {
   }
 
   public saveDossier(dossier: Dossier): Observable<Dossier> {
-    return this.http.post<Dossier>(environment.backendHost + "/dossier",dossier)
+    return this.http.post<Dossier>(environment.backendHost + "/api/archive/dossier",dossier)
   }
 
 
@@ -31,7 +31,7 @@ export class DossierService {
   }
 
   public create(data: any): Observable<any> {
-    return this.http.post(environment.backendHost + "/dossier",data)
+    return this.http.post(environment.backendHost + "/api/archive/dossier",data)
   }
 
   public delete(id: any):Observable<any> {

@@ -1,4 +1,5 @@
 import {Boite} from "./Boite";
+import {ResponsableTraitement} from "./ResponsableTraitement";
 
 export class Dossier {
   id?: any
@@ -9,5 +10,6 @@ export class Dossier {
   typeDossier?: string
   etatDossier?: string
   boiteDTO?: Boite
+  ResponsableTraitementDTO?: ResponsableTraitement
 }
 
