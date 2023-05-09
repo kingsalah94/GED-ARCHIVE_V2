@@ -52,6 +52,30 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   }
 
+ /* onLogin(user: User): void {
+    this.showLoading = true;
+    this.subscription.push(this.authenticationService.login(user).subscribe({
+      next:  (response: HttpResponse<User> | HttpErrorResponse) => {
+        const token = response.headers.get(HeaderType.JWT_TOKEN);
+        this.authenticationService.saveToken(token);
+        if (!(response instanceof HttpErrorResponse)) {
+          this.authenticationService.addUserToLocalCache(response.body);
+          if (response.body.firstLogin) { // vérification pour la première connexion
+            this.router.navigateByUrl('/change-password');
+          } else {
+            this.router.navigateByUrl('/dashboard');
+          }
+        }
+        this.showLoading = false;
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        this.sendErrorNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.showLoading = false;
+      }
+    }));
+  }*/
+
+
   private sendErrorNotification(notificationType: NotificationType, message: string): void {
         if (message){
           this.notificationService.notify(notificationType,message);

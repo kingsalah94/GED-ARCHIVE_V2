@@ -4,6 +4,10 @@ import {HttpClient, HttpErrorResponse, HttpEvent, HttpResponse} from "@angular/c
 import {Observable} from "rxjs";
 import {User} from "../models/user";
 import {CustomHttpResponse} from "../Http-Response/Custom-http-response";
+import {ChangePasswordComponent} from "../ArchiveManagement/Componants/change-password/change-password.component";
+import {ChangePasswordRequest} from "../models/ChangePasswordRequest";
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +28,9 @@ export class UserService {
   }
   public resetPassword(email: string): Observable<CustomHttpResponse | HttpErrorResponse>{
     return  this.http.get<CustomHttpResponse>(`${this.host}/api/archive/user/resetPassword/${email}`);
+  }
+  public changePassword(request:ChangePasswordRequest): Observable<any>{
+    return  this.http.post(`${this.host}/api/archive/user/change-password`, request);
   }
 
   public updateProfilrImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse>{

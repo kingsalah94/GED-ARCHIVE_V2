@@ -10,6 +10,6 @@ export class Dossier {
   typeDossier?: string
   etatDossier?: string
   boiteDTO?: Boite
-  ResponsableTraitementDTO?: ResponsableTraitement
+  responsableTraitementDTO?: ResponsableTraitement
 }
 

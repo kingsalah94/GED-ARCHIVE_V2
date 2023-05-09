@@ -13,7 +13,7 @@ export class BoiteService {
   constructor(private http: HttpClient) { }
 
   public saveBoite(boite: Boite): Observable<Boite> {
-    return this.http.post<Boite>(environment.backendHost + "/boite",boite)
+    return this.http.post<Boite>(environment.backendHost + "/api/archive/boite",boite)
   }
 
   public getBoite(): Observable<Array<Boite>> {
@@ -22,28 +22,28 @@ export class BoiteService {
 
 
   public getAllBoite(): Observable<Boite[]> {
-    return this.http.get<Boite[]>(environment.backendHost + "/boite")
+    return this.http.get<Boite[]>(environment.backendHost + "/api/archive/boite")
   }
   public getOneBoite(id:any): Observable<Boite> {
-    return this.http.get<Boite>(environment.backendHost + "/boite/"+id)
+    return this.http.get<Boite>(environment.backendHost + "/api/archive/boite/"+id)
   }
 
   public create(data: any): Observable<any> {
-    return this.http.post(environment.backendHost + "/boite",data)
+    return this.http.post(environment.backendHost + "/api/archive/boite",data)
   }
 
   public delete(id: any):Observable<any> {
-    return this.http.delete(environment.backendHost + "/boite/"+id)
+    return this.http.delete(environment.backendHost + "/api/archive/boite/"+id)
   }
 
   public updateBoite(boite: Boite): Observable<Boite> {
-    return this.http.put<Boite>(environment.backendHost+"/boite/"+boite.id,boite);
+    return this.http.put<Boite>(environment.backendHost+"/api/archive/boite/"+boite.id,boite);
   }
   public updateBoites(id: any,data:any): Observable<any> {
-    return this.http.put(environment.backendHost+"/boite/"+id,data);
+    return this.http.put(environment.backendHost+"/api/archive/boite/"+id,data);
   }
 
   findByNom(keyword: string): Observable<Boite[]> {
-    return this.http.get<Boite[]>(environment.backendHost+"/boite/search?keyword="+keyword);
+    return this.http.get<Boite[]>(environment.backendHost+"/api/archive/boite/search?keyword="+keyword);
   }
 }

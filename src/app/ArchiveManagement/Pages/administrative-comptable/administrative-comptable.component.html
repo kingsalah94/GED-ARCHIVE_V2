@@ -3,10 +3,10 @@
     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#document-tab-pane" type="button" role="tab" aria-controls="document-tab-pane" aria-selected="false">Documents</button>
+    <button class="nav-link" id="document-tab" data-bs-toggle="tab" data-bs-target="#document-tab-pane" type="button" role="tab" aria-controls="document-tab-pane" aria-selected="false">Documents</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#dossier-tab-pane" type="button" role="tab" aria-controls="dossier-tab-pane" aria-selected="false">Dossiers</button>
+    <button class="nav-link" id="dossier-tab" data-bs-toggle="tab" data-bs-target="#dossier-tab-pane" type="button" role="tab" aria-controls="dossier-tab-pane" aria-selected="false">Dossiers</button>
   </li>
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="boite-tab" data-bs-toggle="tab" data-bs-target="#boite-tab-pane" type="button" role="tab" aria-controls="boite-tab-pane" aria-selected="false">Boite D'archives</button>
@@ -18,7 +18,7 @@
     ...
   </div>
   <!--=======Document=====-->
-  <div class="tab-pane fade" id="document-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+  <div class="tab-pane fade" id="document-tab-pane" role="tabpanel" aria-labelledby="document-tab" tabindex="0">
     <!--Table Contain-->
     <div class="tab-content p-5 opacity-75" id="myTabContainer">
       <div class="tab-pane fade show active" id="users">
@@ -204,9 +204,9 @@
         </div>
       </div>
     </div>
-    <!--End of Add User-->
+    <!--End of Add Document-->
 
-    <!--Modal Edit User-->
+    <!--Modal Edit Document-->
     <div class="modal fade" id="editDocumentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -269,8 +269,10 @@
         </div>
       </div>
     </div>
-    <!--End of Edit User-->
+    <!--End of Edit Document-->
+    </div>
   </div>
+
   <!--======Dossier=======-->
   <div class="tab-pane fade" id="dossier-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
     <div class="row p-4">
@@ -339,7 +341,15 @@
                         </select>
                       </div>
                     </div>
-
+                    <div class="row mb-3">
+                      <div class="col form-group">
+                        <label class="col-form-label col-sm-2">Responsable de Traitement</label>
+                        <select class="form-control" name="boite" [(ngModel)]="dossiers.responsableTraitementDTO" id="exampl2ess3FormControlSelect1">
+                          <option [ngValue]="undefined">--Select Responsable--</option>
+                          <option *ngFor="let r of responsable" [ngValue]="r">{{r.nomRt}}</option>
+                        </select>
+                      </div>
+                    </div>
                     <div class="col-md-12 text-end">
                       <button type="reset" class="btn btn-danger me-4">
                         <i class="fas fa-ban"></i>&nbsp;
@@ -359,8 +369,53 @@
       </div>
     </div>
   </div>
+
   <!--=====================Boite===================-->
   <div class="tab-pane fade" id="boite-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">
-    ...
+    <div class="container p-4">
+      <div class="card">
+        <div class="col mb-3 p-4">
+          <hr>
+          <div class="col-md-12">
+            <div class="col-md-12 mb-3">
+              <h2>
+                <i class="fas fa-info-circle blue-color"></i>&nbsp;
+                Information de la Boite
+              </h2>
+            </div>
+            <div class="col-md-12 ">
+              <form>
+                <div class="row mb-3">
+                  <div class="col form-group">
+                    <label  class="form-label">Cote(numero de la boite):</label>
+                    <input type="text" class="form-control" name="numeroBoite"
+                           [(ngModel)]="boites.numeroBoite"
+                           placeholder="Cote">
+                  </div>
+                  <div class="col form-group">
+                    <label class="form-label">Etagere</label>
+                    <select class="form-control" name="etagerDTO" [(ngModel)]="boites.etagereDTO" id="examplem3FormControlSelect1">
+                      <option [ngValue]="undefined">--Select Etagere--</option>
+                      <option *ngFor="let et of etagere" [ngValue]="et">Etagere N#{{et.numeroEtagere}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12 text-end">
+                  <button class="btn btn-danger me-4" (cancel)="boites">
+                    <i class="fas fa-ban"></i>&nbsp;
+                    Annuler
+                  </button>
+                  <button class="btn btn-primary" (click)="handleSaveBoite()">
+                    <i class="fas fa-save"></i>&nbsp;
+                    Enregistrer
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+

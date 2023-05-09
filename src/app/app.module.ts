@@ -16,7 +16,7 @@ import { MenuComponent } from './ArchiveManagement/Componants/menu/menu.componen
 import { FooterComponent } from './ArchiveManagement/Componants/footer/footer.component';
 import { DashboardComponent } from './ArchiveManagement/Pages/dashboard/dashboard.component';
 import { HeaderComponent } from './ArchiveManagement/Componants/header/header.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ProfileComponent} from "./ArchiveManagement/Componants/profile/profile.component";
 import {
   ArchivesConfigurationComponent
@@ -27,6 +27,7 @@ import {
 import {
   ControleConformiterComponent
 } from "./ArchiveManagement/Pages/controle-conformiter/controle-conformiter.component";
+import {ChangePasswordComponent} from "./ArchiveManagement/Componants/change-password/change-password.component";
 
 @NgModule({
   declarations: [
@@ -41,18 +42,20 @@ import {
     ProfileComponent,
     ArchivesConfigurationComponent,
     AdministrativeComptableComponent,
-    ControleConformiterComponent
+    ControleConformiterComponent,
+    ChangePasswordComponent
 
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        HttpClientModule,
-        NotificationModule,
-        FormsModule,
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    NotificationModule,
+    FormsModule,
+    ReactiveFormsModule,
 
-    ],
+  ],
   providers: [AuthenticationGuard ,AuthenticationService, UserService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor,multi:true}],
   bootstrap: [AppComponent]
 })

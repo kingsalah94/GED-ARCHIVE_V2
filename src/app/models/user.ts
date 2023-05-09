@@ -14,6 +14,7 @@ export class User {
   public authorities: string[];
   public active: boolean;
   public notLocked: boolean;
+  public firstLogin: boolean;
 
 
   constructor() {
@@ -35,6 +36,7 @@ export class User {
     this.authorities = [];
     this.active = false;
     this.notLocked = false;
+    this.firstLogin= true;
   }
 
 

@@ -14,6 +14,12 @@ import {Dossier} from "../../../models/dossier";
 import {BoiteService} from "../../../GlobaleServices/Boite/boite.service";
 import {Boite} from "../../../models/Boite";
 import {DossierService} from "../../../GlobaleServices/dossier/dossier.service";
+import {ResponsableTraitement} from "../../../models/ResponsableTraitement";
+import {
+  ResponsableTraitementService
+} from "../../../GlobaleServices/ResponsableTraitement/responsable-traitement.service";
+import {Etagere} from "../../../models/Etagere";
+import {EtagereService} from "../../../GlobaleServices/Etagere/etagere.service";
 
 @Component({
   selector: 'app-administrative-comptable',
@@ -36,13 +42,19 @@ export class AdministrativeComptableComponent {
   editDocument = new Documents();
   selectedButton: string = '';
   public dossier!: Dossier[];
+  public responsable!: ResponsableTraitement[];
+  //public responsabletraitement: ResponsableTraitement = new ResponsableTraitement();
   dossiers: Dossier = new Dossier();
-  boite: Boite[] = [];
+  boite!: Boite[];
+  boites: Boite = new Boite();
+  etagere: Etagere[]=[];
 
 
   constructor(private boiteService:BoiteService,
               private documentService: DocumentsService,
+              private responsableService: ResponsableTraitementService,
               private dossierService: DossierService,
+              private etagereService:EtagereService,
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService) {
   }
@@ -50,9 +62,13 @@ export class AdministrativeComptableComponent {
   ngOnInit(): void {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getDocuments(true);
-    this.getDossier(true)
+    this.getDossier(true);
     this.boiteService.getBoite()
-      .subscribe(response =>this.boite=response)
+      .subscribe(response =>this.boite=response);
+    this.responsableService.getResponsable()
+      .subscribe(response =>this.responsable=response);
+    this.etagereService.getEtagere()
+      .subscribe(response =>this.etagere=response)
   }
   public changeTitle(title: string): void{
     this.titleSubject.next(title);
@@ -230,7 +246,7 @@ export class AdministrativeComptableComponent {
     this.dossierService.create(this.dossiers).subscribe({
       next :data=>{
         alert("Le Dossier est Creer Avec Succer");
-        //this.newDocumentFormGroup.reset();
+
       },
       error: (err: any) => {
         console.log(err);
@@ -238,4 +254,16 @@ export class AdministrativeComptableComponent {
     });
   }
 
+  /*==================Partie Gest Boite==============*/
+
+  handleSaveBoite(){
+    this.boiteService.create(this.boites).subscribe({
+      next : data=>{
+        alert("Boite Creer Avec Succer");
+      },
+      error: (err:any) => {
+        console.log(err);
+      }
+    });
+  }
 }

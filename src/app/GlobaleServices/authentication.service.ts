@@ -24,7 +24,8 @@ export class AuthenticationService {
   public register(user: User): Observable<HttpResponse<User>>{
     return this.http.post<User>
     (`${this.host}/api/archive/user/register`,user,{observe:'response'});
-  }public add(user: User): Observable<HttpResponse<User>>{
+  }
+  public add(user: User): Observable<HttpResponse<User>>{
     return this.http.post<User>
     (`${this.host}/api/archive/user/add`,user,{observe:'response'});
   }
@@ -59,20 +60,7 @@ export class AuthenticationService {
   public getToken(): string{
     return <string>this.token;
   }
-  /*public isloggedIn(): boolean {
-    this.loadToken();
-    if(this.token != null && this.token !== ''){
-      if(this.jwtHelper.decodeToken(this.token).sub != null || ''){
-        if(this.jwtHelper.isTokenExpired(this.token)){
-          this.loggedInUsername = this.jwtHelper.decodeToken(this.token).sub;
-          return true;
-        }
-      }
-    }else {
-      this.logOut();
-      return false;
-    }
-  }*/
+
   public isUserLoggedIn(): boolean {
     this.loadToken();
     if (this.token && this.jwtHelper.decodeToken(this.token).sub) {

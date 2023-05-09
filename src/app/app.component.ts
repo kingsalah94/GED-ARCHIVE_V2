@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Configuration, OpenAIApi} from "openai";
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'GED-ARCHIVE';
+
+
 
 }
