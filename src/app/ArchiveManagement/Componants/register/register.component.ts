@@ -6,6 +6,9 @@ import {NotificationService} from "../../../GlobaleServices/notification.service
 import {User} from "../../../models/user";
 import {HttpErrorResponse} from "@angular/common/http";
 import {NotificationType} from "../../../Enumerations/notification-type.enum";
+import {DivisionService} from "../../../GlobaleServices/Division/division.service";
+import {Divisions} from "../../../models/Divisions";
+
 
 @Component({
   selector: 'app-register',
@@ -15,21 +18,27 @@ import {NotificationType} from "../../../Enumerations/notification-type.enum";
 export class RegisterComponent implements OnInit,OnDestroy{
   public showLoading: boolean | undefined;
   private subscription : Subscription[] = [];
-  user?: User;
+  user: User = new User();
+  division!: Divisions[];
+  divisions: Divisions = new Divisions();
 
   constructor(private router : Router,
+              private divisionService: DivisionService,
               private authenticationService: AuthenticationService,
               private notificationService: NotificationService) {
   }
   ngOnInit(): void {
-    if (this.authenticationService.isUserLoggedIn()){
+    this.divisionService.getDivisions().subscribe(response =>this.division=response);
+    /*if (this.authenticationService.isUserLoggedIn()){
       this.router.navigateByUrl('/dashboard');
-    }
+    }*/
+
   }
 
 public onRegister(user:User): void{
     this.showLoading = true;
-      this.authenticationService.register(user).subscribe({
+      // @ts-ignore
+  this.authenticationService.register(user).subscribe({
         next: response => {
           this.showLoading = false;
           this.sendNotification(NotificationType.SUCCESS,`A new account was created for ${response.body?.firstName}.

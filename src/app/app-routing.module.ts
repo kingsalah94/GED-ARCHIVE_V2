@@ -16,6 +16,7 @@ import {
 import {
   ArchivesConfigurationComponent
 } from "./ArchiveManagement/Pages/archives-configuration/archives-configuration.component";
+import {ChangePasswordComponent} from "./ArchiveManagement/Componants/change-password/change-password.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -47,6 +48,11 @@ const routes: Routes = [
       {
         path: 'archives/configurations',
         component: ArchivesConfigurationComponent,
+        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'user/change-password',
+        component: ChangePasswordComponent,
         canActivate: [AuthenticationGuard]
       },
     ]

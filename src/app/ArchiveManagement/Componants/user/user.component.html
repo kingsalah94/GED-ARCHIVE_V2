@@ -218,6 +218,13 @@
                   <label for="email">Email</label>
                   <input type="email" name="email" id="email" required ngModel class="form-control">
                 </div>
+                <div class="col form-group">
+                  <label class="col-form-label col-sm-2">Dossier</label>
+                  <select class="form-control" name="divisionId" ngModel="user.divisionId" id="example3FormControlSelect1">
+                    <option ngValue="undefined">--Select un Dossier--</option>
+                    <option *ngFor="let d of division" [ngValue]="d.id">{{d.divisionName}}</option>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="role">Role</label>
                   <select name="role" id="role" required ngModel="ROLE_USER" class="form-control">

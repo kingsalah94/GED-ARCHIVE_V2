@@ -8,6 +8,8 @@ import {NotificationType} from "../../../Enumerations/notification-type.enum";
 import {NgForm} from "@angular/forms";
 import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
 import {AuthenticationService} from "../../../GlobaleServices/authentication.service";
+import {DivisionService} from "../../../GlobaleServices/Division/division.service";
+import {Divisions} from "../../../models/Divisions";
 
 
 @Component({
@@ -30,14 +32,17 @@ export class UserComponent implements OnInit{
   editUser = new User();
   selectedButton: string = '';
   public showLoading: boolean | undefined;
+  division!: Divisions[];
+  divisions: Divisions = new Divisions();
 
 
-  constructor(private userService: UserService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
+  constructor(private divisionService:DivisionService, private userService: UserService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getUsers(true);
+    this.divisionService.getDivisions().subscribe(response =>this.division=response);
   }
   public changeTitle(title: string): void{
     this.titleSubject.next(title);

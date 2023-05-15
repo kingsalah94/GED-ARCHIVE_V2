@@ -64,6 +64,17 @@ export class UserService {
     formData.append('profileImage',profileImage);
     formData.append('isActive',JSON.stringify(user.active));
     formData.append('isNotLocked',JSON.stringify(user.notLocked));
+    formData.append('firstLogin',JSON.stringify(user.firstLogin));
+    formData.append('divisionId',user.divisionId);
+    return formData;
+  }
+
+  public changeUserPasswordFormData( request: ChangePasswordRequest): FormData {
+    const formData = new FormData();
+    formData.append('username',request.username);
+    formData.append('password',request.password);
+    formData.append('newPassword',request.newPassword);
+    formData.append('confirmNewPassword',request.confirmNewPassword);
     return formData;
   }
 

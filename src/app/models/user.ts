@@ -15,6 +15,7 @@ export class User {
   public active: boolean;
   public notLocked: boolean;
   public firstLogin: boolean;
+  public divisionId:any;
 
 
   constructor() {
@@ -36,7 +37,8 @@ export class User {
     this.authorities = [];
     this.active = false;
     this.notLocked = false;
-    this.firstLogin= true;
+    this.firstLogin= false;
+    this.divisionId=0;
   }
 
 

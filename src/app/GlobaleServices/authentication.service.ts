@@ -25,6 +25,7 @@ export class AuthenticationService {
     return this.http.post<User>
     (`${this.host}/api/archive/user/register`,user,{observe:'response'});
   }
+
   public add(user: User): Observable<HttpResponse<User>>{
     return this.http.post<User>
     (`${this.host}/api/archive/user/add`,user,{observe:'response'});

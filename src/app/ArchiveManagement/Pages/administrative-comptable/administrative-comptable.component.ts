@@ -99,7 +99,8 @@ export class AdministrativeComptableComponent {
         this.refreshing = false;
       })
     );
-  } public getDossier(shwNotification: Boolean): void{
+  }
+  public getDossier(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
     this.subscription.push(this.documentService.getDossier().subscribe((response: Dossier[] ) => {
@@ -108,7 +109,7 @@ export class AdministrativeComptableComponent {
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
-            this.sendNotification(NotificationType.SUCCESS, `${response.length} dossier(s) Charger avec succer.`);
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} dossier(s) Charger.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
