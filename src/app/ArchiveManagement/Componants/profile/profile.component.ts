@@ -19,13 +19,14 @@ export class ProfileComponent {
   private titleSubject = new BehaviorSubject<string>('Users');
   public titleAction$= this.titleSubject.asObservable();
   public users!: User[] ;
+  public currentUser!:User
   public refreshing: boolean | undefined;
   private subscription : Subscription[] = [];
   public fileName: string | undefined;
   public profileImage: File | undefined;
   public selectedUser: User = new User();
   private currentUsername!: string;
-  currentUser: any;
+  //currentUser: any;
   editUser = new User();
   constructor(private userService: UserService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
   }
@@ -142,6 +143,27 @@ export class ProfileComponent {
     this.editUser = editUser;
     this.currentUsername = editUser.username;
     this.clickButton('#openUserEdit');
+  }
+
+  public onUpdateCurrentUser(user: User): void{
+    this.refreshing=true;
+    this.currentUsername = this.authenticationService.getUserFromLocalCache().username;
+    // @ts-ignore
+    const formData = this.userService.createUserFormData(this.currentUsername, user, this.profileImage);
+    this.subscription.push(this.userService.updateUser(formData).subscribe({
+      next: (response: User)=>{
+        this.getUsers(false);
+        // @ts-ignore
+        this.fileName = "";
+        // @ts-ignore
+        this.profileImage = "";
+        this.sendNotification(NotificationType.SUCCESS, `${response.firstName} ${response.lastName} Updated Successfully`);
+      },
+      error: (e)=> {
+        console.error(e);
+        this.sendNotification(NotificationType.ERROR, e.message);
+      }
+    }));
   }
 
   public onResetPassword(emailForm: NgForm): void{

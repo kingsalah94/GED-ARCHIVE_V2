@@ -1,9 +1,9 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
   <div class="row flex-lg-nowrap">
-    <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+    <!--<div class="col-12 col-lg-auto mb-3" style="width: 200px;">
       <div class="card p-3">
-        <div class="e-navlist e-navlist--active-bg">
+        <div class="e-navlist e-navlist&#45;&#45;active-bg">
           <ul class="nav">
             <li class="nav-item"><a class="nav-link px-2 active" href="#"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
             <li class="nav-item"><a class="nav-link px-2" href="https://www.bootdey.com/snippets/view/bs4-crud-users" target="__blank"><i class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
@@ -11,7 +11,7 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <div class="col">
       <div class="row">
@@ -29,41 +29,58 @@
                   </div>
                   <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                     <div class="text-center text-sm-left mb-2 mb-sm-0">
-                      <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                      <p class="mb-0">@johnny.s</p>
-                      <div class="text-muted"><small>Last seen 2 hours ago</small></div>
+                      <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{currentUser.firstName}} {{currentUser.lastName}}</h4>
+                      <p class="mb-0">{{currentUser.username}}</p>
+                      <div *ngIf="currentUser.lastLoginDateDisplay !== null" class="text-muted"><small>last login:{{currentUser.lastLoginDateDisplay | date: 'medium'}}</small></div>
                       <div class="mt-2">
-                        <button class="btn btn-primary" type="button">
+                        <button (click)="profilImageInput.click()" class="btn btn-primary" type="button">
                           <i class="fa fa-fw fa-camera"></i>
                           <span>Change Photo</span>
                         </button>
                       </div>
                     </div>
                     <div class="text-center text-sm-right">
-                      <span class="badge badge-secondary">administrator</span>
-                      <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
+                      <span class="badge bg-secondary">{{currentUser.role}}</span>
+                      <div class="text-muted"><small>joined: {{currentUser.joinDate | date: 'medium'}}</small></div>
                     </div>
                   </div>
                 </div>
-                <ul class="nav nav-tabs">
-                  <li class="nav-item"><a href="" class="active nav-link">Settings</a></li>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Infos</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Password</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
+                  </li>
+                  <!--<li class="nav-item" role="presentation">
+                    <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
+                  </li>-->
                 </ul>
-                <div class="tab-content pt-3">
-                  <div class="tab-pane active">
-                    <form class="form" novalidate="">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                    <form #profileUserForm="ngForm" (ngSubmit)="onUpdateCurrentUser(profileUserForm)" class="form" novalidate="">
                       <div class="row">
                         <div class="col">
                           <div class="row">
                             <div class="col">
                               <div class="form-group">
-                                <label>Full Name</label>
-                                <input class="form-control" type="text" name="name" placeholder="John Smith" value="John Smith">
+                                <label>First Name</label>
+                                <input class="form-control" type="text" name="firstName" required [(ngModel)]="currentUser.firstName">
+                              </div>
+                            </div>
+                            <div class="col">
+                              <div class="form-group">
+                                <label>Last Name</label>
+                                <input class="form-control" type="text" name="firstName" required [(ngModel)]="currentUser.lastName">
                               </div>
                             </div>
                             <div class="col">
                               <div class="form-group">
                                 <label>Username</label>
-                                <input class="form-control" type="text" name="username" placeholder="johnny.s" value="johnny.s">
+                                <input class="form-control" type="text" name="username" [(ngModel)]="currentUser.username">
                               </div>
                             </div>
                           </div>
@@ -71,7 +88,7 @@
                             <div class="col">
                               <div class="form-group">
                                 <label>Email</label>
-                                <input class="form-control" type="text" placeholder="user@example.com">
+                                <input class="form-control" type="email" name="email" [(ngModel)]="currentUser.email">
                               </div>
                             </div>
                           </div>
@@ -85,7 +102,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="row">
+                      <!--<div class="row">
                         <div class="col-12 col-sm-6 mb-3">
                           <div class="mb-2"><b>Change Password</b></div>
                           <div class="row">
@@ -134,15 +151,19 @@
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div>-->
                       <div class="row">
                         <div class="col d-flex justify-content-end">
                           <button class="btn btn-primary" type="submit">Save Changes</button>
                         </div>
                       </div>
                     </form>
-
                   </div>
+                  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                    <app-change-password></app-change-password>
+                  </div>
+                  <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
+                  <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
                 </div>
               </div>
             </div>
@@ -162,9 +183,8 @@
           </div>
           <div class="card">
             <div class="card-body">
-              <h6 class="card-title font-weight-bold">Support</h6>
-              <p class="card-text">Get fast, free help from our friendly assistants.</p>
-              <button type="button" class="btn btn-primary">Contact Us</button>
+              <h6 class="card-title font-weight-bold">Authorities</h6>
+              {{currentUser.authorities}}
             </div>
           </div>
         </div>

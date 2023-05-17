@@ -30,7 +30,7 @@ export class UserService {
     return  this.http.get<CustomHttpResponse>(`${this.host}/api/archive/user/resetPassword/${email}`);
   }
   public changePassword(request:ChangePasswordRequest): Observable<any>{
-    return  this.http.post(`${this.host}/api/archive/user/change-password`, request);
+    return  this.http.put(`${this.host}/api/archive/user/change-password`, request);
   }
 
   public updateProfilrImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse>{

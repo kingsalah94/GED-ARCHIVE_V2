@@ -15,7 +15,7 @@ export class DashboardComponent {
   }
   ngOnInit(): void {
     if (this.authenticationService.isUserLoggedIn()){
-      if (!(this.authenticationService.getUserFromLocalCache().firstLogin)) {
+      if ((this.authenticationService.getUserFromLocalCache().firstLogin)) {
         this.router.navigateByUrl('/dashboard/user/change-password')
       }else {
         this.router.navigateByUrl('/dashboard');

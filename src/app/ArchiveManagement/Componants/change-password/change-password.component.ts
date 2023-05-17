@@ -19,7 +19,7 @@ export class ChangePasswordComponent implements OnInit{
   user!: User;
   currentUser!: User;
   showLoading: boolean = false;
-  request!:ChangePasswordRequest;
+  request!:ChangePasswordRequest[];
   public refreshing: boolean | undefined;
   private subscription : Subscription[] = [];
 
@@ -47,14 +47,13 @@ export class ChangePasswordComponent implements OnInit{
 
   public onResetPassword(requestForm: NgForm): void{
     this.refreshing = true;
-    //const emailAddress = emailForm.value['reset-password-email'];
-    const formData = this.userService.changeUserPasswordFormData( requestForm.value);
-    // @ts-ignore
-    this.subscription.push(this.userService.changePassword(formData).subscribe({
-      next: (response: CustomHttpResponse)=>{
-        this.sendNotification(NotificationType.SUCCESS, response.message);
+    //const formData = this.userService.changeUserPasswordFormData( requestForm.value);
+    this.subscription.push(this.userService.changePassword(this.request=requestForm.value).subscribe({
+      next: (response: ChangePasswordRequest)=>{
+        this.sendNotification(NotificationType.SUCCESS, "Your password is updated successfully!!!");
         this.refreshing = false;
-        //emailForm.reset();
+        requestForm.reset();
+
       },
       error: err => {
         this.sendNotification(NotificationType.WARNING, err.error.messages);
