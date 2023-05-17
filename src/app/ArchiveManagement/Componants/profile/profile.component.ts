@@ -28,6 +28,7 @@ export class ProfileComponent {
   private currentUsername!: string;
   //currentUser: any;
   editUser = new User();
+  profilImageInput: any;
   constructor(private userService: UserService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
   }
 
@@ -152,6 +153,7 @@ export class ProfileComponent {
     const formData = this.userService.createUserFormData(this.currentUsername, user, this.profileImage);
     this.subscription.push(this.userService.updateUser(formData).subscribe({
       next: (response: User)=>{
+        this.authenticationService.addUserToLocalCache(response);
         this.getUsers(false);
         // @ts-ignore
         this.fileName = "";
