@@ -274,10 +274,10 @@
   </div>
 
   <!--======Dossier=======-->
-  <div class="tab-pane fade" id="dossier-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+  <div class="tab-pane fade " id="dossier-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
     <div class="row p-4">
-      <div class="col-md-7 container">
-        <div class="card col-md-10 mt-1 mb-4">
+      <div class="col-md-7 container ">
+        <div class="card col-md-12 mt-1 mb-4 justify-content-center bg-success-subtle">
           <div class="card-body">
             <div class="col mb-3 p-4">
               <div class="p-2 flex-fill text-end">
@@ -301,7 +301,6 @@
                         <input type="text"  class="form-control" name="nomDossier"
                                [(ngModel)]="dossiers.nomDossier" placeholder="nomDossier">
                       </div>
-
                       <div class="col">
                         <label  class="form-label">Cote du Dossier</label>
                         <input type="text"  class="form-control" name="cote" [(ngModel)]="dossiers.cote">
@@ -312,13 +311,6 @@
                         <label  class="form-label">Date</label>
                         <input type="date" class="form-control" name="dateDeCreation"
                                [(ngModel)]="dossiers.dateDeCreation " placeholder="dateDeCreation">
-                      </div>
-                      <div class="col">
-                        <label class="form-label">Type Du Dossier</label>
-                        <select  class="form-control" name="typeDocument" [(ngModel)]="dossiers.typeDossier" id="exmples3FormControlSelect1">
-                          <option value="ADMINISTRATIVE_ET_COMPTABLE">ADMINISTRATIVE_ET_COMPTABLE</option>
-                          <option value="CONTROLE_CONFORMITE">CONTROLE_CONFORMITE</option>
-                        </select>
                       </div>
                       <div class="col">
                         <label class="form-label">Etat Dossier</label>
@@ -342,12 +334,35 @@
                       </div>
                     </div>
                     <div class="row mb-3">
+                      <div class="col">
+                        <label  class="form-label">Description:</label>
+                        <input type="text" name="description" class="form-control" [(ngModel)]="dossiers.description" placeholder="description">
+                      </div>
                       <div class="col form-group">
-                        <label class="col-form-label col-sm-2">Responsable de Traitement</label>
+                        <label class="col-form-label col-sm-2">DateLimite</label>
+                        <input type="date" name="dateLimiteConservation" class="form-control" [(ngModel)]="dossiers.dateLimiteConservation" placeholder="dateLimiteConservation">
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col">
+                        <label class="col-form-label col-sm-2">ResponsableTrait</label>
                         <select class="form-control" name="boite" [(ngModel)]="dossiers.responsableTraitementDTO" id="exampl2ess3FormControlSelect1">
-                          <option [ngValue]="undefined">--Select Responsable--</option>
+                          <option [ngValue]="undefined">--Select ResponsableTrait--</option>
                           <option *ngFor="let r of responsable" [ngValue]="r">{{r.nomRt}}</option>
                         </select>
+                      </div>
+                      <div class="col">
+                        <label class="form-label">Type Du Dossier</label>
+                        <select  class="form-control" name="typeDocument" [(ngModel)]="dossiers.typeDossier" id="exmples3FormControlSelect1">
+                          <option value="ADMINISTRATIVE_ET_COMPTABLE">ADMINISTRATIVE_ET_COMPTABLE</option>
+                          <option value="CONTROLE_CONFORMITE">CONTROLE_CONFORMITE</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col form-group">
+                        <label class="col-form-label col-sm-2">RespDossier</label>
+                        <input type="text" name="responsable" class="form-control" [(ngModel)]="dossiers.responsable" placeholder="responsable">
                       </div>
                     </div>
                     <div class="col-md-12 text-end">
@@ -373,7 +388,7 @@
   <!--=====================Boite===================-->
   <div class="tab-pane fade" id="boite-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">
     <div class="container p-4">
-      <div class="card">
+      <div class="card bg-success-subtle">
         <div class="col mb-3 p-4">
           <hr>
           <div class="col-md-12">
@@ -394,10 +409,52 @@
                   </div>
                   <div class="col form-group">
                     <label class="form-label">Etagere</label>
-                    <select class="form-control" name="etagerDTO" [(ngModel)]="boites.etagereDTO" id="examplem3FormControlSelect1">
+                    <select class="form-control" name="rangerDTO" [(ngModel)]="boites.rangerDTO" id="examplem3FormControlSelect1">
                       <option [ngValue]="undefined">--Select Etagere--</option>
-                      <option *ngFor="let et of etagere" [ngValue]="et">Etagere N#{{et.numeroEtagere}}</option>
+                      <option *ngFor="let et of etagere" [ngValue]="et">Ranger N#{{et.numeroEtagere}}</option>
                     </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col form-group">
+                    <label  class="form-label">Description:</label>
+                    <input type="text" class="form-control" name="description"
+                           [(ngModel)]="boites.description"
+                           placeholder="Description">
+                  </div>
+                  <div class="col form-group">
+                    <label class="form-label">Responsable Du Dossier</label>
+                    <<input type="text" class="form-control" name="responsable"
+                            [(ngModel)]="boites.responsable"
+                            placeholder="Responsable">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col form-group">
+                    <label  class="form-label">Date Limite Conservation:</label>
+                    <input type="datetime-local" class="form-control" name="dateLimiteConservation"
+                           [(ngModel)]="boites.dateLimiteConservation"
+                           placeholder="DateLimiteConservation">
+                  </div>
+                  <div class="col form-group">
+                    <label class="form-label">Etagere</label>
+                    <input type="text" class="form-control" name="emplacement"
+                           [(ngModel)]="boites.emplacement"
+                           placeholder="Emplacement">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col form-group">
+                    <label  class="form-label">Nombre de Dossier:</label>
+                    <input type="text" class="form-control" name="nombreDossiers"
+                           [(ngModel)]="boites.nombreDossiers"
+                           placeholder="NombreDossiers">
+                  </div>
+                  <div class="col form-group">
+                    <label class="form-label">Capacitee</label>
+                    <input type="text" class="form-control" name="capacite"
+                           [(ngModel)]="boites.capacite"
+                           placeholder="Capacite">
                   </div>
                 </div>
                 <div class="col-md-12 text-end">

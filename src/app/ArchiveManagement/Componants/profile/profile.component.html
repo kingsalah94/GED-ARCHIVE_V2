@@ -12,6 +12,11 @@
                       <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
                         <img src="{{currentUser.profileImageUrl}}" width="140" class="rounded" alt="" />
                       </div>
+                      <div *ngIf="fileStatus.status === 'progress'" class="progress mt-1">
+                        <div class="progress-bar bg-info" role="progressbar" [style.width.%]="fileStatus.percentage"  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                          {{ fileStatus.percentage }}%
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
@@ -20,7 +25,7 @@
                       <p class="mb-0">{{currentUser.username}}</p>
                       <div *ngIf="currentUser.lastLoginDateDisplay !== null" class="text-muted"><small>last login:{{currentUser.lastLoginDateDisplay | date: 'medium'}}</small></div>
                       <div class="mt-2">
-                        <button (click)="profilImageInput.click()" class="btn btn-primary" type="button">
+                        <button (click)="updateProfileImage()" class="btn btn-primary" type="button">
                           <i class="fa fa-fw fa-camera"></i>
                           <span>Change Photo</span>
                         </button>
@@ -157,4 +162,8 @@
       </div>
     </div>
   </div>
+  <form enctype="multipart/form-data" style="display:none;">
+    <input type="file" (change)="handleProfileImageChange($event)"
+           name="profile-image-input" id="profile-image-input" placeholder="file" accept="*">
+  </form>
 </div>

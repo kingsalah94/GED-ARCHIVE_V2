@@ -4,6 +4,7 @@ export class Etagere {
   id?: any
   numeroEtagere?: any
   nbrRanger?: any
+  description?:string
   rayonDTO?: Rayon
 }
 

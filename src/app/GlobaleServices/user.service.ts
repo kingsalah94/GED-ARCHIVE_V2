@@ -26,20 +26,20 @@ export class UserService {
   public updateUser(formData: FormData): Observable<any>{
     return  this.http.put<User>(`${this.host}/api/archive/user/update`,formData);
   }
-  public resetPassword(email: string): Observable<CustomHttpResponse | HttpErrorResponse>{
+  public resetPassword(email: string): Observable<CustomHttpResponse>{
     return  this.http.get<CustomHttpResponse>(`${this.host}/api/archive/user/resetPassword/${email}`);
   }
   public changePassword(request:ChangePasswordRequest): Observable<any>{
     return  this.http.put(`${this.host}/api/archive/user/change-password`, request);
   }
 
-  public updateProfilrImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse>{
+  public updateProfileImage(formData: FormData): Observable<HttpEvent<User>>{
     return  this.http.post<User>(`${this.host}/api/archive/user/updateProfileImage`,formData,
       {reportProgress: true,
       observe: 'events'
       });
   }
-  public deleteUser(username: string): Observable<CustomHttpResponse | HttpErrorResponse>{
+  public deleteUser(username: string): Observable<CustomHttpResponse>{
     return  this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/user/delete/${username}`);
   }
   public addUsersToLocalCache(users: User[] | HttpErrorResponse): void{
@@ -66,6 +66,14 @@ export class UserService {
     formData.append('isNotLocked',JSON.stringify(user.notLocked));
     formData.append('firstLogin',JSON.stringify(user.firstLogin));
     formData.append('divisionId',user.divisionId);
+    return formData;
+  }
+
+  public profileFormData( user: User, profileImage: File): FormData {
+    const formData = new FormData();
+    formData.append('username',user.username);
+    formData.append('profileImage',profileImage);
+
     return formData;
   }
 

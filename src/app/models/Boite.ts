@@ -1,7 +1,17 @@
 import {Etagere} from "./Etagere";
+import {Ranger} from "./Ranger";
 
 export class Boite {
   id?: any
   numeroBoite?: any
-  etagereDTO?: Etagere
+  dateCreation?:Date
+  description?:string
+  responsable?:string
+  dateLimiteConservation?:Date
+  emplacement?:string
+  nombreDossiers?:number
+  capacite?:number
+  rangerDTO?:Ranger
+ 
+
 }

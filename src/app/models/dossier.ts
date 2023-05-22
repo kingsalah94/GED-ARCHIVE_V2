@@ -9,6 +9,9 @@ export class Dossier {
   dateExtreme?: string
   typeDossier?: string
   etatDossier?: string
+  description?:string
+  responsable?:string
+  dateLimiteConservation?:Date
   boiteDTO?: Boite
   responsableTraitementDTO?: ResponsableTraitement
 }
