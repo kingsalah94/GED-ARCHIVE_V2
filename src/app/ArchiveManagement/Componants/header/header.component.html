@@ -1,21 +1,21 @@
 <!-- SEARCH FORM -->
 <div class="row">
   <div class="col-md-8">
-    <div class="input-group input-group-sm">
+    <!--<div class="input-group input-group-sm">
       <input class="form-control form-control-navbar" [(ngModel)]="keyword" type="search" placeholder="Entrez un mot-clé..." aria-label="Search">
       <div class="input-group-append">
         <button class="btn btn-primary" (click)="search()" type="submit">
           <i class="fas fa-search"></i>
         </button>
       </div>
-    </div>
+    </div>-->
   </div>
   <div class="col-md-4 ">
     <div class="row">
       <div class="col-md-10 text-end">
         <a href="javascript:void(0)" [routerLink]="['user/profile']">
           <span>Bonjour&nbsp;{{currentUser.firstName}} &nbsp;</span>
-          <img src="{{currentUser?.profileImageUrl}}" width="40" class="rounded-circle" alt="" />
+          <img src="{{currentUser?.profileImageUrl}}" width="50" height="50" class="rounded-circle" alt="" />
         </a>
       </div>
     </div>

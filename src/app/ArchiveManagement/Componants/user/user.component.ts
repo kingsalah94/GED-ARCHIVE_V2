@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subscription, takeUntil} from "rxjs";
 import {User} from "../../../models/user";
 import {UserService} from "../../../GlobaleServices/user.service";
@@ -10,6 +10,9 @@ import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
 import {AuthenticationService} from "../../../GlobaleServices/authentication.service";
 import {DivisionService} from "../../../GlobaleServices/Division/division.service";
 import {Divisions} from "../../../models/Divisions";
+import {Role} from "../../../Enumerations/role.enum.";
+import {SubSink} from "subsink";
+
 
 
 @Component({
@@ -17,8 +20,8 @@ import {Divisions} from "../../../models/Divisions";
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit{
-
+export class UserComponent implements OnInit, OnDestroy{
+private subs = new SubSink();
   private titleSubject = new BehaviorSubject<string>('Users');
   public titleAction$= this.titleSubject.asObservable();
   public users!: User[] ;
@@ -58,6 +61,7 @@ export class UserComponent implements OnInit{
 
   public getUsers(shwNotification: Boolean): void{
     this.refreshing = true;
+    this.subs.add(
     // @ts-ignore
     this.subscription.push(this.userService.getUsers().subscribe((response: User[] ) => {
         this.userService.addUsersToLocalCache(response);
@@ -72,7 +76,7 @@ export class UserComponent implements OnInit{
         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
         this.refreshing = false;
       })
-    );
+    ));
   }
 
   public onSelectUser(selectedUser: User): void {
@@ -201,6 +205,20 @@ export class UserComponent implements OnInit{
       })
     );
   }
+
+  public get isAdmin(): boolean {
+    return this.getUserRole() === Role.ADMIN || this.getUserRole() === Role.SUPER_ADMIN;
+  }
+  public get isManager(): boolean {
+    return this.isAdmin  || this.getUserRole() === Role.ARCHIVE_MANAGER;
+  }
+  public get isAdminOrArchiveManager(): boolean {
+    return this.isAdmin || this.isManager;
+  }
+
+  private getUserRole(): string {
+    return this.authenticationService.getUserFromLocalCache().role;
+  }
   private sendNotification(notificationType: NotificationType, message: string): void {
     if (message){
       this.notificationService.notify(notificationType,message);
@@ -215,7 +233,9 @@ export class UserComponent implements OnInit{
   }
 
 
-  onLogOut() {
 
+
+  ngOnDestroy(): void {
+    this.subscription.forEach(sub => sub.unsubscribe());
   }
 }

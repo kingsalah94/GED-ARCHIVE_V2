@@ -19,7 +19,7 @@
             <i class="fa fa-users"></i>
             Users
           </a>
-          <a class="nav-item nav-link  m-3 ml-1" (click)="changeTitle('Settings')" data-bs-toggle="tab" data-bs-target="#reset-password">
+          <a [hidden]="!isAdmin" class="nav-item nav-link  m-3 ml-1" (click)="changeTitle('Settings')" data-bs-toggle="tab" data-bs-target="#reset-password">
             <i class="fa fa-cogs"></i>
             Settings
           </a>
@@ -45,7 +45,7 @@
                      placeholder="Search users...">
             </form>
             <!--Add A New User-->
-            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <button [hidden]="!isAdminOrArchiveManager" type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addUserModal">
               <i class="fa fa-plus"></i>New User
             </button>
           </div>
@@ -87,7 +87,7 @@
                 <button class="btn btn-outline-info" (click)="onEditUser(appUser)" >
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-outline-danger" (click)="onDeleteUser(appUser.username)">
+                <button [hidden]="!isAdmin" class="btn btn-outline-danger" (click)="onDeleteUser(appUser.username)">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
@@ -108,7 +108,7 @@
     </button>
 
     <!--Reset Password-->
-    <div class="tab-pane fade" id="reset-password">
+    <div [hidden]="!isAdmin" class="tab-pane fade" id="reset-password">
       <div class="card p-3">
         <form #resetPasswordForm = "ngForm" (ngSubmit)="onResetPassword(resetPasswordForm)">
           <fieldset>
@@ -192,7 +192,7 @@
     </div>
 
     <!--Modal Add User-->
-    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div [hidden]="!isAdminOrArchiveManager" class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -218,14 +218,14 @@
                   <label for="email">Email</label>
                   <input type="email" name="email" id="email" required ngModel class="form-control">
                 </div>
-                <div class="col form-group">
+                <div *ngIf="isAdmin" class="col form-group">
                   <label class="col-form-label col-sm-2">Division</label>
                   <select class="form-control" name="divisionId" ngModel="user.divisionId" id="example3FormControlSelect1">
                     <option ngValue="undefined">--Select un Dossier--</option>
                     <option *ngFor="let d of division" [ngValue]="d.id">{{d.divisionName}}</option>
                   </select>
                 </div>
-                <div class="form-group">
+                <div *ngIf="isAdmin" class="form-group">
                   <label for="role">Role</label>
                   <select name="role" id="role" required ngModel="ROLE_USER" class="form-control">
                     <option value="ROLE_USER">USER</option>
@@ -234,6 +234,10 @@
                     <option value="ROLE_ADMIN">ADMIN</option>
                     <option value="ROLE_SUPER_ADMIN">SUPER_ADMIN</option>
                   </select>
+                </div>
+                <div class="form-group">
+                  <label for="authorithy">Role</label>
+                  <input type="text" name="role" required ngModel="USER" readonly class="form-control">
                 </div>
                 <div class="input-group mb-2">
                   <div class="input-group-prepend">
@@ -286,7 +290,8 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabelEditUser">Edit {{editUser.firstName}} {{editUser.lastName}}</h1>
+            <h5 class="modal-title fs-5" id="exampleModalLabelEditUser">Edit {{editUser.firstName}} {{editUser.lastName}}
+            <small [hidden]="isAdminOrArchiveManager">(read only)</small></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&nbsp;</span>
             </button>
@@ -296,23 +301,23 @@
               <form #editUserForm="ngForm">
                 <div class="form-group">
                   <label for="firstName">First Name</label>
-                  <input type="text" name="firstName"   required [(ngModel)]="editUser.firstName" class="form-control">
+                  <input type="text" name="firstName" [disabled]="!isAdminOrArchiveManager"   required [(ngModel)]="editUser.firstName" class="form-control">
                 </div>
                 <div class="form-group">
                   <label for="lastName">Last Name</label>
-                  <input type="text" name="lastName"  required  [(ngModel)]="editUser.lastName" class="form-control">
+                  <input type="text" name="lastName" [disabled]="!isAdminOrArchiveManager"  required  [(ngModel)]="editUser.lastName" class="form-control">
                 </div>
                 <div class="form-group">
                   <label for="username">Username</label>
-                  <input type="text" name="username" required [(ngModel)]="editUser.username" class="form-control">
+                  <input type="text" name="username" [disabled]="!isAdminOrArchiveManager"  required [(ngModel)]="editUser.username" class="form-control">
                 </div>
                 <div class="form-group">
                   <label for="email">Email</label>
-                  <input type="email" name="email"  required [(ngModel)]="editUser.email" class="form-control">
+                  <input type="email" name="email" [disabled]="!isAdminOrArchiveManager"  required [(ngModel)]="editUser.email" class="form-control">
                 </div>
                 <div class="form-group">
-                  <label for="role">Role</label>
-                  <select name="role"  required [(ngModel)]="editUser.role" class="form-control">
+                  <label for="role">Role <small [hidden]="isAdmin">(read only)</small></label>
+                  <select name="role" [disabled]="!isAdmin"   required [(ngModel)]="editUser.role" class="form-control">
                     <option value="ROLE_USER">USER</option>
                     <option value="ROLE_HR">HR</option>
                     <option value="ROLE_ARCHIVE_MANAGER">ARCHIVE_MANAGER</option>
@@ -325,7 +330,7 @@
                     <span class="input-group-text">Profile Picture</span>
                   </div>
                   <div class="input-group mb-3">
-                    <input type="file"
+                    <input type="file" accept="image/*" [disabled]="!isAdminOrArchiveManager"
                            (change)="handleProfileImageChange($event)"
                            name="profileImage" class="form-control" >
                     <label class="input-group-text" >
@@ -337,14 +342,14 @@
                 <fieldset class="form-group">
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="checkbox" name="active" [(ngModel)]="editUser.active" class="form-check-input">
-                      Active
+                      <input [disabled]="!isManager" type="checkbox" name="active" [(ngModel)]="editUser.active" class="form-check-input">
+                      Active <small [hidden]="isManager">(read only)</small>
                     </label>
                   </div>
                   <div class="form-check disabled">
                     <label class="form-check-label">
-                      <input type="checkbox" name="notLocked" [(ngModel)]="editUser.notLocked" class="form-check-input">
-                      Unlocked
+                      <input [disabled]="!isManager" type="checkbox" name="notLocked" [(ngModel)]="editUser.notLocked" class="form-check-input">
+                      Unlocked <small [hidden]="isManager">(read only)</small>
                     </label>
                   </div>
                 </fieldset>
@@ -354,7 +359,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-user-close">Close</button>
-            <button type="button" (click)="onUpdateUser()" [disabled]="editUserForm.invalid" class="btn btn-primary">Update User</button>
+            <button type="button" (click)="onUpdateUser()" [disabled]="editUserForm.invalid || isAdminOrArchiveManager" class="btn btn-primary">Update User</button>
           </div>
         </div>
       </div>

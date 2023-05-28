@@ -4,7 +4,7 @@ import {User} from "../../../models/user";
 import {UserService} from "../../../GlobaleServices/user.service";
 import {NotificationService} from "../../../GlobaleServices/notification.service";
 import {AuthenticationService} from "../../../GlobaleServices/authentication.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {NotificationType} from "../../../Enumerations/notification-type.enum";
 import {NgForm} from "@angular/forms";
 import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
@@ -20,6 +20,7 @@ import {
 } from "../../../GlobaleServices/ResponsableTraitement/responsable-traitement.service";
 import {Etagere} from "../../../models/Etagere";
 import {EtagereService} from "../../../GlobaleServices/Etagere/etagere.service";
+import {Role} from "../../../Enumerations/role.enum.";
 
 @Component({
   selector: 'app-administrative-comptable',
@@ -48,6 +49,8 @@ export class AdministrativeComptableComponent {
   boite!: Boite[];
   boites: Boite = new Boite();
   etagere: Etagere[]=[];
+  keyword?: string;
+  results?: any[];
 
 
   constructor(private boiteService:BoiteService,
@@ -55,6 +58,7 @@ export class AdministrativeComptableComponent {
               private responsableService: ResponsableTraitementService,
               private dossierService: DossierService,
               private etagereService:EtagereService,
+              private http:HttpClient,
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService) {
   }
@@ -81,6 +85,12 @@ export class AdministrativeComptableComponent {
     }
   }
 
+  search() {
+    this.http.get<any[]>(`/search/${this.keyword}`).subscribe(
+      results => this.results = results,
+      error => console.error(error)
+    );
+  }
 
   public getDocuments(shwNotification: Boolean): void{
     this.refreshing = true;
@@ -168,7 +178,7 @@ export class AdministrativeComptableComponent {
     const formData = this.documentService.createDocumentFormData(this.currentIntituleDocument, this.editDocument, this.documentPdf);
     this.subscription.push(this.documentService.updateDocument(formData).subscribe({
       next: (response: Documents)=>{
-        this.clickButton('#edit-user-close');
+        this.clickButton('#edit-document-close');
         this.getDocuments(false);
         // @ts-ignore
         this.fileName = "";
@@ -199,6 +209,18 @@ export class AdministrativeComptableComponent {
       // @ts-ignore
       this.document = this.documentService.getDocumentsFromLocalCache();
     }
+  }
+  private getUserRole(): string {
+    return this.authenticationService.getUserFromLocalCache().role;
+  }
+  public get isAdmin(): boolean {
+    return this.getUserRole() === Role.ADMIN || this.getUserRole() === Role.SUPER_ADMIN;
+  }
+  public get isManager(): boolean {
+    return this.isAdmin  || this.getUserRole() === Role.ARCHIVE_MANAGER;
+  }
+  public get isAdminOrArchiveManager(): boolean {
+    return this.isAdmin || this.isManager;
   }
 
   public onEditDocument(editDocument: Documents): void{
@@ -247,7 +269,6 @@ export class AdministrativeComptableComponent {
     this.dossierService.create(this.dossiers).subscribe({
       next :data=>{
         alert("Le Dossier est Creer Avec Succer");
-
       },
       error: (err: any) => {
         console.log(err);

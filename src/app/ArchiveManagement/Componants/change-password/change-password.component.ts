@@ -9,6 +9,7 @@ import {NgForm} from "@angular/forms";
 import {NotificationType} from "../../../Enumerations/notification-type.enum";
 import {Subscription} from "rxjs";
 import {NotificationService} from "../../../GlobaleServices/notification.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-change-password',
@@ -23,26 +24,30 @@ export class ChangePasswordComponent implements OnInit{
   public refreshing: boolean | undefined;
   private subscription : Subscription[] = [];
 
-  constructor(private userService: UserService,private notificationService: NotificationService,private authenticateService:AuthenticationService) { }
+  constructor(private userService: UserService,
+              private router:Router,
+              private notificationService: NotificationService,
+              private authenticateService:AuthenticationService) { }
 
   ngOnInit(): void {
     this.currentUser = this.authenticateService.getUserFromLocalCache();
   }
 
-  onChangePassword(request:ChangePasswordRequest): void {
+ /* onChangePassword(request:ChangePasswordRequest): void {
     this.showLoading = true;
     const newPassword: string = ""; // Remplacez par le mot de passe saisi par l'utilisateur
     this.userService.changePassword(request).subscribe({
       next: (response: CustomHttpResponse) => {
         // Gérer la réponse de l'API
         this.showLoading = false;
+
       },
       error: (errorResponse: HttpErrorResponse) => {
         // Gérer les erreurs
         this.showLoading = false;
       }
     });
-  }
+  }*/
 
 
   public onResetPassword(requestForm: NgForm): void{
@@ -53,6 +58,7 @@ export class ChangePasswordComponent implements OnInit{
         this.sendNotification(NotificationType.SUCCESS, "Your password is updated successfully!!!");
         this.refreshing = false;
         requestForm.reset();
+        this.router.navigateByUrl('/dashboard');
 
       },
       error: err => {
@@ -62,6 +68,12 @@ export class ChangePasswordComponent implements OnInit{
     }))
   }
 
+
+  onLogOut() {
+    this.authenticateService.logOut();
+    this.router.navigateByUrl("/login").then(r => {})
+    this.sendNotification(NotificationType.SUCCESS, `You have been successfully logged out`)
+  }
 
   private sendNotification(notificationType: NotificationType, message: string): void {
     if (message){

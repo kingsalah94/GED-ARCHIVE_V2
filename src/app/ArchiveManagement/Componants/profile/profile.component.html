@@ -10,7 +10,7 @@
                   <div class="col-12 col-sm-auto mb-3">
                     <div class="mx-auto" style="width: 140px;">
                       <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                        <img src="{{currentUser.profileImageUrl}}" width="140" class="rounded" alt="" />
+                        <img src="{{currentUser.profileImageUrl}}" width="140" class="mt-3 rounded" alt="" />
                       </div>
                       <div *ngIf="fileStatus.status === 'progress'" class="progress mt-1">
                         <div class="progress-bar bg-info" role="progressbar" [style.width.%]="fileStatus.percentage"  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
@@ -37,7 +37,7 @@
                     </div>
                   </div>
                 </div>
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
                   <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Infos</button>
                   </li>
@@ -87,8 +87,8 @@
                           <div class="row">
                             <div class="col mb-3">
                               <div class="form-group">
-                                <label>Role</label>
-                                <select name="role" required [(ngModel)]="currentUser.role" class="form-control">
+                                <label>Role <small [hidden]="isAdmin">(read only)</small></label>
+                                <select name="role" [disabled]="!isAdmin" required [(ngModel)]="currentUser.role" class="form-control">
                                   <option value="ROLE_USER">USER</option>
                                   <option value="ROLE_HR">HR</option>
                                   <option value="ROLE_MANAGER">MANAGER</option>
@@ -164,6 +164,6 @@
   </div>
   <form enctype="multipart/form-data" style="display:none;">
     <input type="file" (change)="handleProfileImageChange($event)"
-           name="profile-image-input" id="profile-image-input" placeholder="file" accept="*">
+           name="profile-image-input" id="profile-image-input" placeholder="file" accept="image/*">
   </form>
 </div>

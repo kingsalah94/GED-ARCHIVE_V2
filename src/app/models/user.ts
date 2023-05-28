@@ -35,9 +35,9 @@ export class User {
     this.joinDate = null;
     this.role = '';
     this.authorities = [];
-    this.active = false;
-    this.notLocked = false;
-    this.firstLogin= false;
+    this.active = true;
+    this.notLocked = true;
+    this.firstLogin= true;
     this.divisionId=0;
   }
 

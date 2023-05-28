@@ -20,9 +20,9 @@ export class AuthInterceptor implements HttpInterceptor {
     if (httpRequest.url.includes(`${this.authenticationService.host}/api/archive/user/register`)){
       return  httpHandler.handle(httpRequest);
     }
-    if (httpRequest.url.includes(`${this.authenticationService.host}/api/archive/user/resetPassword/`)){
+    /*if (httpRequest.url.includes(`${this.authenticationService.host}/api/archive/user/resetPassword/`)){
       return  httpHandler.handle(httpRequest);
-    }
+    }*/
     if (httpRequest.url.includes(`${this.authenticationService.host}/api/archive/divisions`)){
       return  httpHandler.handle(httpRequest);
     }

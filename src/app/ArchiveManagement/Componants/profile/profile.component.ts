@@ -10,6 +10,7 @@ import {NgForm} from "@angular/forms";
 import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
 import {Router} from "@angular/router";
 import {FileUploadStatus} from "../../../models/File-upload.status";
+import {Role} from "../../../Enumerations/role.enum.";
 
 @Component({
   selector: 'app-profile',
@@ -45,7 +46,7 @@ export class ProfileComponent {
     this.titleSubject.next(title);
   }
   public getUsers(shwNotification: Boolean): void{
-    this.refreshing = true;
+   // this.refreshing = true;
     // @ts-ignore
     this.subscription.push(this.userService.getUsers().subscribe((response: User[] ) => {
         this.userService.addUsersToLocalCache(response);
@@ -70,12 +71,27 @@ export class ProfileComponent {
     this.subscription.push(this.userService.updateProfileImage(formData).subscribe({
       next: (events: HttpEvent<any>) => {
         this.reportUploadProgress(events);
+        this.refreshing = false;
       },
       error: (e) => {
         this.sendNotification(NotificationType.ERROR, e.message);
         this.fileStatus.status = 'done ';
       }
     }));
+  }
+
+  public get isAdmin(): boolean {
+    return this.getUserRole() === Role.ADMIN || this.getUserRole() === Role.SUPER_ADMIN;
+  }
+  public get isManager(): boolean {
+    return this.isAdmin  || this.getUserRole() === Role.ARCHIVE_MANAGER;
+  }
+  public get isAdminOrArchiveManager(): boolean {
+    return this.isAdmin || this.isManager;
+  }
+
+  private getUserRole(): string {
+    return this.authenticationService.getUserFromLocalCache().role;
   }
 
   private reportUploadProgress(events: HttpEvent<any>) {
@@ -110,34 +126,6 @@ export class ProfileComponent {
   updateProfileImage(): void {
     this.clickButton(`#profile-image-input`);
   }
-
-
-
-
-  public onUpdateUser(): void {
-    // @ts-ignore
-    const formData = this.userService.createUserFormData(this.currentUsername, this.editUser, this.profileImage);
-    this.subscription.push(this.userService.updateUser(formData).subscribe({
-      next: (response: User)=>{
-        this.clickButton('#edit-user-close');
-        this.getUsers(false);
-        // @ts-ignore
-        this.fileName = "";
-        // @ts-ignore
-        this.profileImage = "";
-        this.sendNotification(NotificationType.SUCCESS, `${response.firstName} ${response.lastName} Updated Successfully`);
-      },
-      error: (e)=> {
-        console.error(e);
-        this.sendNotification(NotificationType.ERROR, e.message);
-        this.refreshing=true;
-        // @ts-ignore
-        this.profileImage=""
-      }
-    }));
-  }
-
-
 
 
 
