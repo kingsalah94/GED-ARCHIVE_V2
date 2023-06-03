@@ -33,21 +33,6 @@ export class ChangePasswordComponent implements OnInit{
     this.currentUser = this.authenticateService.getUserFromLocalCache();
   }
 
- /* onChangePassword(request:ChangePasswordRequest): void {
-    this.showLoading = true;
-    const newPassword: string = ""; // Remplacez par le mot de passe saisi par l'utilisateur
-    this.userService.changePassword(request).subscribe({
-      next: (response: CustomHttpResponse) => {
-        // Gérer la réponse de l'API
-        this.showLoading = false;
-
-      },
-      error: (errorResponse: HttpErrorResponse) => {
-        // Gérer les erreurs
-        this.showLoading = false;
-      }
-    });
-  }*/
 
 
   public onResetPassword(requestForm: NgForm): void{
@@ -59,6 +44,8 @@ export class ChangePasswordComponent implements OnInit{
         this.refreshing = false;
         requestForm.reset();
         this.router.navigateByUrl('/dashboard');
+        this.authenticateService.logOut();
+        this.onLogOut();
 
       },
       error: err => {

@@ -22,8 +22,9 @@ export class DashboardComponent {
     // @ts-ignore
     this.user = this.authenticationService.getUserFromLocalCache();
     if (this.authenticationService.isUserLoggedIn()){
-      if ((this.user.firstLogin)) {
+      if ((this.authenticationService.getUserFromLocalCache().firstLogin)) {
         this.router.navigateByUrl('/dashboard/user/change-password');
+
       }else {
         this.router.navigateByUrl('/dashboard');
       }

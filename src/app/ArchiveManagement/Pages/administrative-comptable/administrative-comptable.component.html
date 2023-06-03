@@ -14,19 +14,20 @@
 </ul>
 <!--============================myTabContent==========================================-->
 <div class="tab-content" id="myTabContent">
-  <div class="col-md-6 mt-2 align-content-center">
-    <div class="input-group input-group-sm">
-      <input class="form-control form-control-navbar" [(ngModel)]="keyword" type="search" placeholder="Entrez un mot-clé..." aria-label="Search">
-      <div class="input-group-append">
-        <button class="btn btn-primary" (click)="search()" type="submit">
-          <i class="fas fa-search"></i>
-        </button>
+
+  <div class="tab-pane fade show active " id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <div class="col-md-6 mt-2 ps-md-2">
+      <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" [(ngModel)]="keyword" type="search" placeholder="Entrez un mot-clé..." aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-primary" (click)="search()" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="tab-pane fade show active mt-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <div class="container">
+    <div class="container mt-3">
       <div class="row">
         <div class="col-md-4 col-xl-3">
           <div class="card bg-c-blue order-card">
@@ -58,8 +59,8 @@
         <div class="col-md-4 col-xl-3">
           <div class="card bg-c-pink order-card">
             <div class="card-block">
-              <h6 class="m-b-20">Emprunt</h6>
-              <h2 class="text-right"><i class="fa fa-credit-card f-left"></i><span>486</span></h2>
+              <h6 class="m-b-20">Emprunt Effectuer</h6>
+              <h2 class="text-right"><i class="fa fa-eye f-left"></i><span>486</span></h2>
             </div>
           </div>
         </div>
@@ -332,15 +333,9 @@
   <div class="tab-pane fade " id="dossier-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
     <div class="row p-4">
       <div class="col-md-7 container ">
-        <div class="card col-md-12 mt-1 mb-4 justify-content-center bg-success-subtle">
+        <div class="card  mt-1 mb-4 justify-content-center bg-success-subtle">
           <div class="card-body">
             <div class="col mb-3 p-4">
-              <div class="p-2 flex-fill text-end">
-                <button [routerLink]="['/dashboard/listDossier']" type="button" class="btn btn-success">
-                  <i class="fas fa-eye"></i>&nbsp;
-                  Consulter
-                </button>
-              </div>
               <div class="col-md-12">
                 <div class="col-md-12 mb-3">
                   <h2>
@@ -352,18 +347,18 @@
                   <form action="">
                     <div class="row mb-3">
                       <div class="col">
-                        <label  class="form-label">Nom Du Dossier</label>
+                        <small  class="form-label">Nom Du Dossier</small>
                         <input type="text"  class="form-control" name="nomDossier"
                                [(ngModel)]="dossiers.nomDossier" placeholder="nomDossier">
                       </div>
                       <div class="col">
-                        <label  class="form-label">Cote du Dossier</label>
+                        <small  class="form-label">Cote du Dossier</small>
                         <input type="text"  class="form-control" name="cote" [(ngModel)]="dossiers.cote">
                       </div>
                     </div>
                     <div class=" row mb-3">
                       <div class="col">
-                        <label class="form-label">Etat Dossier</label>
+                        <small class="form-label">Etat Dossier</small>
                         <select  class="form-control" name="etatDossier" [(ngModel)]="dossiers.etatDossier" id="exmple3FormControlSelect1">
                           <option>OPEN</option>
                           <option>CLOSE</option>
@@ -372,11 +367,11 @@
                     </div>
                     <div class="row mb-3">
                       <div class="col">
-                        <label  class="form-label">Date Extreme(Ex:2000-2001):</label>
+                        <small  class="form-label">Date Extreme(Ex:2000-2001):</small>
                         <input type="text" name="dateExtreme" class="form-control" [(ngModel)]="dossiers.dateExtreme" placeholder="dateExtreme">
                       </div>
                       <div class="col form-group">
-                        <label class="col-form-label col-sm-2">Boite D'archive</label>
+                        <small class="col-form-label col-sm-2">Boite d'archive</small>
                         <select class="form-control" name="boite" [(ngModel)]="dossiers.boiteDTO" id="exampless3FormControlSelect1">
                           <option [ngValue]="undefined">--Select une Boite--</option>
                           <option *ngFor="let b of boite" [ngValue]="b">NumeoBote{{b.numeroBoite}}</option>
@@ -385,24 +380,24 @@
                     </div>
                     <div class="row mb-3">
                       <div class="col">
-                        <label  class="form-label">Description:</label>
+                        <small  class="form-label">Description:</small>
                         <input type="text" name="description" class="form-control" [(ngModel)]="dossiers.description" placeholder="description">
                       </div>
                       <div class="col form-group">
-                        <label class="col-form-label col-sm-2">DateLimite</label>
+                        <small class="col-form-label col-sm-2">Date Limite Conservation</small>
                         <input type="date" name="dateLimiteConservation" class="form-control" [(ngModel)]="dossiers.dateLimiteConservation" placeholder="dateLimiteConservation">
                       </div>
                     </div>
                     <div class="row mb-3">
                       <div class="col">
-                        <label class="col-form-label col-sm-2">ResponsableTrait</label>
+                        <small class="col-form-label col-sm-2">Responsable Traitement</small>
                         <select class="form-control" name="boite" [(ngModel)]="dossiers.responsableTraitementDTO" id="exampl2ess3FormControlSelect1">
-                          <option [ngValue]="undefined">--Select ResponsableTrait--</option>
+                          <option [ngValue]="undefined">--Select Responsable Traitement--</option>
                           <option *ngFor="let r of responsable" [ngValue]="r">{{r.nomRt}}</option>
                         </select>
                       </div>
                       <div class="col">
-                        <label class="form-label">Type Du Dossier</label>
+                        <small class="form-label">Type Du Dossier</small>
                         <select  class="form-control" name="typeDocument" [(ngModel)]="dossiers.typeDossier" id="exmples3FormControlSelect1">
                           <option value="ADMINISTRATIVE_ET_COMPTABLE">ADMINISTRATIVE_ET_COMPTABLE</option>
                           <option value="CONTROLE_CONFORMITE">CONTROLE_CONFORMITE</option>
@@ -411,7 +406,7 @@
                     </div>
                     <div class="row mb-3">
                       <div class="col form-group">
-                        <label class="col-form-label col-sm-2">RespDossier</label>
+                        <small class="col-form-label col-sm-2">Responsable Dossier</small>
                         <input type="text" name="responsable" class="form-control" [(ngModel)]="dossiers.responsable" placeholder="responsable">
                       </div>
                     </div>
