@@ -39,7 +39,10 @@ private subs = new SubSink();
   divisions: Divisions = new Divisions();
 
 
-  constructor(private divisionService:DivisionService, private userService: UserService,private notificationService: NotificationService,private authenticationService: AuthenticationService) {
+  constructor(private divisionService:DivisionService,
+              private userService: UserService,
+              private notificationService: NotificationService,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {

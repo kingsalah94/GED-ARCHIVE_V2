@@ -1,49 +1,62 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Batiment} from "../../models/Batiment";
 import {environment} from "../../../environments/environment";
 import {Structures} from "../../models/Structures";
+import {CustomHttpResponse} from "../../Http-Response/Custom-http-response";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class BatimentService {
-
+  private host = environment.backendHost;
   constructor(private http: HttpClient) { }
 
-  public saveBatiment(batiment: Batiment): Observable<Batiment> {
-    return this.http.post<Batiment>(environment.backendHost + "/batiment",batiment)
+  public addBatiment(formData: FormData): Observable<any> {
+    return this.http.post<Batiment>(`${this.host}/api/archive/batiment/add`,formData)
   }
 
 
-  public getBatiment(): Observable<Array<Batiment>> {
-    return this.http.get<Array<Batiment>>(environment.backendHost + "/batiment")
+  public getBatiment(): Observable<Batiment[] | HttpErrorResponse> {
+    return this.http.get<Batiment[] >(`${this.host}/api/archive/batiment`)
   }
-  public getAllBatiment(): Observable<Batiment[]> {
-    return this.http.get<Batiment[]>(environment.backendHost + "/batiment")
-  }
+
   public getOneBatiment(id:any): Observable<Batiment> {
     return this.http.get<Batiment>(environment.backendHost + "/batiment/"+id)
   }
 
-  public create(data: any): Observable<any> {
-    return this.http.post(environment.backendHost + "/batiment",data)
+
+  public delete(nomBatiment: string):Observable<CustomHttpResponse | HttpErrorResponse> {
+    return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/batiment/${nomBatiment}`)
   }
 
-  public delete(id: any):Observable<any> {
-    return this.http.delete(environment.backendHost + "/batiment/"+id)
+  public updateBatiment(formData: FormData): Observable<Batiment> {
+    return this.http.put<Batiment>(`${this.host}/api/archive/batiment/update`,formData);
   }
 
-  public updateBatiment(batiment: Batiment): Observable<Batiment> {
-    return this.http.put<Structures>(environment.backendHost+"/batiment/"+batiment.id,batiment);
-  }
-  public updateBatiments(id: any,data:any): Observable<any> {
-    return this.http.put(environment.backendHost+"/batiment/"+id,data);
+
+  public addBatimentToLocalCache(batiment: Batiment[] | HttpErrorResponse): void{
+    localStorage.setItem('batiment',JSON.stringify(batiment));
   }
 
+  public getBatimentFromLocalCache(): Batiment[] | null {
+    const batiment = localStorage.getItem('batiment');
+    if (batiment) {
+      return JSON.parse(batiment);
+    }
+    return null;
+  }
   findByNom(keyword: string): Observable<Batiment[]> {
     return this.http.get<Batiment[]>(environment.backendHost+"/batiment/search?keyword="+keyword);
+  }
+
+  public createBatimentFormData(currentNomBatiment: string,batiment: Batiment): FormData {
+    const formData = new FormData();
+    formData.append('currentNomBatiment',currentNomBatiment);
+    formData.append('nomBatiment',batiment.nomBatiment);
+    formData.append('nbr_Niveau',batiment.nbr_Niveau);
+    return formData;
   }
 }

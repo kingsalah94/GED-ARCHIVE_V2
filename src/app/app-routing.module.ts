@@ -17,6 +17,8 @@ import {
   ArchivesConfigurationComponent
 } from "./ArchiveManagement/Pages/archives-configuration/archives-configuration.component";
 import {ChangePasswordComponent} from "./ArchiveManagement/Componants/change-password/change-password.component";
+import {EmpruntDocumentComponent} from "./ArchiveManagement/Pages/emprunt-document/emprunt-document.component";
+import {ChartDataComponent} from "./ArchiveManagement/Pages/chart-data/chart-data.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -53,6 +55,16 @@ const routes: Routes = [
       {
         path: 'user/change-password',
         component: ChangePasswordComponent,
+        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'archives/emprunts',
+        component: EmpruntDocumentComponent,
+        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'archives/chartData',
+        component: ChartDataComponent,
         canActivate: [AuthenticationGuard]
       },
     ]

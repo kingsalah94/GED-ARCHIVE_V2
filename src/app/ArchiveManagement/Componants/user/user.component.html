@@ -84,7 +84,7 @@
             </td>
             <td>
               <div class="btn-group">
-                <button class="btn btn-outline-info" (click)="onEditUser(appUser)" >
+                <button [hidden]="!isAdmin" class="btn btn-outline-info" (click)="onEditUser(appUser)" >
                   <i class="fas fa-edit"></i>
                 </button>
                 <button [hidden]="!isAdmin" class="btn btn-outline-danger" (click)="onDeleteUser(appUser.username)">
@@ -235,10 +235,10 @@
                     <option value="ROLE_SUPER_ADMIN">SUPER_ADMIN</option>
                   </select>
                 </div>
-                <div class="form-group">
+               <!-- <div class="form-group">
                   <label for="authorithy">Role</label>
                   <input type="text" name="role" required ngModel="USER" readonly class="form-control">
-                </div>
+                </div>-->
                 <div class="input-group mb-2">
                   <div class="input-group-prepend">
                     <span class="input-group-text">Profile Picture</span>
@@ -315,6 +315,13 @@
                   <label for="email">Email</label>
                   <input type="email" name="email" [disabled]="!isAdminOrArchiveManager"  required [(ngModel)]="editUser.email" class="form-control">
                 </div>
+                <div *ngIf="isAdmin" class="col form-group">
+                  <label class="col-form-label col-sm-2">Division</label>
+                  <select class="form-control" name="divisionId" ngModel="user.divisionId" id="example3FormControlSelect1">
+                    <option ngValue="undefined">--Select un Dossier--</option>
+                    <option *ngFor="let d of division" [ngValue]="d.id">{{d.divisionName}}</option>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="role">Role <small [hidden]="isAdmin">(read only)</small></label>
                   <select name="role" [disabled]="!isAdmin"   required [(ngModel)]="editUser.role" class="form-control">
@@ -359,7 +366,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-user-close">Close</button>
-            <button type="button" (click)="onUpdateUser()" [disabled]="editUserForm.invalid || isAdminOrArchiveManager" class="btn btn-primary">Update User</button>
+            <button type="button" (click)="onUpdateUser()" [disabled]="editUserForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update User</button>
           </div>
         </div>
       </div>

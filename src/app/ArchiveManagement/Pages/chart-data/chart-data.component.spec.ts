@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PaginationComponent } from './pagination.component';
+import { ChartDataComponent } from './chart-data.component';
 
-describe('PaginationComponent', () => {
-  let component: PaginationComponent;
-  let fixture: ComponentFixture<PaginationComponent>;
+describe('ChartDataComponent', () => {
+  let component: ChartDataComponent;
+  let fixture: ComponentFixture<ChartDataComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PaginationComponent ]
+      declarations: [ ChartDataComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PaginationComponent);
+    fixture = TestBed.createComponent(ChartDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

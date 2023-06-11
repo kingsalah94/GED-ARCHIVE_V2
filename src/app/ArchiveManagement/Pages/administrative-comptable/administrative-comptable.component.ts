@@ -52,6 +52,13 @@ export class AdministrativeComptableComponent {
   keyword?: string;
   results?: any[];
 
+  items: any[] = [];
+  pageOfDocuments?: Array<any>;
+  sortProperty: string = 'id';
+  sortOrder = 1;
+  loading = false;
+
+
 
   constructor(private boiteService:BoiteService,
               private documentService: DocumentsService,
@@ -72,7 +79,8 @@ export class AdministrativeComptableComponent {
     this.responsableService.getResponsable()
       .subscribe(response =>this.responsable=response);
     this.etagereService.getEtagere()
-      .subscribe(response =>this.etagere=response)
+      .subscribe(response =>this.etagere=response);
+
   }
   public changeTitle(title: string): void{
     this.titleSubject.next(title);
@@ -84,7 +92,33 @@ export class AdministrativeComptableComponent {
       content.style.display = 'block';
     }
   }
+  onChangePage(pageOfDocuments: Array<any>) {
+    // update current page of document
+    this.pageOfDocuments = pageOfDocuments;
+  }
 
+  sortBy(property: string) {
+    this.sortOrder = property === this.sortProperty ? (this.sortOrder * -1) : 1;
+    this.sortProperty = property;
+    this.document = [...this.document.sort((a: any, b: any) => {
+      // sort comparison function
+      let result = 0;
+      if (a[property] < b[property]) {
+        result = -1;
+      }
+      if (a[property] > b[property]) {
+        result = 1;
+      }
+      return result * this.sortOrder;
+    })];
+  }
+
+  sortIcon(property: string) {
+    if (property === this.sortProperty) {
+      return this.sortOrder === 1 ? '☝️' : '👇';
+    }
+    return '';
+  }
   search() {
     this.http.get<any[]>(`/search/${this.keyword}`).subscribe(
       results => this.results = results,
@@ -98,6 +132,7 @@ export class AdministrativeComptableComponent {
     this.subscription.push(this.documentService.getDocuments().subscribe((response: Documents[] ) => {
         this.documentService.addDocumentsToLocalCache(response);
         this.document = response;
+        this.loading= false;
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
@@ -114,7 +149,6 @@ export class AdministrativeComptableComponent {
     this.refreshing = true;
     // @ts-ignore
     this.subscription.push(this.documentService.getDossier().subscribe((response: Dossier[] ) => {
-
         this.dossier = response;
         this.refreshing = false;
         if (shwNotification) {
@@ -196,12 +230,12 @@ export class AdministrativeComptableComponent {
   public searchDocuments(keyword: string): void{
     const results: Documents[] = [];
     // @ts-ignore
-    for (const documen of  this.documentService.getDocumentsFromLocalCache()){
-      if (documen.intituleDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
-        documen.numeroDordre.toLowerCase().indexOf(keyword.toLowerCase()) !== -1||
-        documen.typeDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
-        documen.nombrPage.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
-        results.push(documen);
+    for (const document of  this.documentService.getDocumentsFromLocalCache()){
+      if (document.intituleDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
+        document.numeroDordre.toLowerCase().indexOf(keyword.toLowerCase()) !== -1||
+        document.typeDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
+        document.nombrPage.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
+        results.push(document);
       }
     }
     this.document = results;

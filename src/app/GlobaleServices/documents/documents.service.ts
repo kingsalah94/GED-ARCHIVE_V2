@@ -44,8 +44,8 @@ data:any;
   public deletedocument(intituleDocument: string): Observable<CustomHttpResponse | HttpErrorResponse>{
     return  this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/document/delete/${intituleDocument}`);
   }
-  public addDocumentsToLocalCache(document: Documents[] | HttpErrorResponse): void{
-    localStorage.setItem('document',JSON.stringify(document));
+  public addDocumentsToLocalCache(documents: Documents[] | HttpErrorResponse): void{
+    localStorage.setItem('documents',JSON.stringify(documents));
   }
   public getDocumentsFromLocalCache(): Documents[] | null {
     const documents = localStorage.getItem('documents');

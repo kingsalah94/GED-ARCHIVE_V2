@@ -28,6 +28,22 @@ import {
   ControleConformiterComponent
 } from "./ArchiveManagement/Pages/controle-conformiter/controle-conformiter.component";
 import {ChangePasswordComponent} from "./ArchiveManagement/Componants/change-password/change-password.component";
+import {DocPaginationComponent} from "./ArchiveManagement/Componants/Paging/doc-pagination/doc-pagination.component";
+import {EmpruntDocumentComponent} from "./ArchiveManagement/Pages/emprunt-document/emprunt-document.component";
+import {
+  StructPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/struct-pagination/struct-pagination.component";
+import {ChartDataComponent} from "./ArchiveManagement/Pages/chart-data/chart-data.component";
+import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
+import {BatimentComponent} from "./ArchiveManagement/Componants/batiment/batiment.component";
+import {NiveauBatiment} from "./models/NiveauBatiment";
+import {ChambreComponent} from "./ArchiveManagement/Componants/chambre/chambre.component";
+import {NiveauComponent} from "./ArchiveManagement/Componants/niveau/niveau.component";
+import {EtagereComponent} from "./ArchiveManagement/Componants/etagere/etagere.component";
+import {RayonComponent} from "./ArchiveManagement/Componants/rayon/rayon.component";
+import {
+  BatimentPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/batiment-pagination/batiment-pagination.component";
 
 @NgModule({
   declarations: [
@@ -43,7 +59,18 @@ import {ChangePasswordComponent} from "./ArchiveManagement/Componants/change-pas
     ArchivesConfigurationComponent,
     AdministrativeComptableComponent,
     ControleConformiterComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    DocPaginationComponent,
+    EmpruntDocumentComponent,
+    StructPaginationComponent,
+    ChartDataComponent,
+    BatimentComponent,
+    ChambreComponent,
+    NiveauComponent,
+    EtagereComponent,
+    RayonComponent,
+    BatimentPaginationComponent
+
 
   ],
   imports: [
@@ -54,6 +81,8 @@ import {ChangePasswordComponent} from "./ArchiveManagement/Componants/change-pas
     NotificationModule,
     FormsModule,
     ReactiveFormsModule,
+    CanvasJSAngularChartsModule
+
 
   ],
   providers: [AuthenticationGuard ,AuthenticationService, UserService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor,multi:true}],

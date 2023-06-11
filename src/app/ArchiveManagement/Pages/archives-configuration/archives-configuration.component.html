@@ -1,28 +1,234 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Structure</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Batiment</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
+    <button class="nav-link" id="niveaubatiment-tab" data-bs-toggle="tab" data-bs-target="#niveaubatiment-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Niveau Batiment</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
+    <button class="nav-link" id="chambre-tab" data-bs-toggle="tab" data-bs-target="#chambre-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Chambre</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="rayon-tab" data-bs-toggle="tab" data-bs-target="#rayon-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Rayon</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="etagere-tab" data-bs-toggle="tab" data-bs-target="#etagere-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Etagere</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="boite-tab" data-bs-toggle="tab" data-bs-target="#boite-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Boites</button>
   </li>
 </ul>
+<h5 class="text-muted text-center">Configuration</h5>
+<!--====================Structure================-->
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-    ...
+    <div class="row p-3">
+    <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Structure Information</h5>
+    </div>
+    <!--Table Contain-->
+    <div class="tab-content p-5 opacity-75" id="myTabContainer">
+      <div class="tab-pane fade show active" id="users">
+        <div class="mb-3 float-end">
+          <div class="btn-group me-2">
+            <form  class="form-inline my-2 my-lg-0 justify-content-center" action="">
+              <input type="search" #searchInput="ngModel"
+                     name="keyword" ngModel
+                     (ngModelChange)="searchStructures(searchInput.value)"
+                     class="form-control me-sm-2"
+                     placeholder="Search structures...">
+            </form>
+            <!--Add A New Structure-->
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addStructureModal">
+              <i class="fa fa-plus"></i>New Structure
+            </button>
+          </div>
+          <div class="btn-group">
+            <button type="button" (click)="getStructures(true)" class="btn btn-info">
+              <i *ngIf="refreshing" class="fas fa-sync fa-spin"></i><i *ngIf="!refreshing" class="fas fa-sync"></i>
+            </button>
+          </div>
+        </div>
+        <table class="table table-success table-bordered table-hover table-striped">
+          <thead>
+          <tr class="text-center">
+            <th><a (click)="sortBy('id')">Id {{sortIcon('id')}}</a></th>
+            <th><a (click)="sortBy('nomStructure')">Nom Structure{{sortIcon('nomStructure')}}</a></th>
+            <th><a (click)="sortBy('description')">Description{{sortIcon('description')}}</a></th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody *ngFor="let struct of pageOfStructures">
+          <tr class="text-center">
+            <td>
+              {{struct?.id}}
+            </td>
+            <td (click)="onSelectStructure(struct)">{{struct.nomStructure}}</td>
+            <td (click)="onSelectStructure(struct)">{{struct.description}}</td>
+
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline-info" (click)="onEditDocument(struct)" >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-danger" (click)="onDeleteStructure(struct.nomStructure)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="loading">
+            <td colspan="5" class="text-center py-5">
+              <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer pb-0 pt-3">
+        <app-struct-pagination [structure]="structure" (changePage)="onChangePage($event)"></app-struct-pagination>
+      </div>
+    </div>
+
+    <!--Button Trigger-->
+    <button [hidden]="true" type="button" id="openStructureInfo" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewStructureModal">
+      User Info
+    </button>
+    <button [hidden]="true" type="button" id="openStructureEdit" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#editStructureModal">
+      Edit
+    </button>
+
+    <!--Modal Structure Infos-->
+    <div class="modal fade" id="viewStructureModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">{{selectedStructure.nomStructure}}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="card">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">{{selectedStructure.nomStructure}}</li>
+                  <li class="list-group-item">{{selectedStructure.description}}</li>
+                  <li class="list-group-item">{{selectedStructure.dateCreation | date : 'medium'}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Modal Add Structure-->
+    <div class="modal fade" id="addStructureModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabeladdUser">New Structure</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <form #newStructureForm="ngForm"  (ngSubmit)="onAddNewStructure(newStructureForm)">
+                <div class="form-group">
+                  <label for="nomStructure">Nom Structure</label>
+                  <input type="text" name="nomStructure" id="nomStructure" required ngModel class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <input type="text" name="description" id="description" required ngModel class="form-control">
+                </div>
+                <button type="submit" style="display: none;" id="new-structure-save"></button>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="new-structure-close">Close</button>
+            <button type="button" (click)="saveNewStructure()" [disabled]="newStructureForm.invalid" class="btn btn-primary">Add Structure</button>
+          </div>
+        </div>
+      </div>
+      <!--End of Add Document-->
+
+    </div>
+
+    <!--Modal Edit Structure-->
+    <div class="modal fade" id="editStructureModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fs-5" id="exampleModalLabelEditDocument">Edit {{editStructure.nomStructure}}
+              <small [hidden]="isAdminOrArchiveManager">(read only)</small></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&nbsp;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <form #editStructureForm="ngForm">
+                <div class="form-group">
+                  <label for="nomStructure">Nom Structure</label>
+                  <input type="text" name="nomStructure" [disabled]="!isAdminOrArchiveManager"   required [(ngModel)]="editStructure.nomStructure" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <input type="text" name="description" [disabled]="!isAdminOrArchiveManager"  required  [(ngModel)]="editStructure.description" class="form-control">
+                </div>
+                <button type="submit" style="display: none;" id="edit-structure-save"></button>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-user-close">Close</button>
+            <button type="button" (click)="onUpdateStructure()" [disabled]="editStructureForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update Structure</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--End of Edit Strucuture-->
   </div>
+  <!--===========Batiment============-->
   <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-    ...
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Batiment Information</h5>
+    </div>
+    <app-batiment></app-batiment>
   </div>
-  <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-    ...
+  <!--===========Niveau Batiement============-->
+  <div class="tab-pane fade" id="niveaubatiment-tab-pane" role="tabpanel" aria-labelledby="niveaubatiment-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Niveau Information</h5>
+    </div>
   </div>
-  <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">
-    ...
+  <!--===========Chambre============-->
+  <div class="tab-pane fade" id="chambre-tab-pane" role="tabpanel" aria-labelledby="chambre-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Chambre Information</h5>
+    </div>
+  </div>
+  <!--===========Rayon============-->
+  <div class="tab-pane fade" id="rayon-tab-pane" role="tabpanel" aria-labelledby="rayon-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Rayon Information</h5>
+    </div>
+  </div>
+  <!--===========Etagere============-->
+  <div class="tab-pane fade" id="etagere-tab-pane" role="tabpanel" aria-labelledby="etagere-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Etagere Information</h5>
+    </div>
+  </div>
+  <!--===========Boites============-->
+  <div class="tab-pane fade" id="boite-tab-pane" role="tabpanel" aria-labelledby="boite-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Boites Information</h5>
+    </div>
   </div>
 </div>

@@ -37,7 +37,6 @@
             </div>
           </div>
         </div>
-
         <div class="col-md-4 col-xl-3">
           <div class="card bg-c-green order-card">
             <div class="card-block">
@@ -79,7 +78,7 @@
                      name="keyword" ngModel
                      (ngModelChange)="searchDocuments(searchInput.value)"
                      class="form-control me-sm-2"
-                     placeholder="Search document...">
+                     placeholder="Search documents...">
             </form>
             <!--Add A New User-->
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addDocumentModal">
@@ -92,12 +91,13 @@
             </button>
           </div>
         </div>
-        <table class="table table-success table-hover table-striped">
-          <thead class="table-borderless">
+        <table class="table table-success table-bordered table-hover table-striped">
+          <thead>
           <tr class="text-center">
+            <th><a (click)="sortBy('id')">Id {{sortIcon('id')}}</a></th>
             <th>Url Document</th>
-            <th>intituleDocument</th>
-            <th>IdentifiantDocument</th>
+            <th><a (click)="sortBy('intituleDocument')">intituleDocument{{sortIcon('intituleDocument')}}</a></th>
+            <th><a (click)="sortBy('documentId')">IdentifiantDocument{{sortIcon('documentId')}}</a></th>
             <th>Numero D'ordre</th>
             <th>Nombre de page</th>
             <th>Type de Document</th>
@@ -105,36 +105,42 @@
             <th>Actions</th>
           </tr>
           </thead>
-          <tbody *ngFor="let doc of document">
-          <tr class="text-center">
-            <!--<td>
-              <img height="40" width="40" src="{{doc?.}}" class="rounded-circle img-fluid img-thumbnail" alt=""/>
-            </td>-->
-            <td (click)="onSelectDocument(doc)">
-              <a href="{{doc?.documentUrl}}"><i class="fas fa-print"></i>Open/Print</a>
-            </td>
-            <td (click)="onSelectDocument(doc)">{{doc?.intituleDocument}}</td>
-            <td (click)="onSelectDocument(doc)">{{doc?.documentId}}</td>
-            <td (click)="onSelectDocument(doc)">{{doc?.numeroDordre}}</td>
-            <td (click)="onSelectDocument(doc)">{{doc?.nombrPage}}</td>
-            <td (click)="onSelectDocument(doc)">{{doc?.typeDocument}}</td>
-            <td (click)="onSelectDocument(doc)">{{doc?.dateCreation}}</td>
-
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-outline-info" (click)="onEditDocument(doc)" >
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-outline-danger" (click)="onDeletedocument(doc.intituleDocument)">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
+          <tbody *ngFor="let doc of pageOfDocuments">
+            <tr class="text-center">
+              <td>
+               {{doc?.id}}
+              </td>
+              <td (click)="onSelectDocument(doc)">
+                <a href="{{doc?.documentUrl}}"><i class="fas fa-print"></i>Open/Print</a>
+              </td>
+              <td (click)="onSelectDocument(doc)">{{doc?.intituleDocument}}</td>
+              <td (click)="onSelectDocument(doc)">{{doc?.documentId}}</td>
+              <td (click)="onSelectDocument(doc)">{{doc?.numeroDordre}}</td>
+              <td (click)="onSelectDocument(doc)">{{doc?.nombrPage}}</td>
+              <td (click)="onSelectDocument(doc)">{{doc?.typeDocument}}</td>
+              <td (click)="onSelectDocument(doc)">{{doc?.dateCreation | date: 'medium'}}</td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-outline-info" (click)="onEditDocument(doc)" >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-outline-danger" (click)="onDeletedocument(doc.intituleDocument)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="loading">
+              <td colspan="5" class="text-center py-5">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-
+      <div class="card-footer pb-0 pt-3">
+        <app-doc-pagination [document]="document" (changePage)="onChangePage($event)"></app-doc-pagination>
+      </div>
     </div>
 
     <!--Button Trigger-->
@@ -147,7 +153,7 @@
 
     <!--Modal Document Infos-->
     <div class="modal fade" id="viewDocumentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">{{selectedDocument.intituleDocument}} {{selectedDocument.numeroDordre}}</h1>
@@ -156,33 +162,15 @@
           <div class="modal-body">
             <div>
               <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12 col-sm-auto">
-                      <div class="mx-auto" style="width: 120px;">
-                        <div class="d-flex justify-content-center align-items-center rounded">
-                          <img class="rounded" height="720" width="440"  src="{{selectedDocument.documentUrl}}" alt="{{selectedDocument.intituleDocument}}">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col d-flex flex-column flex-sm-row justify-content-center">
-                      <div class="text-center text-sm-end mb-sm-0">
-                        <h6 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{selectedDocument.intituleDocument}} </h6>
-                        <p class="mb-1">{{selectedDocument.numeroDordre}}</p>
-                        <div class="text-muted"><small>Last Login: {{selectedDocument.dateCreation | date: 'medium'}}</small>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item"></li>
-                  <li class="list-group-item"><i class="fa fa-id-badge float-end"></i>{{selectedDocument.documentId}}</li>
-                  <li class="list-group-item"><i class="fa fa-envelope float-end"></i>{{selectedDocument.typeDocument}}</li>
-                  <li class="list-group-item"><i class="fa fa-shield-alt float-end"></i>{{selectedDocument.nombrPage}}</li>
-                  <li class="list-group-item"><i class="fa fa-shield-alt float-end"></i>{{selectedDocument.dossierId.nomDossier}}</li>
-
+                  <li class="list-group-item">{{selectedDocument.intituleDocument}}</li>
+                  <li class="list-group-item">{{selectedDocument.numeroDordre}}</li>
+                  <li class="list-group-item">{{selectedDocument.dateCreation | date: 'medium'}}</li>
+                  <li class="list-group-item"><a href="{{selectedDocument.documentUrl}}"><i class="fas fa-print"></i>Open/Print</a></li>
+                  <li class="list-group-item">{{selectedDocument.documentId}}</li>
+                  <li class="list-group-item">{{selectedDocument.typeDocument}}</li>
+                  <li class="list-group-item">{{selectedDocument.nombrPage}}</li>
+                  <li class="list-group-item">{{selectedDocument.dossierId}}</li>
                 </ul>
               </div>
             </div>
@@ -196,7 +184,7 @@
 
     <!--Modal Add Document-->
     <div class="modal fade" id="addDocumentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabeladdUser">New Document</h1>
