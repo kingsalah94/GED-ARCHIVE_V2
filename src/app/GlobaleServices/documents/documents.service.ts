@@ -18,9 +18,7 @@ data:any;
 
   }
 
-  public getDossier(): Observable<Dossier[]> {
-    return this.http.get<Dossier[]>(`${this.host}/api/archive/dossier`)
-  }
+
 
 
 

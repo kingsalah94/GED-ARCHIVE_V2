@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpErrorResponse} from "@angular/common/http";
 import {UserService} from "../../../GlobaleServices/user.service";
 import {User} from "../../../models/user";
@@ -16,7 +16,7 @@ import {Router} from "@angular/router";
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css']
 })
-export class ChangePasswordComponent implements OnInit{
+export class ChangePasswordComponent implements OnInit,OnDestroy{
   user!: User;
   currentUser!: User;
   showLoading: boolean = false;
@@ -68,5 +68,9 @@ export class ChangePasswordComponent implements OnInit{
     }else {
       this.notificationService.notify(notificationType,'An error occurred. please try again.');
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach(sub => sub.unsubscribe());
   }
 }

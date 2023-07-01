@@ -1,8 +1,16 @@
 import {Structures} from "./Structures";
 
 export class ResponsableTraitement{
-    id?:number;
-    nomRt?:string;
-    email?:string;
-    StructuresDTO?: Structures;
+    public id:number;
+    public nomRt:string;
+    public email:string;
+    public structuresId?: any;
+
+
+  constructor() {
+    this.id = 0;
+    this.nomRt = "";
+    this.email = "";
+    this.structuresId = 0;
+  }
 }

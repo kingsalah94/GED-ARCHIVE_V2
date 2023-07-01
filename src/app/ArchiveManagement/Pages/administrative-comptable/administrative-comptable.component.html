@@ -33,15 +33,17 @@
           <div class="card bg-c-blue order-card">
             <div class="card-block">
               <h6 class="m-b-20">Document ARCHIVER</h6>
-              <h2 class="text-right"><i class="fa fa-file-archive f-left"></i><span>486</span></h2>
+              <h2 class="text-right"><i class="fa fa-file-archive f-left"></i><span>{{document.length}}</span></h2>
             </div>
           </div>
         </div>
+
         <div class="col-md-4 col-xl-3">
           <div class="card bg-c-green order-card">
             <div class="card-block">
               <h6 class="m-b-20">Nombre De Dossier</h6>
-              <h2 class="text-right"><i class="fa fa-folder-closed f-left"></i><span>486</span></h2>
+              <h2 class="text-right"><i class="fa fa-folder-closed f-left"></i><span>{{dossier.length
+                }}</span></h2>
             </div>
           </div>
         </div>
@@ -50,7 +52,7 @@
           <div class="card bg-c-yellow order-card">
             <div class="card-block">
               <h6 class="m-b-20">Nombre de Boite</h6>
-              <h2 class="text-right"><i class="fa fa-box-archive f-left"></i><span>486</span></h2>
+              <h2 class="text-right"><i class="fa fa-box-archive f-left"></i><span>{{boite.length}}</span></h2>
             </div>
           </div>
         </div>
@@ -59,7 +61,7 @@
           <div class="card bg-c-pink order-card">
             <div class="card-block">
               <h6 class="m-b-20">Emprunt Effectuer</h6>
-              <h2 class="text-right"><i class="fa fa-eye f-left"></i><span>486</span></h2>
+              <h2 class="text-right"><i class="fa fa-eye f-left"></i><span>{{emprunt.length}}</span></h2>
             </div>
           </div>
         </div>
@@ -69,8 +71,8 @@
   <!--=======Document=====-->
   <div class="tab-pane fade" id="document-tab-pane" role="tabpanel" aria-labelledby="document-tab" tabindex="0">
     <!--Table Contain-->
-    <div class="tab-content p-5 opacity-75" id="myTabContainer">
-      <div class="tab-pane fade show active" id="users">
+    <div class="tab-content p-5 " id="myTabContainer">
+      <div class="tab-pane table-responsive fade show active" id="users">
         <div class="mb-3 float-end">
           <div class="btn-group me-2">
             <form  class="form-inline my-2 my-lg-0 justify-content-center" action="">
@@ -78,7 +80,7 @@
                      name="keyword" ngModel
                      (ngModelChange)="searchDocuments(searchInput.value)"
                      class="form-control me-sm-2"
-                     placeholder="Search documents...">
+                     placeholder="Search document...">
             </form>
             <!--Add A New User-->
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addDocumentModal">
@@ -91,13 +93,12 @@
             </button>
           </div>
         </div>
-        <table class="table table-success table-bordered table-hover table-striped">
-          <thead>
+        <table class="table  table-hover table-striped">
+          <thead class="table-borderless">
           <tr class="text-center">
-            <th><a (click)="sortBy('id')">Id {{sortIcon('id')}}</a></th>
             <th>Url Document</th>
-            <th><a (click)="sortBy('intituleDocument')">intituleDocument{{sortIcon('intituleDocument')}}</a></th>
-            <th><a (click)="sortBy('documentId')">IdentifiantDocument{{sortIcon('documentId')}}</a></th>
+            <th>intituleDocument</th>
+            <th>IdentifiantDocument</th>
             <th>Numero D'ordre</th>
             <th>Nombre de page</th>
             <th>Type de Document</th>
@@ -105,42 +106,36 @@
             <th>Actions</th>
           </tr>
           </thead>
-          <tbody *ngFor="let doc of pageOfDocuments">
-            <tr class="text-center">
-              <td>
-               {{doc?.id}}
-              </td>
-              <td (click)="onSelectDocument(doc)">
-                <a href="{{doc?.documentUrl}}"><i class="fas fa-print"></i>Open/Print</a>
-              </td>
-              <td (click)="onSelectDocument(doc)">{{doc?.intituleDocument}}</td>
-              <td (click)="onSelectDocument(doc)">{{doc?.documentId}}</td>
-              <td (click)="onSelectDocument(doc)">{{doc?.numeroDordre}}</td>
-              <td (click)="onSelectDocument(doc)">{{doc?.nombrPage}}</td>
-              <td (click)="onSelectDocument(doc)">{{doc?.typeDocument}}</td>
-              <td (click)="onSelectDocument(doc)">{{doc?.dateCreation | date: 'medium'}}</td>
-              <td>
-                <div class="btn-group">
-                  <button class="btn btn-outline-info" (click)="onEditDocument(doc)" >
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="btn btn-outline-danger" (click)="onDeletedocument(doc.intituleDocument)">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="loading">
-              <td colspan="5" class="text-center py-5">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-              </td>
-            </tr>
+          <tbody *ngFor="let doc of document">
+          <tr class="text-center">
+            <!--<td>
+              <img height="40" width="40" src="{{doc?.}}" class="rounded-circle img-fluid img-thumbnail" alt=""/>
+            </td>-->
+            <td (click)="onSelectDocument(doc)">
+              <a href="{{doc?.documentUrl}}"><i class="fas fa-print"></i>Open/Print</a>
+            </td>
+            <td (click)="onSelectDocument(doc)">{{doc?.intituleDocument}}</td>
+            <td (click)="onSelectDocument(doc)">{{doc?.documentId}}</td>
+            <td (click)="onSelectDocument(doc)">{{doc?.numeroDordre}}</td>
+            <td (click)="onSelectDocument(doc)">{{doc?.nombrPage}}</td>
+            <td (click)="onSelectDocument(doc)">{{doc?.typeDocument}}</td>
+            <td (click)="onSelectDocument(doc)">{{doc?.dateCreation}}</td>
+
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline-info" (click)="onEditDocument(doc)" >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-danger" (click)="onDeletedocument(doc.intituleDocument)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
-      <div class="card-footer pb-0 pt-3">
-        <app-doc-pagination [document]="document" (changePage)="onChangePage($event)"></app-doc-pagination>
-      </div>
+
     </div>
 
     <!--Button Trigger-->
@@ -153,7 +148,7 @@
 
     <!--Modal Document Infos-->
     <div class="modal fade" id="viewDocumentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">{{selectedDocument.intituleDocument}} {{selectedDocument.numeroDordre}}</h1>
@@ -162,15 +157,33 @@
           <div class="modal-body">
             <div>
               <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12 col-sm-auto">
+                      <div class="mx-auto" style="width: 120px;">
+                        <div class="d-flex justify-content-center align-items-center rounded">
+                          <img class="rounded" height="720" width="440"  src="{{selectedDocument.documentUrl}}" alt="{{selectedDocument.intituleDocument}}">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col d-flex flex-column flex-sm-row justify-content-center">
+                      <div class="text-center text-sm-end mb-sm-0">
+                        <h6 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{selectedDocument.intituleDocument}} </h6>
+                        <p class="mb-1">{{selectedDocument.numeroDordre}}</p>
+                        <div class="text-muted"><small>Last Login: {{selectedDocument.dateCreation | date: 'medium'}}</small>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item">{{selectedDocument.intituleDocument}}</li>
-                  <li class="list-group-item">{{selectedDocument.numeroDordre}}</li>
-                  <li class="list-group-item">{{selectedDocument.dateCreation | date: 'medium'}}</li>
-                  <li class="list-group-item"><a href="{{selectedDocument.documentUrl}}"><i class="fas fa-print"></i>Open/Print</a></li>
-                  <li class="list-group-item">{{selectedDocument.documentId}}</li>
-                  <li class="list-group-item">{{selectedDocument.typeDocument}}</li>
-                  <li class="list-group-item">{{selectedDocument.nombrPage}}</li>
-                  <li class="list-group-item">{{selectedDocument.dossierId}}</li>
+                  <li class="list-group-item"></li>
+                  <li class="list-group-item"><i class="fa fa-id-badge float-end"></i>{{selectedDocument.documentId}}</li>
+                  <li class="list-group-item"><i class="fa fa-envelope float-end"></i>{{selectedDocument.typeDocument}}</li>
+                  <li class="list-group-item"><i class="fa fa-shield-alt float-end"></i>{{selectedDocument.nombrPage}}</li>
+                  <li class="list-group-item"><i class="fa fa-shield-alt float-end"></i>{{selectedDocument.dossierId.nomDossier}}</li>
+
                 </ul>
               </div>
             </div>
@@ -184,7 +197,7 @@
 
     <!--Modal Add Document-->
     <div class="modal fade" id="addDocumentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabeladdUser">New Document</h1>
@@ -213,7 +226,7 @@
                 </div>
                 <div class="col form-group">
                   <label class="col-form-label col-sm-2">Dossier</label>
-                  <select class="form-control" name="dossierId" ngModel="document.dossierId" id="example3FormControlSelect1">
+                  <select class="form-control" name="dossierId" [(ngModel)]="documents.dossierId" id="example3FormControlSelect1">
                     <option ngValue="undefined">--Select un Dossier--</option>
                     <option *ngFor="let d of dossier" [ngValue]="d.id">{{d.nomDossier}}&nbsp;{{d.cote}}</option>
                   </select>
@@ -239,10 +252,10 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="new-document-close">Close</button>
             <button type="button" (click)="saveNewDocument()" [disabled]="newDocumentForm.invalid" class="btn btn-primary">Add Document</button>
+          </div>
         </div>
       </div>
-    </div>
-    <!--End of Add Document-->
+      <!--End of Add Document-->
 
     </div>
 
@@ -275,8 +288,8 @@
                 <div class="col form-group">
                   <label class="col-form-label col-sm-2">Dossier</label>
                   <select class="form-control" name="dossierId" ngModel="document.dossierId" id="exampl3FormControlSelect111">
-                    <option ngValue="undefined">--Select un Dossier--</option>
-                    <option *ngFor="let d of dossier" ngValue="d.id">{{d.nomDossier}}&nbsp;{{d.cote}}</option>
+                    <option ngValue="undefined">--Selet Dossier--</option>
+                    <option *ngFor="let d of dossier" [ngValue]="d.id">{{d.nomDossier}}&nbsp;{{d.cote}}</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -332,7 +345,7 @@
                   </h2>
                 </div>
                 <div class="col-md-12 ">
-                  <form action="">
+                  <form #newDossierForm="ngForm" (ngSubmit)="handleSaveDossier(newDossierForm)">
                     <div class="row mb-3">
                       <div class="col">
                         <small  class="form-label">Nom Du Dossier</small>
@@ -360,9 +373,9 @@
                       </div>
                       <div class="col form-group">
                         <small class="col-form-label col-sm-2">Boite d'archive</small>
-                        <select class="form-control" name="boite" [(ngModel)]="dossiers.boiteDTO" id="exampless3FormControlSelect1">
+                        <select class="form-control" name="boiteId" [(ngModel)]="dossiers.boiteId" id="exampless3FormControlSelect1">
                           <option [ngValue]="undefined">--Select une Boite--</option>
-                          <option *ngFor="let b of boite" [ngValue]="b">NumeoBote{{b.numeroBoite}}</option>
+                          <option *ngFor="let b of boite" [ngValue]="b.id">NumeoBote{{b.numeroBoite}}</option>
                         </select>
                       </div>
                     </div>
@@ -371,22 +384,19 @@
                         <small  class="form-label">Description:</small>
                         <input type="text" name="description" class="form-control" [(ngModel)]="dossiers.description" placeholder="description">
                       </div>
-                      <div class="col form-group">
-                        <small class="col-form-label col-sm-2">Date Limite Conservation</small>
-                        <input type="date" name="dateLimiteConservation" class="form-control" [(ngModel)]="dossiers.dateLimiteConservation" placeholder="dateLimiteConservation">
-                      </div>
+
                     </div>
                     <div class="row mb-3">
                       <div class="col">
                         <small class="col-form-label col-sm-2">Responsable Traitement</small>
-                        <select class="form-control" name="boite" [(ngModel)]="dossiers.responsableTraitementDTO" id="exampl2ess3FormControlSelect1">
+                        <select class="form-control" name="responsableTraitementId" [(ngModel)]="dossiers.responsableTraitementId" id="exampl2ess3FormControlSelect1">
                           <option [ngValue]="undefined">--Select Responsable Traitement--</option>
-                          <option *ngFor="let r of responsable" [ngValue]="r">{{r.nomRt}}</option>
+                          <option *ngFor="let r of responsable" [ngValue]="r.id">{{r.nomRt}}</option>
                         </select>
                       </div>
                       <div class="col">
                         <small class="form-label">Type Du Dossier</small>
-                        <select  class="form-control" name="typeDocument" [(ngModel)]="dossiers.typeDossier" id="exmples3FormControlSelect1">
+                        <select  class="form-control" name="typeDossier" [(ngModel)]="dossiers.typeDossier" id="exmples3FormControlSelect1">
                           <option value="ADMINISTRATIVE_ET_COMPTABLE">ADMINISTRATIVE_ET_COMPTABLE</option>
                           <option value="CONTROLE_CONFORMITE">CONTROLE_CONFORMITE</option>
                         </select>
@@ -398,17 +408,19 @@
                         <input type="text" name="responsable" class="form-control" [(ngModel)]="dossiers.responsable" placeholder="responsable">
                       </div>
                     </div>
-                    <div class="col-md-12 text-end">
-                      <button type="reset" class="btn btn-danger me-4">
-                        <i class="fas fa-ban"></i>&nbsp;
-                        Annuler
-                      </button>
-                      <button type="submit" class="btn btn-primary" (click)="handleSaveDossier()">
-                        <i class="fas fa-save"></i>&nbsp;
-                        Enregistrer
-                      </button>
-                    </div>
+                    <button type="submit" style="display: none;" id="new-dossier-save"></button>
                   </form>
+                  <div class="col-md-12 text-end">
+                    <button type="reset" class="btn btn-danger me-4">
+                      <i class="fas fa-ban"></i>&nbsp;
+                      Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary" (click)="saveNewDossier()" [disabled]="newDossierForm.invalid && isAdminOrArchiveManager">
+                      <i class="fas fa-save"></i>&nbsp;
+                      Enregistrer
+                    </button>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -432,19 +444,17 @@
               </h2>
             </div>
             <div class="col-md-12 ">
-              <form>
+              <form #newBoiteForm="ngForm" (ngSubmit)="handleSaveBoite(newBoiteForm)">
                 <div class="row mb-3">
                   <div class="col form-group">
                     <label  class="form-label">Cote(numero de la boite):</label>
-                    <input type="text" class="form-control" name="numeroBoite"
-                           [(ngModel)]="boites.numeroBoite"
-                           placeholder="Cote">
+                    <input type="text" class="form-control" name="numeroBoite" required ngModel placeholder="Cote">
                   </div>
                   <div class="col form-group">
-                    <label class="form-label">Etagere</label>
-                    <select class="form-control" name="rangerDTO" [(ngModel)]="boites.rangerDTO" id="examplem3FormControlSelect1">
-                      <option [ngValue]="undefined">--Select Etagere--</option>
-                      <option *ngFor="let et of etagere" [ngValue]="et">Ranger N#{{et.numeroEtagere}}</option>
+                    <label class="form-label">Ranger Sur Etagere</label>
+                    <select class="form-control" name="rangerId" [(ngModel)]="boites.rangerId" id="examplem3FormControlSelect1">
+                      <option [ngValue]="undefined">--Select Ranger--</option>
+                      <option *ngFor="let et of ranger" [ngValue]="et.id">Ranger N#{{et.numeroRanger}}</option>
                     </select>
                   </div>
                 </div>
@@ -463,14 +473,9 @@
                   </div>
                 </div>
                 <div class="row mb-3">
+
                   <div class="col form-group">
-                    <label  class="form-label">Date Limite Conservation:</label>
-                    <input type="datetime-local" class="form-control" name="dateLimiteConservation"
-                           [(ngModel)]="boites.dateLimiteConservation"
-                           placeholder="DateLimiteConservation">
-                  </div>
-                  <div class="col form-group">
-                    <label class="form-label">Etagere</label>
+                    <label class="form-label">Emplacement</label>
                     <input type="text" class="form-control" name="emplacement"
                            [(ngModel)]="boites.emplacement"
                            placeholder="Emplacement">
@@ -490,17 +495,33 @@
                            placeholder="Capacite">
                   </div>
                 </div>
-                <div class="col-md-12 text-end">
-                  <button class="btn btn-danger me-4" (cancel)="boites">
-                    <i class="fas fa-ban"></i>&nbsp;
-                    Annuler
-                  </button>
-                  <button class="btn btn-primary" (click)="handleSaveBoite()">
-                    <i class="fas fa-save"></i>&nbsp;
-                    Enregistrer
-                  </button>
-                </div>
+                <fieldset class="form-group">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" name="Empty" ngModel class="form-check-input">
+                      Empty
+                    </label>
+                  </div>
+                  <div class="form-check disabled">
+                    <label class="form-check-label">
+                      <input type="checkbox" name="notFull" ngModel class="form-check-input">
+                      NotFull
+                    </label>
+                  </div>
+                </fieldset>
+                <button type="submit" style="display: none;" id="new-boite-save"></button>
               </form>
+              <div class="col-md-12 text-end">
+                <button type="button" class="btn btn-danger me-4" (cancel)="boites">
+                  <i class="fas fa-ban"></i>&nbsp;
+                  Annuler
+                </button>
+                <button type="button" class="btn btn-primary" (click)="saveNewBoite()" [disabled]="newBoiteForm.invalid && isAdminOrArchiveManager">
+                  <i class="fas fa-save"></i>&nbsp;
+                  Create New Boite
+                </button>
+              </div>
+
             </div>
           </div>
         </div>

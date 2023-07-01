@@ -1,1 +1,192 @@
-<p>etagere works!</p>
+<div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+  <!--Table Contain-->
+  <div class="tab-content p-5 " id="myTabContainer">
+    <div class="tab-pane fade show active" id="users">
+      <div class="mb-3 float-end">
+        <div class="btn-group me-2">
+          <form  class="form-inline my-2 my-lg-0 justify-content-center" action="">
+            <input type="search" #searchInput="ngModel"
+                   name="keyword" ngModel
+                   (ngModelChange)="searchEtagere(searchInput.value)"
+                   class="form-control me-sm-2"
+                   placeholder="Search chambres...">
+          </form>
+          <!--Add A New Structure-->
+          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addEtagereModal">
+            <i class="fa fa-plus"></i>New Etagere
+          </button>
+        </div>
+        <div class="btn-group">
+          <button type="button" (click)="getEtageres(true)" class="btn btn-info">
+            <i *ngIf="refreshing" class="fas fa-sync fa-spin"></i><i *ngIf="!refreshing" class="fas fa-sync"></i>
+          </button>
+        </div>
+      </div>
+      <table class="table  table-bordered table-hover table-striped">
+        <thead>
+        <tr class="text-center">
+          <th><a (click)="sortBy('id')">Id {{sortIcon('id')}}</a></th>
+          <th><a (click)="sortBy('numeroEtagere')">Numero Etagere{{sortIcon('numeroEtagere')}}</a></th>
+          <th><a (click)="sortBy('nbrRanger')">Nombre Ranger {{sortIcon('nbrRanger')}}</a></th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let et of pageOfEtagere">
+        <tr class="text-center">
+          <td>
+            {{et.id}}
+          </td>
+          <td (click)="onSelectEtagere(et)">{{et.numeroEtagere}}</td>
+          <td (click)="onSelectEtagere(et)">{{et.nbrRanger}}</td>
+          <td (click)="onSelectEtagere(et)">{{et.description}}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-outline-info" (click)="onEditEtagere(et)" >
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-outline-danger" (click)="onDeleteEtagere(et.numeroEtagere)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="loading">
+          <td colspan="5" class="text-center py-5">
+            <span class="spinner-border spinner-border-lg align-center"></span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer pb-0 pt-3">
+      <app-etagere-pagination [etagere]="etagere"  (changePage)="onChangePage($event)"></app-etagere-pagination>
+    </div>
+  </div>
+
+  <!--Button Trigger-->
+  <button [hidden]="true" type="button" id="openEtagereInfo" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewEtagereModal">
+    Batiment Info
+  </button>
+  <button [hidden]="true" type="button" id="openEtagereEdit" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#editEtagereModal">
+    Edit
+  </button>
+
+  <!--Modal Etagere Infos-->
+  <div class="modal fade" id="viewEtagereModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{selectedEtagere.numeroEtagere}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="card">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{selectedEtagere.numeroEtagere}}</li>
+                <li class="list-group-item">{{selectedEtagere.nbrRanger}}</li>
+                <li class="list-group-item">{{selectedEtagere.description}}</li>
+                <li class="list-group-item">{{selectedEtagere.dateCreation | date : 'medium'}}</li>
+                <li class="list-group-item"><small class="text-muted">Modifier : le </small>{{selectedEtagere.updatedDate | date : 'medium'}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Modal Add Etagere-->
+  <div class="modal fade" id="addEtagereModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabeladdUser">New Etagere</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #newEtagereForm="ngForm"  (ngSubmit)="onAddNewEtagere(newEtagereForm)">
+              <div class="form-group">
+                <label for="numeroEtagere">Numero Etagere</label>
+                <input type="text" name="numeroEtagere" id="numeroEtagere" required ngModel class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="nbrRanger">Nombre de Ranger</label>
+                <input type="text" name="nbrRanger" id="nbrRanger" required ngModel class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" name="description" id="description" required ngModel class="form-control">
+              </div>
+              <div class="col form-group">
+                <label class="col-form-label col-sm-2">Rayon</label>
+                <select class="form-control" name="rayonId" ngModel="etagere.rayonId" id="exampl3FormControlSelect111">
+                  <option ngValue="undefined">selecte-Rayon</option>
+                  <option *ngFor="let r of rayon" ngValue="r.id">{{r.numeroRayon}}</option>
+                </select>
+              </div>
+              <button type="submit" style="display: none;" id="new-etagere-save"></button>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="new-etagere-close">Close</button>
+          <button type="button" (click)="saveNewEtagere()" [disabled]="newEtagereForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Add Etagere</button>
+        </div>
+      </div>
+    </div>
+    <!--End of Add etagere-->
+
+  </div>
+
+  <!--Modal Edit Etagere-->
+  <div class="modal fade" id="editEtagereModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-5" id="exampleModalLabelEditDocument">Edit {{editEtagere.numeroEtagere}}
+            <small [hidden]="isAdminOrArchiveManager">(read only)</small></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&nbsp;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #editEtagereForm="ngForm">
+              <div class="form-group">
+                <label for="numeroEtagere">Numero Etagere</label>
+                <input type="text" name="numeroEtagere" [disabled]="!isAdminOrArchiveManager"   required [(ngModel)]="editEtagere.numeroEtagere" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="nbrRanger">Nombre de Ranger</label>
+                <input type="text" name="nbrRanger" [disabled]="!isAdminOrArchiveManager"  required  [(ngModel)]="editEtagere.nbrRanger" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" name="description" [disabled]="!isAdminOrArchiveManager"  required  [(ngModel)]="editEtagere.description" class="form-control">
+              </div>
+              <!--<div class="col form-group">
+                <label class="col-form-label col-sm-2">Rayon</label>
+                <select class="form-control" name="rayonId" ngModel="etagere.rayonId" id="exampl3FormCdontrolSelect111">
+                  <option ngValue="{{editEtagere.rayonId.numeroRayon}}">{{editEtagere.rayonId.numeroRayon}}</option>
+                  <option *ngFor="let r of rayon" ngValue="r.id">{{r.numeroRayon}}</option>
+                </select>
+              </div>-->
+              <button type="submit" style="display: none;" id="edit-etagere-save"></button>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-user-close">Close</button>
+          <button type="button" (click)="onUpdateEtagere()" [disabled]="editEtagereForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update Etagere</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End of Edit Chambre-->
+</div>

@@ -17,7 +17,7 @@ export class StructureService {
   constructor(private http: HttpClient) { }
 
  public getStructure(): Observable<Structures[] | HttpErrorResponse> {
-    return this.http.get<Structures[]>(`${this.host}/api/archive/structures`)
+    return this.http.get<Structures[]>(`${this.host}/api/archive/structures/list`)
   }
 
   public addStructure(formData: FormData): Observable<any> {
@@ -25,7 +25,7 @@ export class StructureService {
   }
 
   public deleteStructure(nomStructure: string):Observable<CustomHttpResponse | HttpErrorResponse> {
-     return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/structures/${nomStructure}`)
+     return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/structures/delete/${nomStructure}`)
   }
 
   public updateStructure(formData: FormData): Observable<any> {

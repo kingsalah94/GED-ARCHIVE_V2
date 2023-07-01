@@ -20,16 +20,13 @@ export class BatimentService {
 
 
   public getBatiment(): Observable<Batiment[] | HttpErrorResponse> {
-    return this.http.get<Batiment[] >(`${this.host}/api/archive/batiment`)
+    return this.http.get<Batiment[] >(`${this.host}/api/archive/batiment/list`)
   }
 
-  public getOneBatiment(id:any): Observable<Batiment> {
-    return this.http.get<Batiment>(environment.backendHost + "/batiment/"+id)
-  }
 
 
   public delete(nomBatiment: string):Observable<CustomHttpResponse | HttpErrorResponse> {
-    return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/batiment/${nomBatiment}`)
+    return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/batiment/delete/${nomBatiment}`)
   }
 
   public updateBatiment(formData: FormData): Observable<Batiment> {

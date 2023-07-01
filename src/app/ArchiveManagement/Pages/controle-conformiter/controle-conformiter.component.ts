@@ -19,6 +19,10 @@ import {NotificationType} from "../../../Enumerations/notification-type.enum";
 import {NgForm} from "@angular/forms";
 import {Role} from "../../../Enumerations/role.enum.";
 import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
+import {Ranger} from "../../../models/Ranger";
+import {RangerService} from "../../../GlobaleServices/ranger.service";
+import {Emprunt} from "../../../models/Emprunt";
+import {EmpruntService} from "../../../GlobaleServices/emprunt.service";
 
 @Component({
   selector: 'app-controle-conformiter',
@@ -29,6 +33,9 @@ export class ControleConformiterComponent {
   private titleSubject = new BehaviorSubject<string>('Users');
   public titleAction$= this.titleSubject.asObservable();
   public document!: Documents[] ;
+  public emprunt!: Emprunt[] ;
+  public documents: Documents =new Documents();
+  public ranger!: Ranger[];
   public refreshing: boolean | undefined;
   private subscription : Subscription[] = [];
   public fileName: string | undefined;
@@ -45,16 +52,18 @@ export class ControleConformiterComponent {
   dossiers: Dossier = new Dossier();
   boite!: Boite[];
   boites: Boite = new Boite();
-  etagere: Etagere[]=[];
+
   keyword?: string;
   results?: any[];
+  private loading!: boolean;
 
 
   constructor(private boiteService:BoiteService,
               private documentService: DocumentsService,
               private responsableService: ResponsableTraitementService,
               private dossierService: DossierService,
-              private etagereService:EtagereService,
+              private rangerService:RangerService,
+              private empruntService:EmpruntService,
               private http:HttpClient,
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService) {
@@ -64,12 +73,11 @@ export class ControleConformiterComponent {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getDocuments(true);
     this.getDossier(true);
-    this.boiteService.getBoite()
-      .subscribe(response =>this.boite=response);
-    this.responsableService.getResponsable()
-      .subscribe(response =>this.responsable=response);
-    this.etagereService.getEtagere()
-      .subscribe(response =>this.etagere=response)
+    this.getBoite(true);
+    this.getRanger(true);
+    this.getEmprunts(true);
+
+    this.getResponsable(true);
   }
   public changeTitle(title: string): void{
     this.titleSubject.next(title);
@@ -107,16 +115,92 @@ export class ControleConformiterComponent {
       })
     );
   }
+
+  public getEmprunts(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.empruntService.getEmprunt().subscribe((response: Emprunt[] ) => {
+        //this.structureService.(response);
+        this.empruntService.addEmpruntToLocalCache(response);
+        this.emprunt = response;
+        this.loading= false;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Emprunt(s) Charger avec succer.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+
   public getDossier(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
-    this.subscription.push(this.documentService.getDossier().subscribe((response: Dossier[] ) => {
-
+    this.subscription.push(this.dossierService.getDossier().subscribe((response: Dossier[] ) => {
+        this.dossierService.addDossierToLocalCache(response);
         this.dossier = response;
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
             this.sendNotification(NotificationType.SUCCESS, `${response.length} dossier(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+  public getBoite(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.boiteService.getBoites().subscribe((response: Boite[] ) => {
+
+        this.boite = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Boite(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+
+  public getResponsable(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.responsableService.getResponsable().subscribe((response: ResponsableTraitement[] ) => {
+
+        this.responsable = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Responsable de Traitement(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+  public getRanger(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.rangerService.getRanger().subscribe((response: Ranger[] ) => {
+        this.ranger = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Ranger(s) Charger.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
@@ -147,6 +231,12 @@ export class ControleConformiterComponent {
 
   saveNewDocument(): void {
     this.clickButton('#new-document-save');
+  }
+  saveNewBoite(): void {
+    this.clickButton('#new-boite-save');
+  }
+  saveNewDossier(): void {
+    this.clickButton('#new-dossier-save');
   }
 
   public onAddNewDocument(documentForm: NgForm):void{
@@ -259,30 +349,36 @@ export class ControleConformiterComponent {
   }
 
 
-  /*=====================Partie Gestions des Dossier*/
 
-
-  handleSaveDossier() {
-    this.dossierService.create(this.dossiers).subscribe({
-      next :data=>{
-        alert("Le Dossier est Creer Avec Succer");
-      },
-      error: (err: any) => {
-        console.log(err);
-      }
-    });
-  }
 
   /*==================Partie Gest Boite==============*/
 
-  handleSaveBoite(){
-    this.boiteService.create(this.boites).subscribe({
-      next : data=>{
-        alert("Boite Creer Avec Succer");
+  public handleSaveBoite(boiteForm: NgForm):void{
+    // @ts-ignore
+    const formData = this.boiteService.createBoiteFormData(null, boiteForm.value);
+    this.subscription.push(this.boiteService.addBoite(formData).subscribe({
+      next: (response: Boite)=>{
+        this.getBoite(false);
+        this.sendNotification(NotificationType.SUCCESS, `${response.numeroBoite} Ajouter Avec Succer`)
       },
-      error: (err:any) => {
-        console.log(err);
+      error: (e)=> {
+        console.error(e);
+        this.sendNotification(NotificationType.ERROR, e.message);
       }
-    });
+    }));
+  }
+  public handleSaveDossier(dossierForm: NgForm):void{
+    // @ts-ignore
+    const formData = this.dossierService.createDossierFormData(null, dossierForm.value);
+    this.subscription.push(this.dossierService.addDossier(formData).subscribe({
+      next: (response: Dossier)=>{
+        this.getDossier(false);
+        this.sendNotification(NotificationType.SUCCESS, `${response.nomDossier} Ajouter Avec Succer`)
+      },
+      error: (e)=> {
+        console.error(e);
+        this.sendNotification(NotificationType.ERROR, e.message);
+      }
+    }));
   }
 }

@@ -1,15 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subscription} from "rxjs";
-import {Structures} from "../../../models/Structures";
 import {Dossier} from "../../../models/dossier";
 import {ResponsableTraitement} from "../../../models/ResponsableTraitement";
-import {Boite} from "../../../models/Boite";
 import {Etagere} from "../../../models/Etagere";
-import {BoiteService} from "../../../GlobaleServices/Boite/boite.service";
 import {StructureService} from "../../../GlobaleServices/Structure/structure.service";
-import {
-  ResponsableTraitementService
-} from "../../../GlobaleServices/ResponsableTraitement/responsable-traitement.service";
+import {ResponsableTraitementService} from "../../../GlobaleServices/ResponsableTraitement/responsable-traitement.service";
 import {DossierService} from "../../../GlobaleServices/dossier/dossier.service";
 import {EtagereService} from "../../../GlobaleServices/Etagere/etagere.service";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
@@ -27,7 +22,7 @@ import {BatimentService} from "../../../GlobaleServices/Batiment/batiment.servic
   templateUrl: './batiment.component.html',
   styleUrls: ['./batiment.component.css']
 })
-export class BatimentComponent {
+export class BatimentComponent implements OnInit,OnDestroy{
 
   public batiment!: Batiment[] ;
   public refreshing: boolean | undefined;
@@ -66,10 +61,7 @@ export class BatimentComponent {
     //this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getBatiments(true);
     // this.getDossier(true);
-    this.responsableService.getResponsable()
-      .subscribe(response =>this.responsable=response);
-    this.etagereService.getEtagere()
-      .subscribe(response =>this.etagere=response);
+
 
   }
 
@@ -237,6 +229,8 @@ export class BatimentComponent {
   }
 
 
-
+  ngOnDestroy(): void {
+    this.subscription.forEach(sub => sub.unsubscribe());
+  }
 
 }

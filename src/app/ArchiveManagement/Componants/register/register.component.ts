@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit,OnDestroy{
   user: User = new User();
   division!: Divisions[];
   divisions: Divisions = new Divisions();
+  private refreshing!: boolean;
 
   constructor(private router : Router,
               private divisionService: DivisionService,
@@ -28,7 +29,7 @@ export class RegisterComponent implements OnInit,OnDestroy{
               private notificationService: NotificationService) {
   }
   ngOnInit(): void {
-    this.divisionService.getDivisions().subscribe(response =>this.division=response);
+    this.getDivision(true);
     /*if (this.authenticationService.isUserLoggedIn()){
       this.router.navigateByUrl('/dashboard');
     }*/
@@ -43,7 +44,6 @@ public onRegister(user:User): void{
           this.showLoading = false;
           this.sendNotification(NotificationType.SUCCESS,`A new account was created for ${response.body?.firstName}.
           Please check your email for password to log in`);
-
         },
       error: (errorResponse: HttpErrorResponse) =>{
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -52,6 +52,20 @@ public onRegister(user:User): void{
       });
 }
 
+  public getDivision(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.divisionService.getDivisions().subscribe((response: Divisions[] ) => {
+
+        this.division = response;
+        this.refreshing = false;
+
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
   private sendNotification(notificationType: NotificationType, message: string): void {
     if (message){
       this.notificationService.notify(notificationType,message);

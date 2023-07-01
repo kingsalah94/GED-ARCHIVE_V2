@@ -1,47 +1,57 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Chambre} from "../../models/Chambre";
+import {CustomHttpResponse} from "../../Http-Response/Custom-http-response";
+import {Documents} from "../../models/documents";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChambreService {
-
+  private host = environment.backendHost;
   constructor(private http:HttpClient) { }
 
-  public saveChambre(chambre: Chambre): Observable<Chambre> {
-    return this.http.post<Chambre>(environment.backendHost + "/chambre",chambre)
+
+  public getChambres(): Observable<Chambre[] | HttpErrorResponse>{
+    return this.http.get<Chambre[]>(`${this.host}/api/archive/chambre/list`)
   }
 
-  public getChambre(): Observable<Array<Chambre>> {
-    return this.http.get<Array<Chambre>>(environment.backendHost + "/chambre")
+  public addChambre(formData: FormData):Observable<any>{
+    return this.http.post<Chambre>(`${this.host}/api/archive/chambre/add`,formData)
   }
-  public getAllChambre(): Observable<Chambre[]> {
-    return this.http.get<Chambre[]>(environment.backendHost + "/chambre")
-  }
-  public getOneChambre(id:any): Observable<Chambre> {
-    return this.http.get<Chambre>(environment.backendHost + "/chambre/"+id)
+  public updateChambres(formData: FormData):Observable<any>{
+    return this.http.put<Chambre>(`${this.host}/api/archive/chambre/update`,formData);
   }
 
-  public create(data: any): Observable<any> {
-    return this.http.post(environment.backendHost + "/chambre",data)
+  public deleteChambre(numeroChambre: string):Observable<CustomHttpResponse | HttpErrorResponse> {
+    return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/chambre/delete/${numeroChambre}`);
   }
 
-  public delete(id: any):Observable<any> {
-    return this.http.delete(environment.backendHost + "/chambre/"+id)
+  public addChambreToLocalCache(chambres: Chambre[] | HttpErrorResponse): void{
+    localStorage.setItem('chambres',JSON.stringify(chambres));
+  }
+  public getChambresFromLocalCache(): Chambre[] | null {
+    const chambres = localStorage.getItem('chambres');
+    if (chambres) {
+      return JSON.parse(chambres);
+    }
+    return null;
   }
 
-  public updateChambre(chambre: Chambre): Observable<Chambre> {
-    return this.http.put<Chambre>(environment.backendHost+"/chambre/"+chambre.id,chambre);
-  }
-  public updatechambres(id: any,data:any): Observable<any> {
-    return this.http.put(environment.backendHost+"/chambre/"+id,data);
-  }
 
   findByNom(keyword: string): Observable<Chambre[]> {
     return this.http.get<Chambre[]>(environment.backendHost+"/chambre/search?keyword="+keyword);
+  }
+
+  public createChambreFormData(currentNumeroChambre: string, chambre: Chambre): FormData {
+    const formData = new FormData();
+    formData.append('currentNumeroChambre',currentNumeroChambre);
+    formData.append('numeroChambre',chambre.numeroChambre);
+    formData.append('nbrRayon',chambre.nbrRayon);
+    formData.append('niveauBatimentId',chambre.niveauBatimentId);
+    return formData;
   }
 }

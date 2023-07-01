@@ -73,13 +73,45 @@ export class ArchivesConfigurationComponent {
     //this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getStructures(true);
    // this.getDossier(true);
-    this.boiteService.getBoite()
-      .subscribe(response =>this.boite=response);
-    this.responsableService.getResponsable()
-      .subscribe(response =>this.responsable=response);
-    this.etagereService.getEtagere()
-      .subscribe(response =>this.etagere=response);
+    this.getBoite(true)
+ this.getResponsable(true);
+  }
 
+  public getResponsable(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.responsableService.getResponsable().subscribe((response: ResponsableTraitement[] ) => {
+
+        this.responsable = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Responsable de Traitement(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+  public getBoite(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.boiteService.getBoites().subscribe((response: Boite[] ) => {
+
+        this.boite = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Boite(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
   }
   public changeTitle(title: string): void{
     this.titleSubject.next(title);
@@ -257,28 +289,5 @@ export class ArchivesConfigurationComponent {
   /*=====================Partie Gestions des Dossier*/
 
 
-  handleSaveDossier() {
-    this.dossierService.create(this.dossiers).subscribe({
-      next :data=>{
-        alert("Le Dossier est Creer Avec Succer");
-      },
-      error: (err: any) => {
-        console.log(err);
-      }
-    });
-  }
-
-  /*==================Partie Gest Boite==============*/
-
-  handleSaveBoite(){
-    this.boiteService.create(this.boites).subscribe({
-      next : data=>{
-        alert("Boite Creer Avec Succer");
-      },
-      error: (err:any) => {
-        console.log(err);
-      }
-    });
-  }
 
 }

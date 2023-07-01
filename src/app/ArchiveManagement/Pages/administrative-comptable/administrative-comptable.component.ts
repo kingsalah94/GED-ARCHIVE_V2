@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subscription} from "rxjs";
 import {User} from "../../../models/user";
 import {UserService} from "../../../GlobaleServices/user.service";
@@ -18,20 +18,25 @@ import {ResponsableTraitement} from "../../../models/ResponsableTraitement";
 import {
   ResponsableTraitementService
 } from "../../../GlobaleServices/ResponsableTraitement/responsable-traitement.service";
-import {Etagere} from "../../../models/Etagere";
-import {EtagereService} from "../../../GlobaleServices/Etagere/etagere.service";
 import {Role} from "../../../Enumerations/role.enum.";
+import {Ranger} from "../../../models/Ranger";
+import {RangerService} from "../../../GlobaleServices/ranger.service";
+import {Emprunt} from "../../../models/Emprunt";
+import {EmpruntService} from "../../../GlobaleServices/emprunt.service";
 
 @Component({
   selector: 'app-administrative-comptable',
   templateUrl: './administrative-comptable.component.html',
   styleUrls: ['./administrative-comptable.component.css']
 })
-export class AdministrativeComptableComponent {
+export class AdministrativeComptableComponent implements OnInit,OnDestroy{
 
   private titleSubject = new BehaviorSubject<string>('Users');
   public titleAction$= this.titleSubject.asObservable();
   public document!: Documents[] ;
+  public emprunt!: Emprunt[] ;
+  public documents: Documents =new Documents();
+  public ranger!: Ranger[];
   public refreshing: boolean | undefined;
   private subscription : Subscription[] = [];
   public fileName: string | undefined;
@@ -48,23 +53,18 @@ export class AdministrativeComptableComponent {
   dossiers: Dossier = new Dossier();
   boite!: Boite[];
   boites: Boite = new Boite();
-  etagere: Etagere[]=[];
+
   keyword?: string;
   results?: any[];
-
-  items: any[] = [];
-  pageOfDocuments?: Array<any>;
-  sortProperty: string = 'id';
-  sortOrder = 1;
-  loading = false;
-
+  private loading!: boolean;
 
 
   constructor(private boiteService:BoiteService,
               private documentService: DocumentsService,
               private responsableService: ResponsableTraitementService,
               private dossierService: DossierService,
-              private etagereService:EtagereService,
+              private rangerService:RangerService,
+              private empruntService:EmpruntService,
               private http:HttpClient,
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService) {
@@ -74,13 +74,11 @@ export class AdministrativeComptableComponent {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getDocuments(true);
     this.getDossier(true);
-    this.boiteService.getBoite()
-      .subscribe(response =>this.boite=response);
-    this.responsableService.getResponsable()
-      .subscribe(response =>this.responsable=response);
-    this.etagereService.getEtagere()
-      .subscribe(response =>this.etagere=response);
+    this.getBoite(true);
+    this.getRanger(true);
+    this.getEmprunts(true);
 
+    this.getResponsable(true);
   }
   public changeTitle(title: string): void{
     this.titleSubject.next(title);
@@ -92,33 +90,7 @@ export class AdministrativeComptableComponent {
       content.style.display = 'block';
     }
   }
-  onChangePage(pageOfDocuments: Array<any>) {
-    // update current page of document
-    this.pageOfDocuments = pageOfDocuments;
-  }
 
-  sortBy(property: string) {
-    this.sortOrder = property === this.sortProperty ? (this.sortOrder * -1) : 1;
-    this.sortProperty = property;
-    this.document = [...this.document.sort((a: any, b: any) => {
-      // sort comparison function
-      let result = 0;
-      if (a[property] < b[property]) {
-        result = -1;
-      }
-      if (a[property] > b[property]) {
-        result = 1;
-      }
-      return result * this.sortOrder;
-    })];
-  }
-
-  sortIcon(property: string) {
-    if (property === this.sortProperty) {
-      return this.sortOrder === 1 ? '☝️' : '👇';
-    }
-    return '';
-  }
   search() {
     this.http.get<any[]>(`/search/${this.keyword}`).subscribe(
       results => this.results = results,
@@ -132,7 +104,6 @@ export class AdministrativeComptableComponent {
     this.subscription.push(this.documentService.getDocuments().subscribe((response: Documents[] ) => {
         this.documentService.addDocumentsToLocalCache(response);
         this.document = response;
-        this.loading= false;
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
@@ -145,15 +116,92 @@ export class AdministrativeComptableComponent {
       })
     );
   }
+
+  public getEmprunts(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.empruntService.getEmprunt().subscribe((response: Emprunt[] ) => {
+        //this.structureService.(response);
+        this.empruntService.addEmpruntToLocalCache(response);
+        this.emprunt = response;
+        this.loading= false;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Emprunt(s) Charger avec succer.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+
   public getDossier(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
-    this.subscription.push(this.documentService.getDossier().subscribe((response: Dossier[] ) => {
+    this.subscription.push(this.dossierService.getDossier().subscribe((response: Dossier[] ) => {
+      this.dossierService.addDossierToLocalCache(response);
         this.dossier = response;
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
             this.sendNotification(NotificationType.SUCCESS, `${response.length} dossier(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+  public getBoite(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.boiteService.getBoites().subscribe((response: Boite[] ) => {
+
+        this.boite = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Boite(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+
+  public getResponsable(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.responsableService.getResponsable().subscribe((response: ResponsableTraitement[] ) => {
+
+        this.responsable = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Responsable de Traitement(s) Charger.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  }
+  public getRanger(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.rangerService.getRanger().subscribe((response: Ranger[] ) => {
+        this.ranger = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Ranger(s) Charger.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
@@ -184,6 +232,12 @@ export class AdministrativeComptableComponent {
 
   saveNewDocument(): void {
     this.clickButton('#new-document-save');
+  }
+  saveNewBoite(): void {
+    this.clickButton('#new-boite-save');
+  }
+  saveNewDossier(): void {
+    this.clickButton('#new-dossier-save');
   }
 
   public onAddNewDocument(documentForm: NgForm):void{
@@ -230,12 +284,12 @@ export class AdministrativeComptableComponent {
   public searchDocuments(keyword: string): void{
     const results: Documents[] = [];
     // @ts-ignore
-    for (const document of  this.documentService.getDocumentsFromLocalCache()){
-      if (document.intituleDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
-        document.numeroDordre.toLowerCase().indexOf(keyword.toLowerCase()) !== -1||
-        document.typeDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
-        document.nombrPage.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
-        results.push(document);
+    for (const documen of  this.documentService.getDocumentsFromLocalCache()){
+      if (documen.intituleDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
+        documen.numeroDordre.toLowerCase().indexOf(keyword.toLowerCase()) !== -1||
+        documen.typeDocument.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 ||
+        documen.nombrPage.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
+        results.push(documen);
       }
     }
     this.document = results;
@@ -296,30 +350,40 @@ export class AdministrativeComptableComponent {
   }
 
 
-  /*=====================Partie Gestions des Dossier*/
 
-
-  handleSaveDossier() {
-    this.dossierService.create(this.dossiers).subscribe({
-      next :data=>{
-        alert("Le Dossier est Creer Avec Succer");
-      },
-      error: (err: any) => {
-        console.log(err);
-      }
-    });
-  }
 
   /*==================Partie Gest Boite==============*/
 
-  handleSaveBoite(){
-    this.boiteService.create(this.boites).subscribe({
-      next : data=>{
-        alert("Boite Creer Avec Succer");
+  public handleSaveBoite(boiteForm: NgForm):void{
+    // @ts-ignore
+    const formData = this.boiteService.createBoiteFormData(null, boiteForm.value);
+    this.subscription.push(this.boiteService.addBoite(formData).subscribe({
+      next: (response: Boite)=>{
+        this.getBoite(false);
+        this.sendNotification(NotificationType.SUCCESS, `${response.numeroBoite} Ajouter Avec Succer`)
       },
-      error: (err:any) => {
-        console.log(err);
+      error: (e)=> {
+        console.error(e);
+        this.sendNotification(NotificationType.ERROR, e.message);
       }
-    });
+    }));
   }
+  public handleSaveDossier(dossierForm: NgForm):void{
+    // @ts-ignore
+    const formData = this.dossierService.createDossierFormData(null, dossierForm.value);
+    this.subscription.push(this.dossierService.addDossier(formData).subscribe({
+      next: (response: Dossier)=>{
+        this.getDossier(false);
+        this.sendNotification(NotificationType.SUCCESS, `${response.nomDossier} Ajouter Avec Succer`)
+      },
+      error: (e)=> {
+        console.error(e);
+        this.sendNotification(NotificationType.ERROR, e.message);
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+  }
+
 }

@@ -1,1 +1,193 @@
-<p>emprunt-document works!</p>
+<div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+  <!--Table Contain-->
+  <div class="tab-content p-5 " id="myTabContainer">
+    <div class="tab-pane fade show active" id="users">
+      <div class="mb-3 float-end">
+        <div class="btn-group me-2">
+          <form  class="form-inline my-2 my-lg-0 justify-content-center" action="">
+            <input type="search" #searchInput="ngModel"
+                   name="keyword" ngModel
+                   (ngModelChange)="searchEmprunt(searchInput.value)"
+                   class="form-control me-sm-2"
+                   placeholder="Search emprunt...">
+          </form>
+          <!--Add A New Structure-->
+          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addBatimentModal">
+            <i class="fa fa-plus"></i>New Emprunt
+          </button>
+        </div>
+        <div class="btn-group">
+          <button type="button" (click)="getEmprunts(true)" class="btn btn-info">
+            <i *ngIf="refreshing" class="fas fa-sync fa-spin"></i><i *ngIf="!refreshing" class="fas fa-sync"></i>
+          </button>
+        </div>
+      </div>
+      <table class="table table-bordered table-hover table-striped">
+        <thead>
+        <tr class="text-center">
+          <th><a (click)="sortBy('id')">Id {{sortIcon('id')}}</a></th>
+          <th><a (click)="sortBy('codeEmprunt')">Code Emprunt{{sortIcon('codeEmprunt')}}</a></th>
+          <th><a (click)="sortBy('dateEmprunt')">Date Emprunt{{sortIcon('dateEmprunt')}}</a></th>
+          <th><a (click)="sortBy('dateRetour')">Date retour{{sortIcon('dateRetour')}}</a></th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let emprunt of pageOfEmprunt">
+        <tr class="text-center">
+          <td>
+            {{emprunt.id}}
+          </td>
+          <td (click)="onSelectEmprunt(emprunt)">{{emprunt.codeEmprunt}}</td>
+          <td (click)="onSelectEmprunt(emprunt)">{{emprunt.dateEmprunt}}</td>
+          <td (click)="onSelectEmprunt(emprunt)">{{emprunt.dateRetour}}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-outline-info" (click)="onEditEmprunt(emprunt)" >
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-outline-danger" (click)="onDeleteEmprunt(emprunt.codeEmprunt)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="loading">
+          <td colspan="5" class="text-center py-5">
+            <span class="spinner-border spinner-border-lg align-center"></span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer pb-0 pt-3">
+      <app-emprunt-pagination [emprunt]="emprunt" (changePage)="onChangePage($event)"></app-emprunt-pagination>
+    </div>
+  </div>
+
+  <!--Button Trigger-->
+  <button [hidden]="true" type="button" id="openEmpruntInfo" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewEmpruntModal">
+    Emprunt Info
+  </button>
+  <button [hidden]="true" type="button" id="openEmpruntEdit" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#editEmpruntModal">
+    Edit
+  </button>
+
+  <!--Modal Structure Infos-->
+  <div class="modal fade" id="viewEmpruntModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{selectedEmprunt.codeEmprunt}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="card">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{selectedEmprunt.codeEmprunt}}</li>
+                <li class="list-group-item">{{selectedEmprunt.dateEmprunt | date : 'medium'}}</li>
+                <li class="list-group-item">{{selectedEmprunt.dateRetour | date : 'medium'}}</li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Modal Add Structure-->
+  <div class="modal fade" id="addBatimentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabeladdUser">New Emprunt</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #newEmpruntForm="ngForm"  (ngSubmit)="onAddNewEmprunt(newEmpruntForm)">
+              <div class="form-group">
+                <label for="codeEmprunt">CodeEmprunt</label>
+                <input type="text" name="codeEmprunt" id="codeEmprunt" required ngModel class="form-control">
+              </div>
+              <div class="col form-group">
+                <label class="col-form-label col-sm-2">Utilisateur</label>
+                <select class="form-control" name="email" [(ngModel)]="emprunts.email" id="example3FormControlSelssect1">
+                  <option ngValue="undefined">--Select User--</option>
+                  <option *ngFor="let u of users" [ngValue]="u.email">{{u.email}}</option>
+                </select>
+              </div>
+              <div class="col form-group">
+                <label class="col-form-label col-sm-2">Dossier</label>
+                <select class="form-control" name="dossierId" [(ngModel)]="emprunts.dossierId" id="example3FormControlSelect1">
+                  <option ngValue="undefined">--Select un Dossier--</option>
+                  <option *ngFor="let d of dossier" [ngValue]="d.id">{{d.nomDossier}}&nbsp;{{d.cote}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="codeEmprunt">Date Retour</label>
+                <input type="date" name="dateRetour" id="dateRetour" required [(ngModel)]="emprunts.dateRetour" class="form-control">
+              </div>
+              <button type="submit" style="display: none;" id="new-emprunt-save"></button>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="new-emprunt-close">Close</button>
+          <button type="button" (click)="saveNewEmprunt()" [disabled]="newEmpruntForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Add Batiment</button>
+        </div>
+      </div>
+    </div>
+    <!--End of Add Document-->
+
+  </div>
+
+  <!--Modal Edit Structure-->
+  <div class="modal fade" id="editEmpruntModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-5" id="exampleModalLabelEditDocument">Edit {{editEmprunt.codeEmprunt}}
+            <small [hidden]="isAdminOrArchiveManager">(read only)</small></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&nbsp;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #editEmpruntForm="ngForm">
+              <div class="form-group">
+                <label for="codeEmprunt">Code Emprunt</label>
+                <input type="text" name="codeEmprunt" [disabled]="!isAdminOrArchiveManager"   required [(ngModel)]="editEmprunt.codeEmprunt" class="form-control">
+              </div>
+              <div class="col form-group">
+                <label class="col-form-label col-sm-2">Utilisateur</label>
+                <select class="form-control" name="email" [(ngModel)]="editEmprunt.email" id="example3ForddmControlSelssect1">
+                  <option ngValue="undefined">--Select User--</option>
+                  <option *ngFor="let u of users" [ngValue]="u.email">{{u.email}}</option>
+                </select>
+              </div>
+              <div class="col form-group">
+                <label class="col-form-label col-sm-2">Dossier</label>
+                <select class="form-control" name="dossierId" [(ngModel)]="editEmprunt.dossierId" id="lkfe">
+                  <option ngValue="undefined">--Select un Dossier--</option>
+                  <option *ngFor="let d of dossier" [ngValue]="d.id">{{d.nomDossier}}&nbsp;{{d.cote}}</option>
+                </select>
+              </div>
+              <button type="submit" style="display: none;" id="edit-emprunt-save"></button>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-emprunt-close">Close</button>
+          <button type="button" (click)="onUpdateEmprunt()" [disabled]="editEmpruntForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update Batiment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End of Edit Strucuture-->
+</div>

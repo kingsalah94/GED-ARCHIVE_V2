@@ -1,27 +1,36 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Structure</button>
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Gestion Structure</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Batiment</button>
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Gestion Batiment</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="niveaubatiment-tab" data-bs-toggle="tab" data-bs-target="#niveaubatiment-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Niveau Batiment</button>
+    <button class="nav-link" id="niveaubatiment-tab" data-bs-toggle="tab" data-bs-target="#niveaubatiment-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Niveau Batiment </button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="chambre-tab" data-bs-toggle="tab" data-bs-target="#chambre-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Chambre</button>
+    <button class="nav-link" id="chambre-tab" data-bs-toggle="tab" data-bs-target="#chambre-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Chambre</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="rayon-tab" data-bs-toggle="tab" data-bs-target="#rayon-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Rayon</button>
+    <button class="nav-link" id="rayon-tab" data-bs-toggle="tab" data-bs-target="#rayon-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Rayon</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="etagere-tab" data-bs-toggle="tab" data-bs-target="#etagere-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Etagere</button>
+    <button class="nav-link" id="etagere-tab" data-bs-toggle="tab" data-bs-target="#etagere-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Etagere</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="boite-tab" data-bs-toggle="tab" data-bs-target="#boite-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Boites</button>
+    <button class="nav-link" id="boite-tab" data-bs-toggle="tab" data-bs-target="#boite-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Boites</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="dossier-tab" data-bs-toggle="tab" data-bs-target="#dossier-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Dossiers</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="direction-tab" data-bs-toggle="tab" data-bs-target="#direction-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Direction</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="division-tab" data-bs-toggle="tab" data-bs-target="#division-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Gestion Divisions</button>
   </li>
 </ul>
-<h5 class="text-muted text-center">Configuration</h5>
+<h3 class="text-muted text-center">Configuration</h3>
 <!--====================Structure================-->
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
@@ -29,7 +38,7 @@
     <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Structure Information</h5>
     </div>
     <!--Table Contain-->
-    <div class="tab-content p-5 opacity-75" id="myTabContainer">
+    <div class="tab-content p-5" id="myTabContainer">
       <div class="tab-pane fade show active" id="users">
         <div class="mb-3 float-end">
           <div class="btn-group me-2">
@@ -51,7 +60,7 @@
             </button>
           </div>
         </div>
-        <table class="table table-success table-bordered table-hover table-striped">
+        <table class="table  table-bordered table-hover table-striped">
           <thead>
           <tr class="text-center">
             <th><a (click)="sortBy('id')">Id {{sortIcon('id')}}</a></th>
@@ -186,7 +195,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-user-close">Close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-structure-close">Close</button>
             <button type="button" (click)="onUpdateStructure()" [disabled]="editStructureForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update Structure</button>
           </div>
         </div>
@@ -206,29 +215,53 @@
     <div class="row p-3">
       <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Niveau Information</h5>
     </div>
+    <app-niveau-batiment></app-niveau-batiment>
   </div>
   <!--===========Chambre============-->
   <div class="tab-pane fade" id="chambre-tab-pane" role="tabpanel" aria-labelledby="chambre-tab" tabindex="0">
     <div class="row p-3">
       <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Chambre Information</h5>
     </div>
+    <app-chambre></app-chambre>
   </div>
   <!--===========Rayon============-->
   <div class="tab-pane fade" id="rayon-tab-pane" role="tabpanel" aria-labelledby="rayon-tab" tabindex="0">
     <div class="row p-3">
       <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Rayon Information</h5>
     </div>
+    <app-rayon></app-rayon>
   </div>
   <!--===========Etagere============-->
   <div class="tab-pane fade" id="etagere-tab-pane" role="tabpanel" aria-labelledby="etagere-tab" tabindex="0">
     <div class="row p-3">
       <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Etagere Information</h5>
     </div>
+    <app-etagere></app-etagere>
   </div>
   <!--===========Boites============-->
   <div class="tab-pane fade" id="boite-tab-pane" role="tabpanel" aria-labelledby="boite-tab" tabindex="0">
     <div class="row p-3">
       <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Boites Information</h5>
     </div>
+    <app-boite></app-boite>
+  </div>
+  <!--===========Dossier============-->
+  <div class="tab-pane fade" id="dossier-tab-pane" role="tabpanel" aria-labelledby="boite-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Dossier Information</h5>
+    </div>
+    <app-dossier></app-dossier>
+  </div>
+  <div class="tab-pane fade" id="direction-tab-pane" role="tabpanel" aria-labelledby="boite-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Dossier Information</h5>
+    </div>
+    <app-direction></app-direction>p
+  </div>
+  <div class="tab-pane fade" id="division-tab-pane" role="tabpanel" aria-labelledby="boite-tab" tabindex="0">
+    <div class="row p-3">
+      <h5><i class="fas fa-info-circle blue-color"></i>&nbsp;Dossier Information</h5>
+    </div>
+    <app-divisions></app-divisions>
   </div>
 </div>

@@ -1,15 +1,23 @@
 import {NiveauBatiment} from "./NiveauBatiment";
 
 export class Chambre {
-  id?: any
-  numeroChambre?: string
-  nbrRayon?: any
-  niveauBatimentDTO?: NiveauBatiment
+  public id: any
+  public numeroChambre: string
+  public nbrRayon: any
+  public dateCreation: Date;
+  public updatedDate: Date;
+  public niveauBatimentId?: any
+
+
+  constructor() {
+    this.id = 0;
+    this.numeroChambre = '';
+    this.nbrRayon = '';
+    // @ts-ignore
+    this.dateCreation=null;
+    // @ts-ignore
+    this.updatedDate = null;
+    this.niveauBatimentId = 0;
+  }
 }
 
-/*export interface NiveauBatimentDto {
-  id: number
-  numeroNiveau: number
-  nbrChambre: number
-  batimentDTO: any
-}*/

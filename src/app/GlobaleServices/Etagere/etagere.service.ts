@@ -1,48 +1,55 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {Etagere} from "../../models/Etagere";
+import {CustomHttpResponse} from "../../Http-Response/Custom-http-response";
+import {Documents} from "../../models/documents";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EtagereService {
-
+  private host = environment.backendHost;
   constructor(private http: HttpClient) { }
 
-  public saveEtagere(etagere: Etagere): Observable<Etagere> {
-    return this.http.post<Etagere>(environment.backendHost + "/api/archive/etagere",etagere)
+  public addEtagere(formData: FormData): Observable<any> {
+    return this.http.post<Etagere>(`${this.host}/api/archive/etagere/add`,formData)
+  }
+  public updateEtagere(formData: FormData): Observable<any> {
+    return this.http.put<Etagere>(`${this.host}/api/archive/etagere/update`,formData)
   }
 
-  public getEtagere(): Observable<Array<Etagere>> {
-    return this.http.get<Array<Etagere>>(environment.backendHost + "/api/archive/etagere")
+  public getEtagere(): Observable<Etagere[] | HttpErrorResponse> {
+    return this.http.get<Etagere[]>(`${this.host}/api/archive/etagere/list`)
   }
 
-  public getBatiment(): Observable<Array<Etagere>> {
-    return this.http.get<Array<Etagere>>(environment.backendHost + "/api/archive/etagere")
-  }
-  public getAllEtagere(): Observable<Etagere[]> {
-    return this.http.get<Etagere[]>(environment.backendHost + "/api/archive/etagere")
-  }
-  public getOneEtagere(id:any): Observable<Etagere> {
-    return this.http.get<Etagere>(environment.backendHost + "/api/archive/etagere/"+id)
+
+  public delete(numeroEtagere: string):Observable<CustomHttpResponse | HttpErrorResponse> {
+    return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/document/delete/${numeroEtagere}`)
   }
 
-  public create(data: any): Observable<any> {
-    return this.http.post(environment.backendHost + "/api/archive/etagere",data)
+  public addEtagereToLocalCache(etageres: Etagere[] | HttpErrorResponse): void{
+    localStorage.setItem('etageres',JSON.stringify(etageres));
+  }
+  public getEtagereFromLocalCache(): Etagere[] | null {
+    const etageres = localStorage.getItem('etageres');
+    if (etageres) {
+      return JSON.parse(etageres);
+    }
+    return null;
   }
 
-  public delete(id: any):Observable<any> {
-    return this.http.delete(environment.backendHost + "/api/archive/etagere/"+id)
-  }
+  public createEtagereFormData(currentNumeroEtagere: string, etagere: Etagere): FormData {
+    const formData = new FormData();
+    formData.append('currentNumeroEtagere',currentNumeroEtagere);
+    formData.append('numeroEtagere',etagere.numeroEtagere);
+    formData.append('description',etagere.description);
+    formData.append('nbrRanger',etagere.nbrRanger);
+    formData.append('rayonId',etagere.rayonId);
 
-  public updateEtagere(etagere: Etagere): Observable<Etagere> {
-    return this.http.put<Etagere>(environment.backendHost+"/api/archive/etagere/"+etagere.id,etagere);
-  }
-  public updateEtageres(id: any,data:any): Observable<any> {
-    return this.http.put(environment.backendHost+"/api/archive/etagere/"+id,data);
+    return formData;
   }
 
   findByNom(keyword: string): Observable<Etagere[]> {

@@ -35,7 +35,7 @@ private subs = new SubSink();
   editUser = new User();
   selectedButton: string = '';
   public showLoading: boolean | undefined;
-  division!: Divisions[];
+  public division!: Divisions[];
   divisions: Divisions = new Divisions();
 
 
@@ -48,6 +48,8 @@ private subs = new SubSink();
   ngOnInit(): void {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getUsers(true);
+    this.getDivision(true)
+    // @ts-ignore
     this.divisionService.getDivisions().subscribe(response =>this.division=response);
   }
   public changeTitle(title: string): void{
@@ -73,6 +75,25 @@ private subs = new SubSink();
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
             this.sendNotification(NotificationType.SUCCESS, `${response.length} user(s) loaded successfully.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    ));
+  }
+  public getDivision(shwNotification: Boolean): void{
+    this.refreshing = true;
+    this.subs.add(
+    // @ts-ignore
+    this.subscription.push(this.divisionService.getDivisions().subscribe((response: Divisions[] ) => {
+        this.divisionService.addDivisionToLocalCache(response);
+        this.division = response;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Division(s) loaded successfully.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {

@@ -38,12 +38,46 @@ import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
 import {BatimentComponent} from "./ArchiveManagement/Componants/batiment/batiment.component";
 import {NiveauBatiment} from "./models/NiveauBatiment";
 import {ChambreComponent} from "./ArchiveManagement/Componants/chambre/chambre.component";
-import {NiveauComponent} from "./ArchiveManagement/Componants/niveau/niveau.component";
 import {EtagereComponent} from "./ArchiveManagement/Componants/etagere/etagere.component";
 import {RayonComponent} from "./ArchiveManagement/Componants/rayon/rayon.component";
 import {
   BatimentPaginationComponent
 } from "./ArchiveManagement/Componants/Paging/batiment-pagination/batiment-pagination.component";
+import {
+  ChambrePaginationComponent
+} from "./ArchiveManagement/Componants/Paging/chambre-pagination/chambre-pagination.component";
+import {DivisionsComponent} from "./ArchiveManagement/Componants/divisions/divisions.component";
+import {DirectionComponent} from "./ArchiveManagement/Componants/direction/direction.component";
+import {NiveauBatimentComponent} from "./ArchiveManagement/Componants/niveau-batiment/niveau-batiment.component";
+import {DossierComponent} from "./ArchiveManagement/Componants/dossier/dossier.component";
+import {BoiteComponent} from "./ArchiveManagement/Componants/boite/boite.component";
+import {
+  DirectionPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/direction-pagination/direction-pagination.component";
+import {
+  DivisionPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/division-pagination/division-pagination.component";
+import {
+  DossierPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/dossier-pagination/dossier-pagination.component";
+import {
+  EtagerePaginationComponent
+} from "./ArchiveManagement/Componants/Paging/etagere-pagination/etagere-pagination.component";
+import {
+  NiveauPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/niveau-pagination/niveau-pagination.component";
+import {
+  RagerPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/rager-pagination/rager-pagination.component";
+import {
+  RayonPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/rayon-pagination/rayon-pagination.component";
+import {
+  BoitePaginationComponent
+} from "./ArchiveManagement/Componants/Paging/boite-pagination/boite-pagination.component";
+import {
+  EmpruntPaginationComponent
+} from "./ArchiveManagement/Componants/Paging/emprunt-pagination/emprunt-pagination.component";
 
 @NgModule({
   declarations: [
@@ -66,10 +100,25 @@ import {
     ChartDataComponent,
     BatimentComponent,
     ChambreComponent,
-    NiveauComponent,
     EtagereComponent,
     RayonComponent,
-    BatimentPaginationComponent
+    BatimentPaginationComponent,
+    ChambrePaginationComponent,
+    DivisionsComponent,
+    DirectionComponent,
+    NiveauBatimentComponent,
+    DossierComponent,
+    BoiteComponent,
+    DirectionPaginationComponent,
+    DivisionPaginationComponent,
+    DossierPaginationComponent,
+    EtagerePaginationComponent,
+    NiveauPaginationComponent,
+    RagerPaginationComponent,
+    RayonPaginationComponent,
+    BoitePaginationComponent,
+    EmpruntPaginationComponent
+
 
 
   ],
