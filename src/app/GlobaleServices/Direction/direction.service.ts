@@ -44,12 +44,12 @@ export class DirectionService {
     return null;
   }
 
-  public createDirectionFormData(directionName: string, direction: Directions): FormData {
+  public createDirectionFormData(currentDirectionName: string, direction: Directions): FormData {
     const formData = new FormData();
-    formData.append('directionName',directionName);
+    formData.append('currentDirectionName',currentDirectionName);
     formData.append('directionName',direction.directionName);
     formData.append('description',direction.description);
-    formData.append('structuresId',direction.structuresId);
+    formData.append('structureId',direction.structureId);
 
 
     return formData;

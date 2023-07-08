@@ -153,7 +153,7 @@ export class DivisionsComponent {
 
   public onAddNewDivision(divisionForm: NgForm):void{
     // @ts-ignore
-    const formData = this.chambreService.createChambreFormData(null,divisionForm.value);
+    const formData = this.divisionService.createDivisionFormData(null,divisionForm.value);
     this.subscription.push(this.divisionService.addDivision(formData).subscribe({
       next: (response: Divisions)=>{
         this.clickButton('#new-division-close');
@@ -167,9 +167,9 @@ export class DivisionsComponent {
     }));
   }
 
-  public onUpdateChambre(): void {
+  public onUpdateDivisions(): void {
     // @ts-ignore
-    const formData = this.batimentService.createBatimentFormData(this.currentNumeroChambre, this.editChambre);
+    const formData = this.divisionService.createDivisionFormData(this.currentDivisionName, this.editDivision);
     this.subscription.push(this.divisionService.updateDivisions(formData).subscribe({
       next: (response: Chambre)=>{
         this.clickButton('#edit-division-close');

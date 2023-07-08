@@ -1,8 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Chambre} from "../../../models/Chambre";
+import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {Etagere} from "../../../models/Etagere";
-import {ChambreService} from "../../../GlobaleServices/Chambre/chambre.service";
+
 import {StructureService} from "../../../GlobaleServices/Structure/structure.service";
 import {
   ResponsableTraitementService
@@ -16,37 +14,38 @@ import {NotificationType} from "../../../Enumerations/notification-type.enum";
 import {NgForm} from "@angular/forms";
 import {Role} from "../../../Enumerations/role.enum.";
 import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
-import {Rayon} from "../../../models/Rayon";
-import {RayonService} from "../../../GlobaleServices/Rayon/rayon.service";
+import {ResponsableTraitement} from "../../../models/ResponsableTraitement";
+import {Structures} from "../../../models/Structures";
 
 @Component({
-  selector: 'app-etagere',
-  templateUrl: './etagere.component.html',
-  styleUrls: ['./etagere.component.css']
+  selector: 'app-responsable-traitement',
+  templateUrl: './responsable-traitement.component.html',
+  styleUrls: ['./responsable-traitement.component.css']
 })
-export class EtagereComponent implements OnInit,OnDestroy{
-  public etagere!: Etagere[] ;
+export class ResponsableTraitementComponent implements OnInit{
+
+  public responsable!: ResponsableTraitement[] ;
+  public responsables: ResponsableTraitement = new ResponsableTraitement();
   public refreshing: boolean | undefined;
   private subscription : Subscription[] = [];
-  public selectedEtagere: Etagere = new Etagere();
-  private currentNumeroEtagere!: string;
+  public selectedResponsable: ResponsableTraitement = new ResponsableTraitement();
+  private currentNomRt!: string;
 
-  editEtagere = new Etagere();
+  editResponsable = new ResponsableTraitement();
   selectedButton: string = '';
 
-  rayon: Rayon[]=[];
   keyword?: string;
   results?: any[];
 
   items: any[] = [];
-  pageOfEtagere?: Array<any>;
+  pageOfResponsable?: Array<any>;
   sortProperty: string = 'id';
   sortOrder = 1;
   loading = false;
+  public structure: Structures[]=[];
 
 
-  constructor(private rayonService:RayonService,
-              private structureService: StructureService,
+  constructor(private structureService: StructureService,
               private responsableService: ResponsableTraitementService,
               private dossierService: DossierService,
               private etagereService:EtagereService,
@@ -57,21 +56,21 @@ export class EtagereComponent implements OnInit,OnDestroy{
 
   ngOnInit(): void {
     //this.currentUser = this.authenticationService.getUserFromLocalCache();
-    this.getEtageres(true);
-     this.getRayons(true);
+    this.getResponsable(true);
+    this.getStructures(true);
 
   }
 
 
-  onChangePage(pageOfEtagere: Array<any>) {
+  onChangePage(pageOfResponsable: Array<any>) {
     // update current page of document
-    this.pageOfEtagere = pageOfEtagere;
+    this.pageOfResponsable = pageOfResponsable;
   }
 
   sortBy(property: string) {
     this.sortOrder = property === this.sortProperty ? (this.sortOrder * -1) : 1;
     this.sortProperty = property;
-    this.etagere = [...this.etagere.sort((a: any, b: any) => {
+    this.responsable = [...this.responsable.sort((a: any, b: any) => {
       // sort comparison function
       let result = 0;
       if (a[property] < b[property]) {
@@ -92,18 +91,18 @@ export class EtagereComponent implements OnInit,OnDestroy{
   }
 
 
-  public getEtageres(shwNotification: Boolean): void{
+  public getResponsable(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
-    this.subscription.push(this.etagereService.getEtagere().subscribe((response: Etagere[] ) => {
+    this.subscription.push(this.responsableService.getResponsable().subscribe((response: ResponsableTraitement[] ) => {
         //this.structureService.(response);
-        this.etagereService.addEtagereToLocalCache(response);
-        this.etagere = response;
+        this.responsableService.addResponsableTraitementToLocalCache(response);
+        this.responsable = response;
         this.loading= false;
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
-            this.sendNotification(NotificationType.SUCCESS, `${response.length} Etagere(s) Charger avec succer.`);
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Responsable(s) Charger avec succer.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
@@ -113,18 +112,18 @@ export class EtagereComponent implements OnInit,OnDestroy{
     );
   }
 
-  public getRayons(shwNotification: Boolean): void{
+  public getStructures(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
-    this.subscription.push(this.rayonService.getRayons().subscribe((response: Rayon[] ) => {
+    this.subscription.push(this.structureService.getStructure().subscribe((response: Structures[] ) => {
         //this.structureService.(response);
-        this.rayonService.addRayonsToLocalCache(response);
-        this.rayon = response;
+        this.structureService.addStructuresToLocalCache(response);
+        this.structure = response;
         this.loading= false;
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
-            this.sendNotification(NotificationType.SUCCESS, `${response.length} Rayon(s) Charger avec succer.`);
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Structure(s) Charger avec succer.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
@@ -135,64 +134,64 @@ export class EtagereComponent implements OnInit,OnDestroy{
   }
 
 
-  public onSelectEtagere(selectedEtagere: Etagere): void {
-    this.selectedEtagere = selectedEtagere;
-    this.clickButton('#openEtagereInfo');
+  public onSelectResponsable(selectedResponsable: ResponsableTraitement): void {
+    this.selectedResponsable = selectedResponsable;
+    this.clickButton('#openResponsableInfo');
 
   }
 
 
 
 
-  saveNewEtagere(): void {
-    this.clickButton('#new-etagere-save');
+  saveNewResponsable(): void {
+    this.clickButton('#new-responsable-save');
   }
 
-  public onAddNewEtagere(etagereForm: NgForm):void{
+  public onAddNewResponsable(responsableForm: NgForm):void{
     // @ts-ignore
-    const formData = this.etagereService.createEtagereFormData(null,etagereForm.value);
-    this.subscription.push(this.etagereService.addEtagere(formData).subscribe({
-      next: (response: Etagere)=>{
-        this.clickButton('#new-etagere-close');
-        this.getEtageres(false);
+    const formData = this.responsableService.createResponsableTraitementFormData(null,responsableForm.value);
+    this.subscription.push(this.responsableService.addResponsable(formData).subscribe({
+      next: (response: ResponsableTraitement)=>{
+        this.clickButton('#new-responsable-close');
+        this.getResponsable(false);
         //structureForm.reset();
-        this.sendNotification(NotificationType.SUCCESS, `${response.numeroEtagere} Ajouter Avec Succer`)
+        this.sendNotification(NotificationType.SUCCESS, `${response.nomRt} Ajouter Avec Succer`)
       },
-      error: (e)=> {
+      error: (e: { message: string; })=> {
         console.error(e);
         this.sendNotification(NotificationType.ERROR, e.message);
       }
     }));
   }
 
-  public onUpdateEtagere(): void {
+  public onUpdateResponsable(): void {
     // @ts-ignore
-    const formData = this.etagereService.createEtagereFormData(this.currentNumeroEtagere, this.editEtagere);
-    this.subscription.push(this.etagereService.updateEtagere(formData).subscribe({
-      next: (response: Etagere)=>{
-        this.clickButton('#edit-etagere-close');
-        this.getEtageres(false);
-        this.sendNotification(NotificationType.SUCCESS, `${response.numeroEtagere} Updated Successfully`);
+    const formData = this.responsableService.createResponsableTraitementFormData(this.currentNomRt, this.editResponsable);
+    this.subscription.push(this.responsableService.updateResponsable(formData).subscribe({
+      next: (response: ResponsableTraitement)=>{
+        this.clickButton('#edit-responsable-close');
+        this.getResponsable(false);
+        this.sendNotification(NotificationType.SUCCESS, `${response.nomRt} Updated Successfully`);
       },
-      error: (e)=> {
+      error: (e: { message: string; })=> {
         console.error(e);
         this.sendNotification(NotificationType.ERROR, e.message);
       }
     }));
   }
 
-  public searchEtagere(keyword: string): void{
-    const results: Etagere[] = [];
+  public searchResponsable(keyword: string): void{
+    const results: ResponsableTraitement[] = [];
     // @ts-ignore
-    for (const etagere of  this.etagereService.getEtagereFromLocalCache()){
-      if (etagere.numeroEtagere.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
-        results.push(etagere);
+    for (const responsable of  this.responsableService.getResponsableTraitementFromLocalCache()){
+      if (responsable.nomRt.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
+        results.push(responsable);
       }
     }
-    this.etagere = results;
+    this.responsable = results;
     if (results.length === 0 || !keyword){
       // @ts-ignore
-      this.etagere = this.etagereService.getEtagereFromLocalCache();
+      this.responsable = this.responsableService.getResponsableFromLocalCache();
     }
   }
   private getUserRole(): string {
@@ -208,24 +207,24 @@ export class EtagereComponent implements OnInit,OnDestroy{
     return this.isAdmin || this.isManager;
   }
 
-  public onEditEtagere(editEtagere: Etagere): void{
-    this.editEtagere = editEtagere;
-    this.currentNumeroEtagere = editEtagere.numeroEtagere;
-    this.clickButton('#openEtagereEdit');
+  public onEditResponsable(editResponsable: ResponsableTraitement): void{
+    this.editResponsable = editResponsable;
+    this.currentNomRt = editResponsable.nomRt;
+    this.clickButton('#openResponsableEdit');
   }
 
 
 
 
 
-  public onDeleteEtagere(numeroEtagere: string): void{
+  public onDeleteResponsable(nomRt: string): void{
     // @ts-ignore
-    this.subscription.push(this.etagereService.delete(numeroEtagere).subscribe({
+    this.subscription.push(this.responsableService.delete(nomRt).subscribe({
         next: (response: CustomHttpResponse) => {
           this.sendNotification(NotificationType.SUCCESS, response.message);
-          this.getEtageres(true);
+          this.getResponsable(true);
         },
-        error: err => {
+        error: (err: { error: { messages: string; }; }) => {
           this.sendNotification(NotificationType.ERROR, err.error.messages);
         }
       })

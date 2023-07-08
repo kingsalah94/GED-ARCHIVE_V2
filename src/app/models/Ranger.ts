@@ -1,16 +1,25 @@
-import {Etagere} from "./Etagere";
-import {Boite} from "./Boite";
+
 
 export class Ranger {
   public id:any
- public numeroRanger:string
+  public numeroRanger:string
+  public nombreBoite:any
+  public numeroEtagere:string
+  public dateCreation:Date
+  public updatedDate:Date
   public etagereId: any;
-  public _boite!: Boite[]
+
 
 
   constructor() {
     this.id = 0;
     this.numeroRanger = "";
+    this.nombreBoite = 0;
+    this.numeroEtagere='';
+    // @ts-ignore
+    this.dateCreation=null;
+    // @ts-ignore
+    this.updatedDate=null;
     this.etagereId = 0;
   }
 }

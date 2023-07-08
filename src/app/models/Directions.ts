@@ -7,7 +7,7 @@ export class Directions{
   public description: string
   public dateCreation:Date;
   public updatedDate:Date;
-  structuresId: any
+  structureId: any
 
 
   constructor() {
@@ -18,6 +18,6 @@ export class Directions{
     this.dateCreation = null;
     // @ts-ignore
     this.updatedDate = null;
-    this.structuresId = 0;
+    this.structureId = 0;
   }
 }

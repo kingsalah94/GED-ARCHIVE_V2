@@ -12,7 +12,7 @@
                    placeholder="Search Division...">
           </form>
           <!--Add A New Structure-->
-          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addDivisionModal">
+          <button type="button" (click)="getDirections(true)" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addDivisionModal">
             <i class="fa fa-plus"></i>New Division
           </button>
         </div>
@@ -100,7 +100,7 @@
   </div>
 
   <!--Modal Add Direction-->
-  <div class="modal fade" id="addChambreModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addDivisionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -121,8 +121,8 @@
               <div class="col form-group">
                 <label class="col-form-label col-sm-2">Direction</label>
                 <select class="form-control" name="directionId" ngModel="division.directionId" id="exampl3FormControlSelect111">
-                  <option ngValue="undefined">{{editDivision.directionId.directionName}}</option>
-                  <option *ngFor="let d of direction" ngValue="d.id">{{d.directionName}}</option>
+                  <option ngValue="undefined">--select-direction--</option>
+                  <option *ngFor="let d of direction" [ngValue]="d.id">{{d.directionName}}</option>
                 </select>
               </div>
               <button type="submit" style="display: none;" id="new-division-save"></button>
@@ -135,12 +135,12 @@
         </div>
       </div>
     </div>
-    <!--End of Add Document-->
+    <!--End of Add Direction-->
 
   </div>
 
   <!--Modal Edit Structure-->
-  <div class="modal fade" id="editBatimentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editDivisionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -161,13 +161,13 @@
                 <label for="description">Description</label>
                 <input type="text" name="description" [disabled]="!isAdminOrArchiveManager"  required  [(ngModel)]="editDivision.description" class="form-control">
               </div>
-              <button type="submit" style="display: none;" id="edit-batiment-save"></button>
+              <button type="submit" style="display: none;" id="edit-division-save"></button>
             </form>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-user-close">Close</button>
-          <button type="button" (click)="onUpdateChambre()" [disabled]="editDivisionForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update Division</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-division-close">Close</button>
+          <button type="button" (click)="onUpdateDivisions()" [disabled]="editDivisionForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update Division</button>
         </div>
       </div>
     </div>

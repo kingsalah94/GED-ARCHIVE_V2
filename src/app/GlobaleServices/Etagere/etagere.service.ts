@@ -27,7 +27,7 @@ export class EtagereService {
 
 
   public delete(numeroEtagere: string):Observable<CustomHttpResponse | HttpErrorResponse> {
-    return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/document/delete/${numeroEtagere}`)
+    return this.http.delete<CustomHttpResponse>(`${this.host}/api/archive/etagere/delete/${numeroEtagere}`)
   }
 
   public addEtagereToLocalCache(etageres: Etagere[] | HttpErrorResponse): void{

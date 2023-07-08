@@ -78,6 +78,13 @@ import {
 import {
   EmpruntPaginationComponent
 } from "./ArchiveManagement/Componants/Paging/emprunt-pagination/emprunt-pagination.component";
+import {RangerComponent} from "./ArchiveManagement/Componants/ranger/ranger.component";
+import {
+  ResponsableTraitementComponent
+} from "./ArchiveManagement/Componants/responsable-traitement/responsable-traitement.component";
+import {
+  ResponsablePaginationComponent
+} from "./ArchiveManagement/Componants/Paging/responsable-pagination/responsable-pagination.component";
 
 @NgModule({
   declarations: [
@@ -117,8 +124,10 @@ import {
     RagerPaginationComponent,
     RayonPaginationComponent,
     BoitePaginationComponent,
-    EmpruntPaginationComponent
-
+    EmpruntPaginationComponent,
+    RangerComponent,
+    ResponsableTraitementComponent,
+    ResponsablePaginationComponent
 
 
   ],

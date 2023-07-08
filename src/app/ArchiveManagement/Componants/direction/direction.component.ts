@@ -59,7 +59,7 @@ export class DirectionComponent implements OnInit,OnDestroy{
   ngOnInit(): void {
     //this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.getDirections(true);
-    // this.getDossier(true);
+     this.getStructure(true);
 
   }
 
@@ -100,6 +100,25 @@ export class DirectionComponent implements OnInit,OnDestroy{
         //this.structureService.(response);
         this.directionService.addDirectionToLocalCache(response);
         this.direction = response;
+        this.loading= false;
+        this.refreshing = false;
+        if (shwNotification) {
+          if (!(response instanceof HttpErrorResponse)) {
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Direction(s) Charger avec succer.`);
+          }
+        }
+      }, (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        this.refreshing = false;
+      })
+    );
+  } public getStructure(shwNotification: Boolean): void{
+    this.refreshing = true;
+    // @ts-ignore
+    this.subscription.push(this.structureService.getStructure().subscribe((response: Structures[] ) => {
+        //this.structureService.(response);
+        this.structureService.addStructuresToLocalCache(response);
+        this.structure = response;
         this.loading= false;
         this.refreshing = false;
         if (shwNotification) {

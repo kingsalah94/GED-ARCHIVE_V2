@@ -47,9 +47,9 @@ export class DivisionService {
     return null;
   }
 
-  public createDivisionFormData(divisionName: string, division: Divisions): FormData {
+  public createDivisionFormData(currentDivisionName: string, division: Divisions): FormData {
     const formData = new FormData();
-    formData.append('nomDossier',divisionName);
+    formData.append('currentDivisionName',currentDivisionName);
     formData.append('divisionName',division.divisionName);
     formData.append('description',division.description);
     formData.append('directionId',division.directionId);

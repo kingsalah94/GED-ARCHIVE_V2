@@ -53,9 +53,9 @@ data:any;
     return null;
   }
 
-  public createDocumentFormData(loggedInUsername: string, document: Documents, documentPdf: File): FormData {
+  public createDocumentFormData(currentIntituleDocument: string, document: Documents, documentPdf: File): FormData {
     const formData = new FormData();
-    formData.append('currentUsername',loggedInUsername);
+    formData.append('currentIntituleDocument',currentIntituleDocument);
     formData.append('intituleDocument',document.intituleDocument);
     formData.append('numeroDordre',document.numeroDordre);
     formData.append('typeDocument',document.typeDocument);

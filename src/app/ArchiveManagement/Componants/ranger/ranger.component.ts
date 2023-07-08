@@ -1,14 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Chambre} from "../../../models/Chambre";
+import {Component, OnInit} from '@angular/core';
+import {Ranger} from "../../../models/Ranger";
 import {Subscription} from "rxjs";
-import {Etagere} from "../../../models/Etagere";
-import {ChambreService} from "../../../GlobaleServices/Chambre/chambre.service";
+import {Rayon} from "../../../models/Rayon";
+import {RayonService} from "../../../GlobaleServices/Rayon/rayon.service";
 import {StructureService} from "../../../GlobaleServices/Structure/structure.service";
 import {
   ResponsableTraitementService
 } from "../../../GlobaleServices/ResponsableTraitement/responsable-traitement.service";
 import {DossierService} from "../../../GlobaleServices/dossier/dossier.service";
-import {EtagereService} from "../../../GlobaleServices/Etagere/etagere.service";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {NotificationService} from "../../../GlobaleServices/notification.service";
 import {AuthenticationService} from "../../../GlobaleServices/authentication.service";
@@ -16,36 +15,38 @@ import {NotificationType} from "../../../Enumerations/notification-type.enum";
 import {NgForm} from "@angular/forms";
 import {Role} from "../../../Enumerations/role.enum.";
 import {CustomHttpResponse} from "../../../Http-Response/Custom-http-response";
-import {Rayon} from "../../../models/Rayon";
-import {RayonService} from "../../../GlobaleServices/Rayon/rayon.service";
+import {EtagereService} from "../../../GlobaleServices/Etagere/etagere.service";
+import {RangerService} from "../../../GlobaleServices/ranger.service";
+import {Etagere} from "../../../models/Etagere";
 
 @Component({
-  selector: 'app-etagere',
-  templateUrl: './etagere.component.html',
-  styleUrls: ['./etagere.component.css']
+  selector: 'app-ranger',
+  templateUrl: './ranger.component.html',
+  styleUrls: ['./ranger.component.css']
 })
-export class EtagereComponent implements OnInit,OnDestroy{
-  public etagere!: Etagere[] ;
+export class RangerComponent implements OnInit{
+  public ranger!: Ranger[] ;
+  public rangers: Ranger = new Ranger();
   public refreshing: boolean | undefined;
   private subscription : Subscription[] = [];
-  public selectedEtagere: Etagere = new Etagere();
-  private currentNumeroEtagere!: string;
+  public selectedRanger: Ranger = new Ranger();
+  private currentNumeroRanger!: string;
 
-  editEtagere = new Etagere();
+  editRanger = new Ranger();
   selectedButton: string = '';
 
-  rayon: Rayon[]=[];
   keyword?: string;
   results?: any[];
 
   items: any[] = [];
-  pageOfEtagere?: Array<any>;
+  pageOfRanger?: Array<any>;
   sortProperty: string = 'id';
   sortOrder = 1;
   loading = false;
+  public etagere: Etagere[]=[];
 
 
-  constructor(private rayonService:RayonService,
+  constructor(private rangerService:RangerService,
               private structureService: StructureService,
               private responsableService: ResponsableTraitementService,
               private dossierService: DossierService,
@@ -57,21 +58,21 @@ export class EtagereComponent implements OnInit,OnDestroy{
 
   ngOnInit(): void {
     //this.currentUser = this.authenticationService.getUserFromLocalCache();
-    this.getEtageres(true);
-     this.getRayons(true);
+    this.getRangers(true);
+     this.getEtageres(true);
 
   }
 
 
-  onChangePage(pageOfEtagere: Array<any>) {
+  onChangePage(pageOfRanger: Array<any>) {
     // update current page of document
-    this.pageOfEtagere = pageOfEtagere;
+    this.pageOfRanger = pageOfRanger;
   }
 
   sortBy(property: string) {
     this.sortOrder = property === this.sortProperty ? (this.sortOrder * -1) : 1;
     this.sortProperty = property;
-    this.etagere = [...this.etagere.sort((a: any, b: any) => {
+    this.ranger = [...this.ranger.sort((a: any, b: any) => {
       // sort comparison function
       let result = 0;
       if (a[property] < b[property]) {
@@ -92,18 +93,18 @@ export class EtagereComponent implements OnInit,OnDestroy{
   }
 
 
-  public getEtageres(shwNotification: Boolean): void{
+  public getRangers(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
-    this.subscription.push(this.etagereService.getEtagere().subscribe((response: Etagere[] ) => {
+    this.subscription.push(this.rangerService.getRanger().subscribe((response: Ranger[] ) => {
         //this.structureService.(response);
-        this.etagereService.addEtagereToLocalCache(response);
-        this.etagere = response;
+        this.rangerService.addRangerToLocalCache(response);
+        this.ranger = response;
         this.loading= false;
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
-            this.sendNotification(NotificationType.SUCCESS, `${response.length} Etagere(s) Charger avec succer.`);
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Ranger(s) Charger avec succer.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {
@@ -113,13 +114,13 @@ export class EtagereComponent implements OnInit,OnDestroy{
     );
   }
 
-  public getRayons(shwNotification: Boolean): void{
+  public getEtageres(shwNotification: Boolean): void{
     this.refreshing = true;
     // @ts-ignore
-    this.subscription.push(this.rayonService.getRayons().subscribe((response: Rayon[] ) => {
+    this.subscription.push(this.etagereService.getEtagere().subscribe((response: Etagere[] ) => {
         //this.structureService.(response);
-        this.rayonService.addRayonsToLocalCache(response);
-        this.rayon = response;
+        this.etagereService.addEtagereToLocalCache(response);
+        this.etagere = response;
         this.loading= false;
         this.refreshing = false;
         if (shwNotification) {
@@ -135,64 +136,64 @@ export class EtagereComponent implements OnInit,OnDestroy{
   }
 
 
-  public onSelectEtagere(selectedEtagere: Etagere): void {
-    this.selectedEtagere = selectedEtagere;
-    this.clickButton('#openEtagereInfo');
+  public onSelectRanger(selectedRanger: Ranger): void {
+    this.selectedRanger = selectedRanger;
+    this.clickButton('#openRangerInfo');
 
   }
 
 
 
 
-  saveNewEtagere(): void {
-    this.clickButton('#new-etagere-save');
+  saveNewRanger(): void {
+    this.clickButton('#new-ranger-save');
   }
 
-  public onAddNewEtagere(etagereForm: NgForm):void{
+  public onAddNewRanger(rangerForm: NgForm):void{
     // @ts-ignore
-    const formData = this.etagereService.createEtagereFormData(null,etagereForm.value);
-    this.subscription.push(this.etagereService.addEtagere(formData).subscribe({
-      next: (response: Etagere)=>{
-        this.clickButton('#new-etagere-close');
-        this.getEtageres(false);
+    const formData = this.rangerService.createRangerFormData(null,rangerForm.value);
+    this.subscription.push(this.rangerService.addRanger(formData).subscribe({
+      next: (response: Ranger)=>{
+        this.clickButton('#new-ranger-close');
+        this.getRangers(false);
         //structureForm.reset();
-        this.sendNotification(NotificationType.SUCCESS, `${response.numeroEtagere} Ajouter Avec Succer`)
+        this.sendNotification(NotificationType.SUCCESS, `${response.numeroRanger} Ajouter Avec Succer`)
       },
-      error: (e)=> {
+      error: (e: { message: string; })=> {
         console.error(e);
         this.sendNotification(NotificationType.ERROR, e.message);
       }
     }));
   }
 
-  public onUpdateEtagere(): void {
+  public onUpdateRanger(): void {
     // @ts-ignore
-    const formData = this.etagereService.createEtagereFormData(this.currentNumeroEtagere, this.editEtagere);
-    this.subscription.push(this.etagereService.updateEtagere(formData).subscribe({
-      next: (response: Etagere)=>{
-        this.clickButton('#edit-etagere-close');
-        this.getEtageres(false);
-        this.sendNotification(NotificationType.SUCCESS, `${response.numeroEtagere} Updated Successfully`);
+    const formData = this.rangerService.createRangerFormData(this.currentNumeroRanger, this.editRanger);
+    this.subscription.push(this.rangerService.updateRanger(formData).subscribe({
+      next: (response: Ranger)=>{
+        this.clickButton('#edit-ranger-close');
+        this.getRangers(false);
+        this.sendNotification(NotificationType.SUCCESS, `${response.numeroRanger} Updated Successfully`);
       },
-      error: (e)=> {
+      error: (e: { message: string; })=> {
         console.error(e);
         this.sendNotification(NotificationType.ERROR, e.message);
       }
     }));
   }
 
-  public searchEtagere(keyword: string): void{
-    const results: Etagere[] = [];
+  public searchRanger(keyword: string): void{
+    const results: Ranger[] = [];
     // @ts-ignore
-    for (const etagere of  this.etagereService.getEtagereFromLocalCache()){
-      if (etagere.numeroEtagere.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
-        results.push(etagere);
+    for (const ranger of  this.rangerService.getRangerFromLocalCache()){
+      if (ranger.numeroRanger.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
+        results.push(ranger);
       }
     }
-    this.etagere = results;
+    this.ranger = results;
     if (results.length === 0 || !keyword){
       // @ts-ignore
-      this.etagere = this.etagereService.getEtagereFromLocalCache();
+      this.ranger = this.rangerService.getRangerFromLocalCache();
     }
   }
   private getUserRole(): string {
@@ -208,24 +209,25 @@ export class EtagereComponent implements OnInit,OnDestroy{
     return this.isAdmin || this.isManager;
   }
 
-  public onEditEtagere(editEtagere: Etagere): void{
-    this.editEtagere = editEtagere;
-    this.currentNumeroEtagere = editEtagere.numeroEtagere;
-    this.clickButton('#openEtagereEdit');
+  public onEditRanger(editRanger: Ranger): void{
+    this.editRanger = editRanger;
+    this.currentNumeroRanger = editRanger.numeroRanger;
+    this.clickButton('#openRangerEdit');
   }
 
 
 
 
 
-  public onDeleteEtagere(numeroEtagere: string): void{
+  public onDeleteRanger(numeroRanger: string): void{
+
     // @ts-ignore
-    this.subscription.push(this.etagereService.delete(numeroEtagere).subscribe({
+    this.subscription.push(this.rangerService.delete(numeroChambre).subscribe({
         next: (response: CustomHttpResponse) => {
           this.sendNotification(NotificationType.SUCCESS, response.message);
-          this.getEtageres(true);
+          this.getRangers(true);
         },
-        error: err => {
+        error: (err: { error: { messages: string; }; }) => {
           this.sendNotification(NotificationType.ERROR, err.error.messages);
         }
       })

@@ -190,8 +190,6 @@ export class BoiteComponent implements OnInit,OnDestroy{
   }
 
   public onUpdateBoite(): void {
-    // @ts-ignore
-    this.editBoite = this.rangerService.getRangerFromLocalCache()?.forEach(x=> x.id == x._boite);
 
     // @ts-ignore
     const formData = this.boiteService.createBoiteFormData(this.currentNumeroBoite, this.editBoite);

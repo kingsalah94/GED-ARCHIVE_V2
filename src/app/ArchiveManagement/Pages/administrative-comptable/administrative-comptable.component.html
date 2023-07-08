@@ -42,8 +42,7 @@
           <div class="card bg-c-green order-card">
             <div class="card-block">
               <h6 class="m-b-20">Nombre De Dossier</h6>
-              <h2 class="text-right"><i class="fa fa-folder-closed f-left"></i><span>{{dossier.length
-                }}</span></h2>
+              <h2 class="text-right"><i class="fa fa-folder-closed f-left"></i><span>{{dossier.length}}</span></h2>
             </div>
           </div>
         </div>
@@ -157,32 +156,23 @@
           <div class="modal-body">
             <div>
               <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12 col-sm-auto">
-                      <div class="mx-auto" style="width: 120px;">
-                        <div class="d-flex justify-content-center align-items-center rounded">
-                          <img class="rounded" height="720" width="440"  src="{{selectedDocument.documentUrl}}" alt="{{selectedDocument.intituleDocument}}">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col d-flex flex-column flex-sm-row justify-content-center">
-                      <div class="text-center text-sm-end mb-sm-0">
-                        <h6 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{selectedDocument.intituleDocument}} </h6>
-                        <p class="mb-1">{{selectedDocument.numeroDordre}}</p>
-                        <div class="text-muted"><small>Last Login: {{selectedDocument.dateCreation | date: 'medium'}}</small>
-                        </div>
-                      </div>
 
-                    </div>
-                  </div>
-                </div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item"></li>
-                  <li class="list-group-item"><i class="fa fa-id-badge float-end"></i>{{selectedDocument.documentId}}</li>
-                  <li class="list-group-item"><i class="fa fa-envelope float-end"></i>{{selectedDocument.typeDocument}}</li>
-                  <li class="list-group-item"><i class="fa fa-shield-alt float-end"></i>{{selectedDocument.nombrPage}}</li>
-                  <li class="list-group-item"><i class="fa fa-shield-alt float-end"></i>{{selectedDocument.dossierId.nomDossier}}</li>
+                  <li class="list-group-item">{{selectedDocument.intituleDocument}}</li>
+                  <li class="list-group-item">Numero d'Ordre : {{selectedDocument.numeroDordre}}</li>
+                  <li class="list-group-item"><small>Creer : Le {{selectedDocument.dateCreation | date: 'medium'}}</small></li>
+                  <li class="list-group-item">{{selectedDocument.documentId}}</li>
+                  <li class="list-group-item">{{selectedDocument.typeDocument}}</li>
+                  <li class="list-group-item">Nombre de Page : {{selectedDocument.nombrPage}}</li>
+                  <li class="list-group-item">Nom du Dossier: {{selectedDocument.nomDossier}}</li>
+                  <li class="list-group-item">Cote du Dossier: {{selectedDocument.coteDossier}}</li>
+                  <li class="list-group-item">Numero de Boite: {{selectedDocument.numeroBoite}}</li>
+                  <li class="list-group-item">Numero Ranger-Etagere: {{selectedDocument.numeroRanger}}</li>
+                  <li class="list-group-item">Numero Etagere: {{selectedDocument.numeroEtagere}}</li>
+                  <li class="list-group-item">Numero Du Rayon-Chambre: {{selectedDocument.numeroRayon}}</li>
+                  <li class="list-group-item">Numero de chambre: {{selectedDocument.numeroChambre}}</li>
+                  <li class="list-group-item">Numero Niveau-Batiment: {{selectedDocument.numeroNiveau}}</li>
+                  <li class="list-group-item">Batiment Archive: {{selectedDocument.nomBatiment}}</li>
 
                 </ul>
               </div>
@@ -285,13 +275,13 @@
                   <label for="nombrPage">Nombre de Page</label>
                   <input type="text" name="nombrPage" required [(ngModel)]="editDocument.nombrPage" class="form-control">
                 </div>
-                <div class="col form-group">
+                <!--<div class="col form-group">
                   <label class="col-form-label col-sm-2">Dossier</label>
                   <select class="form-control" name="dossierId" ngModel="document.dossierId" id="exampl3FormControlSelect111">
-                    <option ngValue="undefined">--Selet Dossier--</option>
+                    <option ngValue="undefined">&#45;&#45;Selet Dossier&#45;&#45;</option>
                     <option *ngFor="let d of dossier" [ngValue]="d.id">{{d.nomDossier}}&nbsp;{{d.cote}}</option>
                   </select>
-                </div>
+                </div>-->
                 <div class="form-group">
                   <label for="typeDocument">Type de Document</label>
                   <select name="typeDocument"  required [(ngModel)]="editDocument.typeDocument" class="form-control">
@@ -318,8 +308,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-user-close">Close</button>
-            <button type="button" (click)="onUpdateDocument()" [disabled]="editdocumentForm.invalid || isAdminOrArchiveManager" class="btn btn-primary">Update User</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-document-close">Close</button>
+            <button type="button" (click)="onUpdateDocument()" [disabled]="editdocumentForm.invalid && isAdminOrArchiveManager" class="btn btn-primary">Update User</button>
           </div>
         </div>
       </div>

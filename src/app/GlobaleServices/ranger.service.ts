@@ -39,11 +39,13 @@ export class RangerService {
     return null;
   }
 
-  public createEtagereFormData(currentNumeroRanger: string, ranger: Ranger): FormData {
+  public createRangerFormData(currentNumeroRanger: string, ranger: Ranger): FormData {
     const formData = new FormData();
     formData.append('currentNumeroRanger',currentNumeroRanger);
     formData.append('numeroRanger',ranger.numeroRanger);
+    formData.append('nombreBoite',ranger.nombreBoite);
     formData.append('etagereId',ranger.etagereId);
+
 
     return formData;
   }
