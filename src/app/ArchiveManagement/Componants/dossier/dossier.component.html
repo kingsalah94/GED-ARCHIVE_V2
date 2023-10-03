@@ -12,7 +12,7 @@
                    placeholder="Search dossier...">
           </form>
           <!--Add A New Structure-->
-          <button type="button" (click)="getBoite(true)" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addDossierModal">
+          <button type="button" (click)="getBoite(true); getResponsable(true)"  class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addDossierModal">
             <i class="fa fa-plus"></i>New Dossier
           </button>
         </div>

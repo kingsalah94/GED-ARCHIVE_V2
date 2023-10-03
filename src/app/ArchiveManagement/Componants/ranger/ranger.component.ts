@@ -125,7 +125,7 @@ export class RangerComponent implements OnInit{
         this.refreshing = false;
         if (shwNotification) {
           if (!(response instanceof HttpErrorResponse)) {
-            this.sendNotification(NotificationType.SUCCESS, `${response.length} Rayon(s) Charger avec succer.`);
+            this.sendNotification(NotificationType.SUCCESS, `${response.length} Etagere(s) Charger avec succer.`);
           }
         }
       }, (errorResponse: HttpErrorResponse) => {

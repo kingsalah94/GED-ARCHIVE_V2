@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {Chart} from "chart.js";
+import {Chart, controllers} from "chart.js";
 import {ChartData} from "../../../models/ChartData";
 import {environment} from "../../../../environments/environment";
 import {User} from "../../../models/user";
 import {NotificationType} from "../../../Enumerations/notification-type.enum";
-import {BehaviorSubject, Subscription} from "rxjs";
+import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {Divisions} from "../../../models/Divisions";
 import {DivisionService} from "../../../GlobaleServices/Division/division.service";
 import {UserService} from "../../../GlobaleServices/user.service";
@@ -37,7 +37,7 @@ export class ChartDataComponent implements OnInit, OnDestroy{
   public showLoading: boolean | undefined;
   public division!: Divisions[];
   divisions: Divisions = new Divisions();
-
+  public nbre!:number;
   private a!: number;
 
 
@@ -48,7 +48,7 @@ export class ChartDataComponent implements OnInit, OnDestroy{
               private authenticationService: AuthenticationService) {
   }
   ngOnInit(): void {
-  this.getUsers(true);
+   this.getUsers(true);
   }
 
   chartOptions = {
@@ -62,7 +62,7 @@ export class ChartDataComponent implements OnInit, OnDestroy{
         { label: "Dossier", y: 15  },
         { label: "boite", y: 25  },
         { label: "Emprunt",  y: 30  },
-        { label: "Users",  y: 70  }
+        { label: "Users",  y:  70 }
       ]
     }]
   };
@@ -74,6 +74,7 @@ export class ChartDataComponent implements OnInit, OnDestroy{
       this.subscription.push(this.userService.getUsers().subscribe((response: User[] ) => {
           this.userService.addUsersToLocalCache(response);
           this.users = response;
+          this.nbre = response.length;
           this.refreshing = false;
           if (shwNotification) {
             if (!(response instanceof HttpErrorResponse)) {

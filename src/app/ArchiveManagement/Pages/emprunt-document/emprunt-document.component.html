@@ -12,7 +12,7 @@
                    placeholder="Search emprunt...">
           </form>
           <!--Add A New Structure-->
-          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addBatimentModal">
+          <button type="button" (click)="getUsers(true)" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addEmpruntModal">
             <i class="fa fa-plus"></i>New Emprunt
           </button>
         </div>
@@ -100,7 +100,7 @@
   </div>
 
   <!--Modal Add Structure-->
-  <div class="modal fade" id="addBatimentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addEmpruntModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">

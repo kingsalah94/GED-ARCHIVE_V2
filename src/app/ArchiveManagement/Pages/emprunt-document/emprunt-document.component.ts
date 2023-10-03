@@ -167,7 +167,7 @@ export class EmpruntDocumentComponent implements OnInit{
 
   public onSelectEmprunt(selectedEmprunt: Emprunt): void {
     this.selectedEmprunt = selectedEmprunt;
-    this.clickButton('#openBatimentInfo');
+    this.clickButton('#openEmpruntInfo');
 
   }
 
@@ -241,7 +241,7 @@ export class EmpruntDocumentComponent implements OnInit{
   public onEditEmprunt(editEmprunt: Emprunt): void{
     this.editEmprunt = editEmprunt;
     this.currentCodeEmprunt = editEmprunt.codeEmprunt;
-    this.clickButton('#openBatimentEdit');
+    this.clickButton('#openEmpruntEdit');
   }
 
 
